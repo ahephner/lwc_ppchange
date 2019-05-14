@@ -1,0 +1,23 @@
+<template>
+    <lightning-card title="SFDCFacts Calculator" icon-name="standard:formula">
+      <lightning-layout multiple-rows="true">
+        <lightning-layout-item size="12" padding="around-small">
+          <lightning-input type="number" label="First Number" name="firstName" onchange={onNumberChange}></lightning-input>
+        </lightning-layout-item>
+        <lightning-layout-item size="12" padding="around-small">
+          <lightning-input type="number" label="Second Number" name="secondName" onchange={onNumberChange}></lightning-input>
+        </lightning-layout-item>
+        <lightning-layout-item size="12" padding="around-small">
+          <lightning-button-group>
+            <lightning-button label="Add" icon-position="right" icon-name="utility:add" onclick={onAdd}></lightning-button>
+            <lightning-button label="Subtract" icon-position="right" icon-name="utility:dash" onclick={onSub}></lightning-button>
+            <lightning-button label="Multiply" icon-position="right" icon-name="utility:close" onclick={onMultiply}></lightning-button>
+            <lightning-button label="Divide" icon-position="right" icon-name="utility:magicwand" onclick={onDivide}></lightning-button>
+          </lightning-button-group>
+        </lightning-layout-item>
+        <lightning-layout-item size="12" padding="around-small">
+            <p class="slds-m-top_medium" style="color:blue; font-weight:bold;">{result}</p>
+        </lightning-layout-item>
+      </lightning-layout>
+    </lightning-card>
+  </template>

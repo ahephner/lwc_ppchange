@@ -3,6 +3,9 @@
         "experimentalDecorators": true,
         "baseUrl": ".",
         "paths": {
+            "c/calculator": [
+                "calculator/calculator.js"
+            ],
             "c/helloWorld": [
                 "helloWorld/helloWorld.js"
             ],
