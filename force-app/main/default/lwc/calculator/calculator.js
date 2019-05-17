@@ -45,6 +45,14 @@ export default class Calculator extends LightningElement {
       this.operatorUsed = '%';
       //Check if both numbers are okay and operable 
     }
+   /*
+    need to clear the actual html field as well 
+   clear(){
+      this.firstNumber= '';
+      this.secondNumber = '';
+      this.operatorUsed = '';
+      this.currentResult = ''; 
+    }  */
       // eslint-disable-next-line consistent-return
       get result() {
       
