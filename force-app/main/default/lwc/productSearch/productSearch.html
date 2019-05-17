@@ -6,6 +6,15 @@
             class='slds-m-bottom_small'
             placeholder='search for products'
             value={searchProd}></lightning-input>
+            <lightning-layout multiple-rows='true'>
+                <template for:each={goods.data} for:item='good'>
+                    <lightning-layout-item key={good.id} size='3' class="slds-p-around_x-small">
+                       <p>here is : {good.name}</p> 
+                       <p> here is {good.product_name__c}</p>
+
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
 
 
     </lightning-card>
