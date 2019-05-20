@@ -6,23 +6,23 @@
             class='slds-m-bottom_small'
             placeholder='search for products'
             value={searchProd}></lightning-input>
-            <!-- <lightning-layout multiple-rows='true' pull-to-boundary='small' onbearview={handleProductView}>
-                <template for:each={goods.data} for:item='good'>
-                    <lightning-layout-item key={good.id}  size='3' class="slds-p-around_x-small">
-                       <p>here is : {good.name}</p> 
-                       <p> here is {product_name__c}</p>
-
+            <template if:true={goods.data}>
+            <lightning-layout multiple-rows='true' pull-to-boundary='small' onhandlegood={handlegood} >
+                    <template for:each={goods.data} for:item="good">
+                    <lightning-layout-item key={good.Id}  size='3' class="slds-p-around_x-small">
+                        <!-- Child component '-' for capitals in file name -->
+                        <c-product-tiles good={good}></c-product-tiles>
                     </lightning-layout-item>
                 </template>
             </lightning-layout>
- -->
-                <div class='slds-p-around_medium lgc-bf' style="height: 300px;">
-                    <lightning-datatable
-                    key-field='id'
-                    data={goods.data}
-                    columns={columns}
-                    is-loading={tableLoadingState}></lightning-datatable>
-                </div>
+            <!-- No bears found -->
+     <template if:false={hasResults}>
+        <div class="slds-align_absolute-center slds-m-vertical_small">
+            No product found..
+        </div>
+    </template>
+            </template>
+
             
 
     </lightning-card>

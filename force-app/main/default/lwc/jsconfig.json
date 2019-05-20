@@ -17,6 +17,9 @@
             ],
             "c/searchContact": [
                 "searchContact/searchContact.js"
+            ],
+            "c/productTiles": [
+                "productTiles/productTiles.js"
             ]
         }
     },

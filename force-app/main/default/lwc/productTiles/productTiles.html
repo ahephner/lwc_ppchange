@@ -1,0 +1,29 @@
+<template>
+        <lightning-card title={good.Product_Name__c} class='productCard'>
+            <!-- this slot is required to fire the button     -->
+            <div slot="actions">
+                        <lightning-button-icon
+                            icon-name="utility:search"
+                            icon-class="bear-tile-button"
+                            variant="bare"
+                            alternative-text="Open record"
+                            onclick={handleOpenRecordClick}>
+                        </lightning-button-icon>
+                    </div>
+                <div class="slds-media__body">
+        <p class='slds-m-bottom_xx-small'>here is : {good.Name}</p> 
+       <p class='slds-m-bottom_xx-small'> here is {good.Description__c}</p>
+       
+       
+       </div>
+
+       
+                <!-- <div class='slds-p-around_medium lgc-bf' style="height: 300px;">
+                    <lightning-datatable
+                    key-field='id'
+                    data={goods.data}
+                    columns={columns}
+                    is-loading={tableLoadingState}></lightning-datatable>
+                </div> -->
+    </lightning-card>
+</template>
