@@ -9,14 +9,14 @@
             "c/helloWorld": [
                 "helloWorld/helloWorld.js"
             ],
+            "c/productSearch": [
+                "productSearch/productSearch.js"
+            ],
             "c/reportComp": [
                 "reportComp/reportComp.js"
             ],
             "c/searchContact": [
                 "searchContact/searchContact.js"
-            ],
-            "c/productSearch": [
-                "productSearch/productSearch.js"
             ]
         }
     },

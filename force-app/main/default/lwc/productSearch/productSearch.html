@@ -6,16 +6,24 @@
             class='slds-m-bottom_small'
             placeholder='search for products'
             value={searchProd}></lightning-input>
-            <lightning-layout multiple-rows='true'>
+            <!-- <lightning-layout multiple-rows='true' pull-to-boundary='small' onbearview={handleProductView}>
                 <template for:each={goods.data} for:item='good'>
-                    <lightning-layout-item key={good.id} size='3' class="slds-p-around_x-small">
+                    <lightning-layout-item key={good.id}  size='3' class="slds-p-around_x-small">
                        <p>here is : {good.name}</p> 
-                       <p> here is {good.product_name__c}</p>
+                       <p> here is {product_name__c}</p>
 
                     </lightning-layout-item>
                 </template>
             </lightning-layout>
-
+ -->
+                <div class='slds-p-around_medium lgc-bf' style="height: 300px;">
+                    <lightning-datatable
+                    key-field='id'
+                    data={goods.data}
+                    columns={columns}
+                    is-loading={tableLoadingState}></lightning-datatable>
+                </div>
+            
 
     </lightning-card>
 </template>
