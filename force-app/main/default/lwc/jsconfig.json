@@ -12,14 +12,20 @@
             "c/productSearch": [
                 "productSearch/productSearch.js"
             ],
+            "c/productTiles": [
+                "productTiles/productTiles.js"
+            ],
             "c/reportComp": [
                 "reportComp/reportComp.js"
             ],
             "c/searchContact": [
                 "searchContact/searchContact.js"
             ],
-            "c/productTiles": [
-                "productTiles/productTiles.js"
+            "c/pubsub": [
+                "pubsub/pubsub.js"
+            ],
+            "c/goodMargin": [
+                "goodMargin/goodMargin.js"
             ]
         }
     },

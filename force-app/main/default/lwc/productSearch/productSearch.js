@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { NavigationMixin, CurrentPageReference } from 'lightning/navigation';
-//import { fireEvent } from 'c/pubsub';
+import { fireEvent } from 'c/pubsub';
 import { LightningElement, track, wire } from 'lwc';
 import searchGoods from '@salesforce/apex/searchProds.searchGoods'; 
     
@@ -9,21 +9,20 @@ export default class ProductSearch extends NavigationMixin(LightningElement) {
         // @track goods;
          
         @track tableLoadingState = true; 
-
+//get current page reference store in pageRef
         @wire(CurrentPageReference) pageRef; 
         //wire apex searchGOods method with the searchProd term then set goods equal to results
         @wire(searchGoods,{searchProd: '$searchProd'})
-        goods;   
-        
-        // loadGoods(result){
-        //     this.goods = result;
-        //     // eslint-disable-next-line no-undef
-        //     this.tableLoadingState = false; 
-        //     //pubsub needs to be added 
-        //         // if(result.data){
-        //           //   fireEvent(this.pageRef, 'productListUpdate', result.data); 
-        //          //}
-        // }
+        loadGoods(result){
+            this.goods = result;
+            // eslint-disable-next-line no-undef
+            
+            //pubsub needs to be added 
+            //to share across components 
+                 if(result.data){
+                     fireEvent(this.pageRef, 'productListUpdate', result.data); 
+                 }
+        }
         connectedCallback() {
             
         }

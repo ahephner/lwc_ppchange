@@ -14,6 +14,7 @@ export default class ProductTiles extends LightningElement {
             bubbles : true,
             detail: this.good.Id
         });
+        //this.tableLoadingState = false; 
         this.dispatchEvent(selectEvent); 
     }
 }
