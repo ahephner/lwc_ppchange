@@ -17,6 +17,7 @@ export default class GoodMargin extends LightningElement {
     }
 
     handleProductListUpdate(goods){
-        this.name = goods.Product_name__c; 
+        // eslint-disable-next-line no-console
+        console.log(goods);  
     }
 }
