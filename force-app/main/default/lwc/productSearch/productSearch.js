@@ -6,9 +6,9 @@ import searchGoods from '@salesforce/apex/searchProds.searchGoods';
     
 export default class ProductSearch extends NavigationMixin(LightningElement) {
         @track searchProd;
-        // @track goods;
+        @track goods;
          
-        @track tableLoadingState = true; 
+        //@track tableLoadingState = true; 
 //get current page reference store in pageRef
         @wire(CurrentPageReference) pageRef; 
         //wire apex searchGOods method with the searchProd term then set goods equal to results
@@ -23,9 +23,7 @@ export default class ProductSearch extends NavigationMixin(LightningElement) {
                      fireEvent(this.pageRef, 'productListUpdate', result.data); 
                  }
         }
-        connectedCallback() {
-            
-        }
+ 
         searchChange(event){
             window.clearTimeout(this.delayTimeout);
             const searchProd = event.target.value; 
