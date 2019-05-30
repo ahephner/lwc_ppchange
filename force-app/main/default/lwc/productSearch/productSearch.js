@@ -8,7 +8,7 @@ export default class ProductSearch extends NavigationMixin(LightningElement) {
         @track searchProd;
         @track goods;
          
-        //@track tableLoadingState = true; 
+    
 //get current page reference store in pageRef
         @wire(CurrentPageReference) pageRef; 
         //wire apex searchGOods method with the searchProd term then set goods equal to results
@@ -19,9 +19,9 @@ export default class ProductSearch extends NavigationMixin(LightningElement) {
             
             //pubsub needs to be added 
             //to share across components 
-                 if(result.data){
-                     fireEvent(this.pageRef, 'productListUpdate', result.data); 
-                 }
+                //  if(result.data){
+                //      fireEvent(this.pageRef, 'productListUpdate', result.data); 
+                //  }
         }
  
         searchChange(event){
@@ -38,11 +38,11 @@ export default class ProductSearch extends NavigationMixin(LightningElement) {
             console.log(this.goods.data);
             return (this.goods.data.length > 0); 
         }
-        
+        //send to product page
         handlegood(event) {
                const goodId = event.detail; 
                console.log(goodId); 
-                // Navigate to bear record page
+                // Navigate to product record page
                 this[NavigationMixin.Navigate]({
                     type: 'standard__recordPage',
                     attributes: {
@@ -52,4 +52,10 @@ export default class ProductSearch extends NavigationMixin(LightningElement) {
                     },
                 });
         }
+
+        handleproduct(event){
+            fireEvent(this.pageRef, 'productListUpdate', event.detail)
+        }
     }
+
+    

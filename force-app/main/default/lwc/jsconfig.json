@@ -6,6 +6,9 @@
             "c/calculator": [
                 "calculator/calculator.js"
             ],
+            "c/goodMargin": [
+                "goodMargin/goodMargin.js"
+            ],
             "c/helloWorld": [
                 "helloWorld/helloWorld.js"
             ],
@@ -15,17 +18,14 @@
             "c/productTiles": [
                 "productTiles/productTiles.js"
             ],
+            "c/pubsub": [
+                "pubsub/pubsub.js"
+            ],
             "c/reportComp": [
                 "reportComp/reportComp.js"
             ],
             "c/searchContact": [
                 "searchContact/searchContact.js"
-            ],
-            "c/pubsub": [
-                "pubsub/pubsub.js"
-            ],
-            "c/goodMargin": [
-                "goodMargin/goodMargin.js"
             ]
         }
     },
