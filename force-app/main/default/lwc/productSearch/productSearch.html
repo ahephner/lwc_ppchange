@@ -1,0 +1,29 @@
+<template>
+    <lightning-card title='Search Products'>
+        <lightning-input type='search'
+            onchange={searchChange}
+            variant='label-hidden'
+            class='slds-m-bottom_small'
+            placeholder='search for products'
+            value={searchProd}></lightning-input>
+            <template if:true={goods.data}>
+            <lightning-layout multiple-rows='true' pull-to-boundary='small' onhandlegood={handlegood} onhandleproduct={handleproduct} >
+                    <template for:each={goods.data} for:item="good">
+                    <lightning-layout-item key={good.Id}  size='3' class="slds-p-around_x-small">
+                        <!-- Child component '-' for capitals in file name -->
+                        <c-product-tiles good={good}></c-product-tiles>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+            <!-- No products found -->
+     <template if:false={hasResults}>
+        <div class="slds-align_absolute-center slds-m-vertical_small">
+            No product found..
+        </div>
+    </template>
+            </template>
+
+            
+
+    </lightning-card>
+</template>
