@@ -24,8 +24,8 @@
             "c/reportComp": [
                 "reportComp/reportComp.js"
             ],
-            "c/searchContact": [
-                "searchContact/searchContact.js"
+            "c/accOrderPdf": [
+                "accOrderPdf/accOrderPdf.js"
             ]
         }
     },

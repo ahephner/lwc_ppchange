@@ -1,0 +1,19 @@
+<template>
+    <lightning-card>
+       <div class="slds-box">
+           
+               <h2 class="header">Search for Sales Docs</h2>
+               <lightning-input type="date" name="date1" label="First Date" value={dateOne} onchange={dateOneChange} required ></lightning-input>
+               <lightning-input type="date" name="date2" label="Date Two" value={dateTwo} onchange={dateTwoChange}></lightning-input>
+               <lightning-input type="text" name="product" label="Product Number" class='slds-p-bottom_small' value={prodNum} onchange={prodNumChange}></lightning-input>
+               <div class="slds-m-vertical_medium">
+               <lightning-button variant="brand"   label="Search" onclick={handleSearch} icon-name="utility:search" ></lightning-button></div> 
+           
+       </div>
+       </lightning-card>
+       <lightning-card>
+          <div> here is: {dateOne}</div>
+          <div> here is: {dateTwo}</div>
+          <div> here is: {prodNum}</div>
+       </lightning-card>
+   </template>
