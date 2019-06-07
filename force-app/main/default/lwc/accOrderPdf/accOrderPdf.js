@@ -1,6 +1,8 @@
 import { LightningElement, track } from 'lwc';
 
 export default class AccOrderPdf extends LightningElement {
+//get current Record page id?
+    @api recordId; 
     @track
     dateOne ='';
 
