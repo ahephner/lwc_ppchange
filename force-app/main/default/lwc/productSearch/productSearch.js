@@ -3,12 +3,13 @@ import { NavigationMixin, CurrentPageReference } from 'lightning/navigation';
 import { fireEvent } from 'c/pubsub';
 import { LightningElement, track, wire } from 'lwc';
 import searchGoods from '@salesforce/apex/searchProds.searchGoods'; 
-    
+
+
+
 export default class ProductSearch extends NavigationMixin(LightningElement) {
         @track searchProd;
         @track goods;
-         
-    
+
 //get current page reference store in pageRef
         @wire(CurrentPageReference) pageRef; 
         //wire apex searchGOods method with the searchProd term then set goods equal to results
@@ -56,6 +57,7 @@ export default class ProductSearch extends NavigationMixin(LightningElement) {
         handleproduct(event){
             fireEvent(this.pageRef, 'productListUpdate', event.detail)
         }
-    }
+        
+}
 
     
