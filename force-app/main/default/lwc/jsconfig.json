@@ -3,6 +3,9 @@
         "experimentalDecorators": true,
         "baseUrl": ".",
         "paths": {
+            "c/accOrderPdf": [
+                "accOrderPdf/accOrderPdf.js"
+            ],
             "c/calculator": [
                 "calculator/calculator.js"
             ],
@@ -23,9 +26,6 @@
             ],
             "c/reportComp": [
                 "reportComp/reportComp.js"
-            ],
-            "c/accOrderPdf": [
-                "accOrderPdf/accOrderPdf.js"
             ]
         }
     },
