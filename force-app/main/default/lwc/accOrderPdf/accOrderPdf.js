@@ -1,12 +1,17 @@
+/* eslint-disable no-console */
 import { LightningElement, track } from 'lwc';
-//need apex class 
+import docSearch from '@salesforce/apex/docSearchController.docSearch'
 export default class App extends LightningElement {
-   //@api recordid
-    @track dateOne ='';
-
-    @track dateTwo;
-    @track prodNum
-    @track yn = false; 
+    /**
+     * @track indicates that if this object changes,
+     * the UI should update to reflect those changes.
+     */
+     @track dateOne;
+     dateTwo;
+     prodNum;
+     yn = false;
+    @track call; 
+    @track error  
     dateOneChange(event){
         this.dateOne = event.target.value;
     }
@@ -19,10 +24,25 @@ export default class App extends LightningElement {
     ynChange(e){
         this.yn = e.target.checked; 
     }
-//    handleSearch(){
-//        this.dateOne = dateOne;
-//        this.dateTwo = dateTwo;
-//        this.prodNum = prodNum; 
-//    }
+   handleSearch(){
+       let  parameters = {
+            one: this.dateOne,
+            two: this.dateTwo, 
+            check: this.yn, 
+            prodName: this.prodNum, 
+           
+       }; 
+       console.log(parameters.one)
+       console.log(parameters.prodName)
+       docSearch({wrapper: parameters})
+            .then(results =>{
+                this.call = results;
+                this.error = undefined;
+            })
+            .catch(error=>{
+                this.call = undefined;
+                this.error = error; 
+            }); 
+   }
    
 }
