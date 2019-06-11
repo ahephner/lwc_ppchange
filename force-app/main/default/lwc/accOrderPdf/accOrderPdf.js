@@ -1,11 +1,25 @@
 /* eslint-disable no-console */
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track, api, wire } from 'lwc';
 import docSearch from '@salesforce/apex/docSearchController.docSearch'
+import Customer from '@salesforce/schema/Account.Customer__c'
+import { getRecord, getFieldValue  } from 'lightning/uiRecordApi';
+
+const fields = [Customer]; 
 export default class App extends LightningElement {
-    /**
-     * @track indicates that if this object changes,
-     * the UI should update to reflect those changes.
-     */
+     @api recordId; 
+     @track rId; 
+     @wire(getRecord, {recordId: '$recordId', fields })
+        number({error, data}){
+            if(data){
+                this.rId = getFieldValue(data, Customer); 
+                this.error = undefined;
+            }else if(error){
+                this.error = error; 
+                this.rId = undefined; 
+            }
+        }
+     
+     
      @track dateOne;
      dateTwo;
      prodNum;
@@ -14,6 +28,7 @@ export default class App extends LightningElement {
     @track error  
     dateOneChange(event){
         this.dateOne = event.target.value;
+         
     }
     dateTwoChange(event){
         this.dateTwo = event.target.value;
@@ -30,10 +45,9 @@ export default class App extends LightningElement {
             two: this.dateTwo, 
             check: this.yn, 
             prodName: this.prodNum, 
-           
+            custNum: this.rId     
        }; 
-       console.log(parameters.one)
-       console.log(parameters.prodName)
+       
        docSearch({wrapper: parameters})
             .then(results =>{
                 this.call = results;
