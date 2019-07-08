@@ -32,6 +32,9 @@
             ],
             "c/appProductSearch": [
                 "appProductSearch/appProductSearch.js"
+            ],
+            "c/appArea": [
+                "appArea/appArea.js"
             ]
         }
     },

@@ -1,0 +1,13 @@
+<template>
+    <lightning-card>
+    <div class="slds-col slds-size_5-of-12">
+        <lightning-combobox
+            name='category'
+            label='Area'
+            placeholder='Select an area to add app too'
+            value={area}
+            options={areaOptions}
+            onchange={selectArea}></lightning-combobox>
+    </div> 
+</lightning-card>
+</template>

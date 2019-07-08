@@ -1,29 +1,14 @@
 /* eslint-disable no-console */
-import { LightningElement, track, api, wire } from 'lwc';
-import getAreas from '@salesforce/apex/appProduct.getAreas'; 
+import { LightningElement, track, wire } from 'lwc';
 import searchProduct from '@salesforce/apex/appProduct.searchProduct'
 
 export default class AppProductSearch extends LightningElement {
     @track cat = 'ALL';
-    @track area; 
-    @api recordId; 
+
     @track searchKey;
     @track cat;
     @track goods; 
-   //this needs it's own card  
-    @wire(getAreas,{recordId: '$recordId'})
-        areaList;
-     
-     get areaOptions(){
-         console.log('==> '+JSON.stringify(this.areaList.data)); 
-         return this.areaList.data; 
-     }   
 
-     selectArea(e){
-        this.value = e.detail.value 
-    }
-
-///see above
 
      get pc() {
         return [
