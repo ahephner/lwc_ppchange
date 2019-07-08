@@ -1,0 +1,37 @@
+<template>
+    <lightning-card>
+    <div >
+        <lightning-combobox
+            name='category'
+            label='Area'
+            placeholder='Select an area to add app too'
+            value={area}
+            options={areaOptions}
+            onchange={selectArea}></lightning-combobox>
+    </div>  
+    <br/> 
+    <h4>Add Product</h4>
+    <div class='slds-grid slds-gutters'>
+        <div class="slds-col slds-size_3-of-12">
+        <lightning-combobox
+            name='category'
+            label='Category'
+            placeholder='All'
+            value={cat}
+            options={pc}
+            onchange={selectCat}></lightning-combobox>
+        </div> 
+        <div class="slds-col slds-size_6-of-12">
+            <lightning-input 
+                name='Search'
+                label='Product'
+                value={prod}></lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-12">
+            <lightning-input
+                label='Rate'
+                value={rate}></lightning-input>
+        </div>
+    </div>
+    </lightning-card>
+</template>

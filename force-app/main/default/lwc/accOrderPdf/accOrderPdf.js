@@ -28,10 +28,11 @@ export default class App extends LightningElement {
     @track error  
     dateOneChange(event){
         this.dateOne = event.target.value;
-         
+        
     }
     dateTwoChange(event){
         this.dateTwo = event.target.value;
+        
     }
     prodNumChange(e){
         this.prodNum = e.target.value;
@@ -47,7 +48,7 @@ export default class App extends LightningElement {
             prodName: this.prodNum, 
             custNum: this.rId     
        }; 
-       
+      // console.log(parameters.one)
        docSearch({wrapper: parameters})
             .then(results =>{
                 this.call = results;
