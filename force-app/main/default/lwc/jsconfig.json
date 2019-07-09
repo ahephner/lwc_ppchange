@@ -6,6 +6,12 @@
             "c/accOrderPdf": [
                 "accOrderPdf/accOrderPdf.js"
             ],
+            "c/appArea": [
+                "appArea/appArea.js"
+            ],
+            "c/appProductSearch": [
+                "appProductSearch/appProductSearch.js"
+            ],
             "c/calculator": [
                 "calculator/calculator.js"
             ],
@@ -30,11 +36,8 @@
             "c/reportComp": [
                 "reportComp/reportComp.js"
             ],
-            "c/appProductSearch": [
-                "appProductSearch/appProductSearch.js"
-            ],
-            "c/appArea": [
-                "appArea/appArea.js"
+            "c/appProductList": [
+                "appProductList/appProductList.js"
             ]
         }
     },

@@ -18,7 +18,24 @@
                 onchange={searchProd}
                 value={searchKey}></lightning-input>
         </div>
-
     </div>
+    <!--Here is the expanding table-->
+    <template if:true={prod.data}>
+      
+            <template for:each={prod.data} for:item="prods">
+                <c-app-product-list
+                    key={prods.id}
+                    prods={prods}>
+                </c-app-product-list>
+            </template>
+       
+        <!--Nothing found-->
+        <template if:false={hasResults}>
+            <div class="slds-align_absolute-center slds-m-vertical_small">
+                No product found..
+            </div>
+        </template>
+    </template>
+
     </lightning-card>
 </template>

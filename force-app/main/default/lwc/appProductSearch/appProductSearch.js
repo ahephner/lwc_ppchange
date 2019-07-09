@@ -7,7 +7,7 @@ export default class AppProductSearch extends LightningElement {
 
     @track searchKey;
     @track cat;
-    @track goods; 
+    @track prod; 
 
 
      get pc() {
@@ -24,17 +24,21 @@ export default class AppProductSearch extends LightningElement {
      }
    @wire(searchProduct, {searchKey: '$searchKey', cat:'$cat'})
         loadProd(results){
-            this.goods = results; 
-            console.log(this.goods);
-            console.log('here is search key '+this.searchKey)
-            console.log(this.cat);
+            this.prod = results; 
+            //console.log(this.prod);
+            //console.log('here is search key '+this.searchKey)
+            //console.log(this.cat);
         }
+    get hasResults(){
+        console.log(this.prod.data.length); 
+        return (this.prod.data.length >0); 
+    }
     searchProd(event){
         window.clearTimeout(this.delayTimeout);
             const searchKey = event.target.value; 
             // eslint-disable-next-line @lwc/lwc/no-async-operation
             this.delayTimeout = setTimeout(() =>{
                 this.searchKey = searchKey;
-            }, 300);
+            }, 400);
     }
 }
