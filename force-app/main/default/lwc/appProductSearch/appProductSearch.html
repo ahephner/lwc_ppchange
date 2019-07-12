@@ -21,14 +21,13 @@
     </div>
     <!--Here is the expanding table-->
     <template if:true={prod.data}>
-      
+      <div class='slds-m-around-medium' onproductselect={handleProductSelect}>
             <template for:each={prod.data} for:item="prods">
-                <c-app-product-list
-                    key={prods.id}
-                    prods={prods}>
-                </c-app-product-list>
+                    
+                 <c-app-product-list key={prods.id} prods={prods}></c-app-product-list>
+                 
             </template>
-       
+        </div>
         <!--Nothing found-->
         <template if:false={hasResults}>
             <div class="slds-align_absolute-center slds-m-vertical_small">

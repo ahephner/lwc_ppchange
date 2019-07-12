@@ -9,6 +9,9 @@
             "c/appArea": [
                 "appArea/appArea.js"
             ],
+            "c/appProductList": [
+                "appProductList/appProductList.js"
+            ],
             "c/appProductSearch": [
                 "appProductSearch/appProductSearch.js"
             ],
@@ -36,8 +39,8 @@
             "c/reportComp": [
                 "reportComp/reportComp.js"
             ],
-            "c/appProductList": [
-                "appProductList/appProductList.js"
+            "c/appInfo": [
+                "appInfo/appInfo.js"
             ]
         }
     },

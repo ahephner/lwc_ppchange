@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 import { LightningElement, track, wire } from 'lwc';
 import searchProduct from '@salesforce/apex/appProduct.searchProduct'
-
+import { CurrentPageReference } from 'lightning/navigation';
+import {fireEvent} from 'c/pubsub';
 export default class AppProductSearch extends LightningElement {
     @track cat = 'ALL';
 
@@ -22,12 +23,14 @@ export default class AppProductSearch extends LightningElement {
      selectCat(e){
          this.cat = e.detail.value; 
      }
+
+   @wire(CurrentPageReference) pageRef;
+
    @wire(searchProduct, {searchKey: '$searchKey', cat:'$cat'})
         loadProd(results){
             this.prod = results; 
             //console.log(this.prod);
-            //console.log('here is search key '+this.searchKey)
-            //console.log(this.cat);
+
         }
     get hasResults(){
         console.log(this.prod.data.length); 
@@ -40,5 +43,10 @@ export default class AppProductSearch extends LightningElement {
             this.delayTimeout = setTimeout(() =>{
                 this.searchKey = searchKey;
             }, 400);
+    }
+    
+    handleProductSelect(event){
+        console.log('handle product select ' +event.target.prods.Id);
+        fireEvent(this.pageRef, 'productSelected', event.target.prods.Id); 
     }
 }
