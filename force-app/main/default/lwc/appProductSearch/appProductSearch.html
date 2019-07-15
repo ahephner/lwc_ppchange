@@ -1,0 +1,40 @@
+<template>
+    <lightning-card>
+    <h4>Add Product</h4>
+    <div class='slds-grid slds-gutters'>
+        <div class="slds-col slds-size_5-of-12">
+        <lightning-combobox
+            name='category'
+            label='Category'
+            placeholder='All'
+            value={cat}
+            options={pc}
+            onchange={selectCat}></lightning-combobox>
+        </div> 
+        <div class="slds-col slds-size_7-of-12">
+            <lightning-input 
+                name='Search'
+                label='Product'
+                onchange={searchProd}
+                value={searchKey}></lightning-input>
+        </div>
+    </div>
+    <!--Here is the expanding table-->
+    <template if:true={prod.data}>
+      <div class='slds-m-around-medium' onproductselect={handleProductSelect}>
+            <template for:each={prod.data} for:item="prods">
+                    
+                 <c-app-product-list key={prods.id} prods={prods}></c-app-product-list>
+                 
+            </template>
+        </div>
+        <!--Nothing found-->
+        <template if:false={hasResults}>
+            <div class="slds-align_absolute-center slds-m-vertical_small">
+                No product found..
+            </div>
+        </template>
+    </template>
+
+    </lightning-card>
+</template>

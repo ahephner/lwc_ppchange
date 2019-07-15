@@ -6,6 +6,15 @@
             "c/accOrderPdf": [
                 "accOrderPdf/accOrderPdf.js"
             ],
+            "c/appArea": [
+                "appArea/appArea.js"
+            ],
+            "c/appProductList": [
+                "appProductList/appProductList.js"
+            ],
+            "c/appProductSearch": [
+                "appProductSearch/appProductSearch.js"
+            ],
             "c/calculator": [
                 "calculator/calculator.js"
             ],
@@ -14,6 +23,9 @@
             ],
             "c/helloWorld": [
                 "helloWorld/helloWorld.js"
+            ],
+            "c/modal": [
+                "modal/modal.js"
             ],
             "c/productSearch": [
                 "productSearch/productSearch.js"
@@ -26,6 +38,9 @@
             ],
             "c/reportComp": [
                 "reportComp/reportComp.js"
+            ],
+            "c/appInfo": [
+                "appInfo/appInfo.js"
             ]
         }
     },
