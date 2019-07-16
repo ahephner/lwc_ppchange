@@ -1,6 +1,14 @@
 <template>
     <lightning-card>
-        <p>{name}</p>
+        <ul>
+        <template for:each={newProds} for:item="prod">
+            <li key={prod.Id}>
+                <div>
+                    <p>{prod.name}</p>
+                    <lightning-input type="number" required label="Rate"></lightning-input>
+                </div>
+            </li>
+            </template>
+        </ul>
     </lightning-card>
-    
 </template>
