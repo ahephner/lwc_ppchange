@@ -41,6 +41,12 @@
             ],
             "c/reportComp": [
                 "reportComp/reportComp.js"
+            ],
+            "c/IdsUtils": [
+                "IdsUtils/IdsUtils.js"
+            ],
+            "c/idsUtils": [
+                "idsUtils/idsUtils.js"
             ]
         }
     },

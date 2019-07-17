@@ -2,17 +2,17 @@
     <lightning-card>
         <p>Area ID: {areaId}</p>
         <lightning-input label='App Name' value={appName} onchange={newName} required></lightning-input>
-        <lightning-input type='date' name='appDate' label='App Date' value={appDate} onchange={date} required></lightning-input>
+        <lightning-input type='date' name='appDate' label='App Date' value={appDate} onchange={date} ></lightning-input>
         <ul>
         <template for:each={newProds} for:item="prod">
             <li key={prod.Id}>
                 <div>
                     <p>{prod.name}</p>
-                    <lightning-input type="number" required label="Rate" onchange={rate}></lightning-input>
+                    <lightning-input type="number"  label="Rate" value={prod.rate}></lightning-input>
                 </div>
             </li>
             </template>
         </ul>
-        <lightning-button variant="brand" label="save" onclick={insertApp}></lightning-button>
+        <lightning-button variant="brand" label="save" onclick={createApplication__c}></lightning-button>
     </lightning-card>
 </template>
