@@ -1,18 +1,15 @@
 /* eslint-disable no-console */
 import { LightningElement, track, wire } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
-import {getRecord, getFieldValue, createRecord } from 'lightning/uiRecordApi'
+import {getRecord, getFieldValue } from 'lightning/uiRecordApi'
 import { registerListener, unregisterAllListeners } from 'c/pubsub';
+import addApplication from '@salesforce/apex/addApp.addApplication'
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import { reduceErrors } from 'c/idsUtils';
 
-import APP_OBJECT from '@salesforce/schema/Application__c'
-import APP_NAME from '@salesforce/schema/Application__c.Name'
-import AREA from '@salesforce/schema/Application__c.Area__c'
 import PRODUCT_ID from '@salesforce/schema/Product__c.Id'
 import PRODUCT_NAME from '@salesforce/schema/Product__c.Product_Name__c'
 
-const xfields = [PRODUCT_NAME, PRODUCT_ID];
+const fields = [PRODUCT_NAME, PRODUCT_ID];
 export default class AppInfo extends LightningElement {
     recordId; 
     @track appId; 
@@ -26,7 +23,7 @@ export default class AppInfo extends LightningElement {
      
     @wire(CurrentPageReference) pageRef;
 
-    @wire(getRecord, {recordId: '$recordId', xfields})
+    @wire(getRecord, {recordId: '$recordId', fields})
     wiredProduct({error, data}){
         if(data){
             this.newProds = [
@@ -75,37 +72,26 @@ export default class AppInfo extends LightningElement {
 
     // }
     createApplication__c(){
-        console.log('area ' + this.areaId);
-        // console.log('date '+ this.appDate);
-        console.log('app name ' + this.appName)
-        const fields = {}
-        fields[AREA.fieldApiName] = this.areaId
-        fields[APP_NAME.fieldApiName] = this.appName
-        console.log(fields)
-        const recordInput = {apiName: APP_OBJECT.objectApiName, fields};
-        
-        createRecord(recordInput)
-            .then(application__c => {
-                this.appId = application__c.id; 
-                console.log('new appID ' +application__c)
+       let params = {
+           appName: this.appName,
+           appArea: this.areaId,
+           appDate: this.appDate
+       };
+       console.log(params)
+        addApplication({wrapper:params})
+            .then((resp)=>{
+                this.appId = resp.Id; 
+                console.log(this.appId);
                 this.dispatchEvent(
                     new ShowToastEvent({
                         title: 'Success',
-                        message: 'App created',
-                        variant: 'success',
-                    }),
+                        message: 'Look at the applications tab!',
+                        variant: 'success'
+                    })
                 );
+            }).catch((error)=>{
+                console.log(JSON.stringify(error)); 
             })
-            .catch(error => {
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Error creating record',
-                        message: reduceErrors(error).join(', '),
-                        variant: 'error',
-                       
-                    }),
-                ); 
-            });
     }
 }
 
