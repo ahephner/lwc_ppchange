@@ -5,10 +5,10 @@
         <lightning-input type='date' name='appDate' label='App Date' value={appDate} onchange={date} ></lightning-input>
         <ul>
         <template for:each={newProds} for:item="prod">
-            <li key={prod.Id}>
-                <div>
+            <li key={prod.Id} data-item={prod}>
+                <div class='input'>
                     <p>{prod.name}</p>
-                    <lightning-input type="number"  label="Rate" value={prod.rate}></lightning-input>
+                    <lightning-input type="number"  label="Rate" value={prod.rate} onchange={newRate} ></lightning-input>
                 </div>
             </li>
             </template>
