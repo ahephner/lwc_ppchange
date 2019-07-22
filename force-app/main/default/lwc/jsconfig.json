@@ -9,6 +9,9 @@
             "c/appArea": [
                 "appArea/appArea.js"
             ],
+            "c/appInfo": [
+                "appInfo/appInfo.js"
+            ],
             "c/appProductList": [
                 "appProductList/appProductList.js"
             ],
@@ -24,6 +27,9 @@
             "c/helloWorld": [
                 "helloWorld/helloWorld.js"
             ],
+            "c/idsUtils": [
+                "idsUtils/idsUtils.js"
+            ],
             "c/modal": [
                 "modal/modal.js"
             ],
@@ -38,9 +44,6 @@
             ],
             "c/reportComp": [
                 "reportComp/reportComp.js"
-            ],
-            "c/appInfo": [
-                "appInfo/appInfo.js"
             ]
         }
     },
