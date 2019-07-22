@@ -4,15 +4,15 @@
         <lightning-input label='App Name' value={appName} onchange={newName} required></lightning-input>
         <lightning-input type='date' name='appDate' label='App Date' value={appDate} onchange={date} ></lightning-input>
         <ul>
-        <template for:each={newProds} for:item="prod">
-            <li key={prod.Id} data-item={prod}>
-                <div class='input'>
-                    <p>{prod.name}</p>
-                    <lightning-input type="number"  label="Rate" value={prod.rate} onchange={newRate} ></lightning-input>
-                </div>
-            </li>
-            </template>
-        </ul>
+            <template if:true={newProdsSelect} for:each={newProds} for:item="prod">
+                <li key={prod.Id}>
+                    <div class='input'>
+                        <p>{prod.name}</p>
+                        <lightning-input class='rate' type="number"  label="Rate" name={prod.numb} value={prod.numb} onchange={newRate}></lightning-input>
+                    </div>
+                </li>
+                </template>
+            </ul>
         <lightning-button variant="brand" label="save" onclick={createApplication__c}></lightning-button>
     </lightning-card>
 </template>
