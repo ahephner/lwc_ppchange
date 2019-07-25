@@ -20,7 +20,7 @@ export default class AppInfo extends LightningElement {
     @track name;
     //@track rate;  
     @track productId;  
-    @track newProds = [{}]
+    @track newProds = []
     lastId = 0; 
     @wire(CurrentPageReference) pageRef;
 
@@ -36,7 +36,7 @@ export default class AppInfo extends LightningElement {
               rate:  "0", 
               numb: this.lastId 
              }]; 
-            
+             
             this.error = undefined;
         }else if (error){
             this.error = error;
@@ -85,6 +85,14 @@ export default class AppInfo extends LightningElement {
     // console.log('newProds update')
     // console.log(this.newProds[index])
     }
+
+    remove(e){
+        let x = e.target.id.substr(0,18)
+        let i = this.newProds.findIndex(prod => prod.Id === x)
+        this.newProds.splice(i,1)
+        console.log(this.newProds.length)
+      
+    }    
     createApplication__c(){
      console.log(this.newProds)
    
