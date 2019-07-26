@@ -32,11 +32,11 @@ export default class AppInfo extends LightningElement {
             //console.log(this.lastId)
             this.newProds= [
             ...this.newProds,   
-             { Id:   this.productId = getFieldValue(data, PRODUCT_ID), 
-              name:  this.name = getFieldValue(data, PRODUCT_NAME), 
-              rate:  "0", 
+             { Product__c:   this.productId = getFieldValue(data, PRODUCT_ID), 
+               Product_Name__c:  this.name = getFieldValue(data, PRODUCT_NAME), 
+              OZ_M__c:  "0", 
               numb: this.lastId, 
-              appId: '' 
+              Application__c: '' 
              }]; 
              
             this.error = undefined;
@@ -81,7 +81,7 @@ export default class AppInfo extends LightningElement {
     newRate(e){
      let index = this.newProds.findIndex(prod => prod.numb === e.target.name)
      //console.log("index number" + index);
-     this.newProds[index].rate = e.detail.value;    
+     this.newProds[index].OZ_M__c = e.detail.value;    
     // console.log('detail. value')
     // console.log(e.detail.value) 
     // console.log('newProds update')
@@ -108,7 +108,7 @@ export default class AppInfo extends LightningElement {
                 this.appId = resp.Id; 
                 //console.log(this.appId);
                 // eslint-disable-next-line no-return-assign
-                this.newProds.forEach((x) => x.appId = this.appId)
+                this.newProds.forEach((x) => x.Application__c = this.appId)
                 let products = JSON.stringify(this.newProds)
                 console.log(products)
                 addProducts({products:products})

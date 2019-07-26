@@ -7,7 +7,7 @@
             <template if:true={newProdsSelect} for:each={newProds} for:item="prod">
                 <div class="slds-grid slds-wrap" key={prod.Id}>
                     <div class="slds-col slds-size_2-of-12">
-                        <p>{prod.name}</p>
+                        <p>{prod.Product_Name__c}</p>
                     </div>
                     <div class="slds-col slds-size_2-of-12">
                         <lightning-input class='rate' type="number"  label="Rate" name={prod.numb} value={prod.numb} onchange={newRate}></lightning-input>
