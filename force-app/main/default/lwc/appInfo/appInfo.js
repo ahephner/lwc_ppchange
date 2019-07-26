@@ -3,8 +3,9 @@ import { LightningElement, track, wire } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
 import {getRecord, getFieldValue } from 'lightning/uiRecordApi'
 import { registerListener, unregisterAllListeners } from 'c/pubsub';
-//import addApplication from '@salesforce/apex/addApp.addApplication'
-//import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import addApplication from '@salesforce/apex/addApp.addApplication';
+import addProducts from '@salesforce/apex/addApp.addProducts';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 import PRODUCT_ID from '@salesforce/schema/Product__c.Id'
 import PRODUCT_NAME from '@salesforce/schema/Product__c.Product_Name__c'
@@ -34,7 +35,8 @@ export default class AppInfo extends LightningElement {
              { Id:   this.productId = getFieldValue(data, PRODUCT_ID), 
               name:  this.name = getFieldValue(data, PRODUCT_NAME), 
               rate:  "0", 
-              numb: this.lastId 
+              numb: this.lastId, 
+              appId: '' 
              }]; 
              
             this.error = undefined;
@@ -90,33 +92,41 @@ export default class AppInfo extends LightningElement {
         let x = e.target.id.substr(0,18)
         let i = this.newProds.findIndex(prod => prod.Id === x)
         this.newProds.splice(i,1)
-        console.log(this.newProds.length)
+        //console.log(this.newProds.length)
       
     }    
     createApplication__c(){
-     console.log(this.newProds)
-   
-       
-    //     let params = {
-    //        appName: this.appName,
-    //        appArea: this.areaId,
-    //        appDate: this.appDate
-    //    };
-    //    console.log(params)
-    //     addApplication({wrapper:params})
-    //         .then((resp)=>{
-    //             this.appId = resp.Id; 
-    //             console.log(this.appId);
-    //             this.dispatchEvent(
-    //                 new ShowToastEvent({
-    //                     title: 'Success',
-    //                     message: 'Look at the applications tab!',
-    //                     variant: 'success'
-    //                 })
-    //             );
-    //         }).catch((error)=>{
-    //             console.log(JSON.stringify(error)); 
-    //         })
+
+        let params = {
+           appName: this.appName,
+           appArea: this.areaId,
+           appDate: this.appDate
+       };
+       console.log(params)
+        addApplication({wrapper:params})
+            .then((resp)=>{
+                this.appId = resp.Id; 
+                //console.log(this.appId);
+                // eslint-disable-next-line no-return-assign
+                this.newProds.forEach((x) => x.appId = this.appId)
+                let products = JSON.stringify(this.newProds)
+                console.log(products)
+                addProducts({products:products})
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Success',
+                        message: 'Look at the applications tab!',
+                        variant: 'success'
+                    })
+                );
+            }).then(()=>{
+                this.newProds = [];
+                this.appName = ''; 
+                this.appDate = '';
+                this.areaId = ''; 
+            }).catch((error)=>{
+                console.log(JSON.stringify(error)); 
+            })
     }
 }
 
