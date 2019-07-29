@@ -44,6 +44,9 @@
             ],
             "c/reportComp": [
                 "reportComp/reportComp.js"
+            ],
+            "c/appTable": [
+                "appTable/appTable.js"
             ]
         }
     },

@@ -65,6 +65,7 @@ export default class AppInfo extends LightningElement {
 
     handleNewArea(v){
         this.areaId = v;
+        console.log(v)
     }
     date(e){
         this.appDate = e.detail.value; 
