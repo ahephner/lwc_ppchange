@@ -2,7 +2,7 @@
 import { LightningElement, track, wire } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
 import {getRecord, getFieldValue } from 'lightning/uiRecordApi'
-import { registerListener, unregisterAllListeners } from 'c/pubsub';
+import { registerListener, unregisterAllListeners, fireEvent } from 'c/pubsub';
 import addApplication from '@salesforce/apex/addApp.addApplication';
 import addProducts from '@salesforce/apex/addApp.addProducts';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -18,8 +18,7 @@ export default class AppInfo extends LightningElement {
     @track appName;
     @track appDate; 
     @track areaId; 
-    @track name;
-    //@track rate;  
+    @track name;  
     @track productId;  
     @track newProds = []
     lastId = 0; 
@@ -103,7 +102,7 @@ export default class AppInfo extends LightningElement {
            appArea: this.areaId,
            appDate: this.appDate
        };
-       console.log(params)
+       //console.log(params)
         addApplication({wrapper:params})
             .then((resp)=>{
                 this.appId = resp.Id; 
@@ -120,6 +119,9 @@ export default class AppInfo extends LightningElement {
                         variant: 'success'
                     })
                 );
+            }).then(()=>{
+                console.log("sending new app to table "+this.appId); 
+                fireEvent(this.pageRef, 'newApp', this.appId)
             }).then(()=>{
                 this.newProds = [];
                 this.appName = ''; 

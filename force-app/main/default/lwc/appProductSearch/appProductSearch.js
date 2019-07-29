@@ -46,7 +46,7 @@ export default class AppProductSearch extends LightningElement {
     }
     
     handleProductSelect(event){
-        console.log('handle product select ' +event.target.prods.Id);
+        
         fireEvent(this.pageRef, 'productSelected', event.target.prods.Id); 
     }
 }

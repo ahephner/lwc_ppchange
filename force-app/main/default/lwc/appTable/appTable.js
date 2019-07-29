@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 import { LightningElement, track, wire, api } from 'lwc';
-//import { CurrentPageReference } from 'lightning/navigation';
+import { registerListener, unregisterAllListeners } from 'c/pubsub';
+import { CurrentPageReference } from 'lightning/navigation';
+//import { refreshApex } from '@salesforce/apex';
 import getApps from '@salesforce/apex/appProduct.getApps';
 const actions = [
     { label: 'Show details', name: 'show_details' },
@@ -26,7 +28,8 @@ export default class AppTable extends LightningElement {
     @track sortBy; 
     @track sortDirection; 
     @track error; 
-
+    @track test; 
+    @wire(CurrentPageReference) pageRef;
     //get apps
     @wire(getApps, {recordId: '$recordId'})
         wiredList({data, error}){
@@ -40,7 +43,21 @@ export default class AppTable extends LightningElement {
             }
 
         }
-        
+        connectedCallback(){
+
+            registerListener('newApp', this.newAppSubmit, this); 
+        }
+
+        disconnectedCallback(){
+            unregisterAllListeners(this);
+        }
+
+        newAppSubmit(e){
+            console.log('refresh!')
+            console.log(this.test = e)
+                //return refreshApex(this.wiredList)
+        }
+
     handleRowAction(event) {
         const actionName = event.detail.action.name;
         const row = event.detail.row;
