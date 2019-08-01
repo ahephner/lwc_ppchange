@@ -7,7 +7,7 @@ export default class AppProductSearch extends LightningElement {
     @track cat = 'ALL';
 
     @track searchKey;
-    @track cat;
+    
     @track prod; 
 
 
@@ -42,6 +42,7 @@ export default class AppProductSearch extends LightningElement {
             // eslint-disable-next-line @lwc/lwc/no-async-operation
             this.delayTimeout = setTimeout(() =>{
                 this.searchKey = searchKey;
+                
             }, 400);
     }
     

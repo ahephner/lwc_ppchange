@@ -18,6 +18,9 @@
             "c/appProductSearch": [
                 "appProductSearch/appProductSearch.js"
             ],
+            "c/appTable": [
+                "appTable/appTable.js"
+            ],
             "c/calculator": [
                 "calculator/calculator.js"
             ],
@@ -44,9 +47,6 @@
             ],
             "c/reportComp": [
                 "reportComp/reportComp.js"
-            ],
-            "c/appTable": [
-                "appTable/appTable.js"
             ]
         }
     },
