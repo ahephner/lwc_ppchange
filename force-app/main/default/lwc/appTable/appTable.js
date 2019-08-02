@@ -34,7 +34,7 @@ export default class AppTable extends LightningElement {
     @track test; 
     @track record; 
     @wire(CurrentPageReference) pageRef;
-    
+    //required to refresh the data table with new apps or delete old ones! 
     wiredAppList;
 
     //get apps
@@ -50,6 +50,7 @@ export default class AppTable extends LightningElement {
             }
 
         }
+        //listen to appInfo for new app
         connectedCallback(){
 
             registerListener('newApp', this.newAppSubmit, this); 
@@ -58,9 +59,9 @@ export default class AppTable extends LightningElement {
         disconnectedCallback(){
             unregisterAllListeners(this);
         }
-
+        //add new app to table 
         newAppSubmit(e){
-            console.log('refresh!')
+            //console.log('refresh!')
             console.log(this.test = e)
             return refreshApex(this.wiredAppList)
         }
@@ -79,7 +80,17 @@ export default class AppTable extends LightningElement {
                                 message: 'App Deleted', 
                                 variant: 'success'
                             }) 
-                        ); return refreshApex(this.wiredAppList)
+                        );//this refreshes the table  
+                        return refreshApex(this.wiredAppList)
+                    })
+                    .catch(error => {
+                        this.dispatchEvent(
+                            new ShowToastEvent({
+                                title: 'Error deleting record',
+                                message: JSON.stringify(error),
+                                variant: 'error'
+                            })
+                        )
                     })
             
                 break;

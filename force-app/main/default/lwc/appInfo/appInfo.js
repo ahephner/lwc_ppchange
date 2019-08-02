@@ -120,7 +120,7 @@ export default class AppInfo extends LightningElement {
                     })
                 );
             }).then(()=>{
-                console.log("sending new app to table "+this.appId); 
+                //console.log("sending new app to table "+this.appId); 
                 fireEvent(this.pageRef, 'newApp', this.appId)
             }).then(()=>{
                 this.newProds = [];
@@ -128,7 +128,15 @@ export default class AppInfo extends LightningElement {
                 this.appDate = '';
                 this.areaId = ''; 
             }).catch((error)=>{
-                console.log(JSON.stringify(error)); 
+                console.log(JSON.stringify(error))
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Error adding app',
+                        message: JSON.stringify(error),
+                        variant: 'error'
+                    })
+                    
+                ) 
             })
     }
 }
