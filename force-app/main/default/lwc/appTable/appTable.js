@@ -2,7 +2,7 @@
 import { LightningElement, track, wire, api } from 'lwc';
 import { registerListener, unregisterAllListeners } from 'c/pubsub';
 import { CurrentPageReference } from 'lightning/navigation';
-//import { refreshApex } from '@salesforce/apex';
+import { refreshApex } from '@salesforce/apex';
 import getApps from '@salesforce/apex/appProduct.getApps';
 const actions = [
     { label: 'Show details', name: 'show_details' },
@@ -30,16 +30,19 @@ export default class AppTable extends LightningElement {
     @track error; 
     @track test; 
     @wire(CurrentPageReference) pageRef;
+    
+    wiredAppList;
+
     //get apps
     @wire(getApps, {recordId: '$recordId'})
-        wiredList({data, error}){
-            if(data){
-                this.appList = data; 
-                //console.log("getapps")
-                //console.log(JSON.stringify(data))
-            }else if(error){
-                this.error = error 
-                //console.log(error)
+        wiredList(result){
+            this.wiredAppList = result; 
+            if(result.data){
+                this.appList = result.data; 
+                this.error = undefined; 
+            }else if(result.error){
+                this.error = result.error 
+                this.appList = undefined; 
             }
 
         }
@@ -55,7 +58,7 @@ export default class AppTable extends LightningElement {
         newAppSubmit(e){
             console.log('refresh!')
             console.log(this.test = e)
-                //return refreshApex(this.wiredList)
+            return refreshApex(this.wiredAppList)
         }
 
     handleRowAction(event) {
