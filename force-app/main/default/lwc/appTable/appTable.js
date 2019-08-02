@@ -2,8 +2,11 @@
 import { LightningElement, track, wire, api } from 'lwc';
 import { registerListener, unregisterAllListeners } from 'c/pubsub';
 import { CurrentPageReference } from 'lightning/navigation';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
 import getApps from '@salesforce/apex/appProduct.getApps';
+import { deleteRecord } from 'lightning/uiRecordApi';
+
 const actions = [
     { label: 'Show details', name: 'show_details' },
     { label: 'Delete', name: 'delete' },
@@ -29,6 +32,7 @@ export default class AppTable extends LightningElement {
     @track sortDirection; 
     @track error; 
     @track test; 
+    @track record; 
     @wire(CurrentPageReference) pageRef;
     
     wiredAppList;
@@ -63,11 +67,21 @@ export default class AppTable extends LightningElement {
 
     handleRowAction(event) {
         const actionName = event.detail.action.name;
-        const row = event.detail.row;
+        const row = event.detail.row.Id;
+        console.log('row outside '+row)
         switch (actionName) {
             case 'delete':
-                //his.deleteRow(row);
-                console.log(actionName, + " " +row)
+                deleteRecord(row)
+                    .then(() => {
+                        this.dispatchEvent(
+                            new ShowToastEvent({
+                                title: 'Success', 
+                                message: 'App Deleted', 
+                                variant: 'success'
+                            }) 
+                        ); return refreshApex(this.wiredAppList)
+                    })
+            
                 break;
             case 'show_details':
                 console.log(actionName, + " " +row)
