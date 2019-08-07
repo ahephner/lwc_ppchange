@@ -30,6 +30,9 @@
             "c/helloWorld": [
                 "helloWorld/helloWorld.js"
             ],
+            "c/homePageLinks": [
+                "homePageLinks/homePageLinks.js"
+            ],
             "c/idsUtils": [
                 "idsUtils/idsUtils.js"
             ],
