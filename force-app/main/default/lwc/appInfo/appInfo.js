@@ -2,7 +2,7 @@
 import { LightningElement, track, wire } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
 import {getRecord, getFieldValue } from 'lightning/uiRecordApi'
-import { registerListener, unregisterAllListeners } from 'c/pubsub';
+import { registerListener, unregisterAllListeners, fireEvent } from 'c/pubsub';
 import addApplication from '@salesforce/apex/addApp.addApplication';
 import addProducts from '@salesforce/apex/addApp.addProducts';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -18,8 +18,7 @@ export default class AppInfo extends LightningElement {
     @track appName;
     @track appDate; 
     @track areaId; 
-    @track name;
-    //@track rate;  
+    @track name;  
     @track productId;  
     @track newProds = []
     lastId = 0; 
@@ -32,11 +31,11 @@ export default class AppInfo extends LightningElement {
             //console.log(this.lastId)
             this.newProds= [
             ...this.newProds,   
-             { Id:   this.productId = getFieldValue(data, PRODUCT_ID), 
-              name:  this.name = getFieldValue(data, PRODUCT_NAME), 
-              rate:  "0", 
+             { Product__c:   this.productId = getFieldValue(data, PRODUCT_ID), 
+               Product_Name__c:  this.name = getFieldValue(data, PRODUCT_NAME), 
+              OZ_M__c:  "0", 
               numb: this.lastId, 
-              appId: '' 
+              Application__c: '' 
              }]; 
              
             this.error = undefined;
@@ -65,6 +64,7 @@ export default class AppInfo extends LightningElement {
 
     handleNewArea(v){
         this.areaId = v;
+        console.log(v)
     }
     date(e){
         this.appDate = e.detail.value; 
@@ -81,7 +81,7 @@ export default class AppInfo extends LightningElement {
     newRate(e){
      let index = this.newProds.findIndex(prod => prod.numb === e.target.name)
      //console.log("index number" + index);
-     this.newProds[index].rate = e.detail.value;    
+     this.newProds[index].OZ_M__c = e.detail.value;    
     // console.log('detail. value')
     // console.log(e.detail.value) 
     // console.log('newProds update')
@@ -102,13 +102,13 @@ export default class AppInfo extends LightningElement {
            appArea: this.areaId,
            appDate: this.appDate
        };
-       console.log(params)
+       //console.log(params)
         addApplication({wrapper:params})
             .then((resp)=>{
                 this.appId = resp.Id; 
                 //console.log(this.appId);
                 // eslint-disable-next-line no-return-assign
-                this.newProds.forEach((x) => x.appId = this.appId)
+                this.newProds.forEach((x) => x.Application__c = this.appId)
                 let products = JSON.stringify(this.newProds)
                 console.log(products)
                 addProducts({products:products})
@@ -120,12 +120,23 @@ export default class AppInfo extends LightningElement {
                     })
                 );
             }).then(()=>{
+                //console.log("sending new app to table "+this.appId); 
+                fireEvent(this.pageRef, 'newApp', this.appId)
+            }).then(()=>{
                 this.newProds = [];
                 this.appName = ''; 
                 this.appDate = '';
                 this.areaId = ''; 
             }).catch((error)=>{
-                console.log(JSON.stringify(error)); 
+                console.log(JSON.stringify(error))
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Error adding app',
+                        message: JSON.stringify(error),
+                        variant: 'error'
+                    })
+                    
+                ) 
             })
     }
 }

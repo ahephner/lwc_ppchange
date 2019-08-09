@@ -7,7 +7,7 @@ export default class AppProductSearch extends LightningElement {
     @track cat = 'ALL';
 
     @track searchKey;
-    @track cat;
+    
     @track prod; 
 
 
@@ -42,11 +42,12 @@ export default class AppProductSearch extends LightningElement {
             // eslint-disable-next-line @lwc/lwc/no-async-operation
             this.delayTimeout = setTimeout(() =>{
                 this.searchKey = searchKey;
+                
             }, 400);
     }
     
     handleProductSelect(event){
-        console.log('handle product select ' +event.target.prods.Id);
+        
         fireEvent(this.pageRef, 'productSelected', event.target.prods.Id); 
     }
 }

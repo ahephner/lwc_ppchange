@@ -12,11 +12,17 @@
             "c/appInfo": [
                 "appInfo/appInfo.js"
             ],
+            "c/appModal": [
+                "appModal/appModal.js"
+            ],
             "c/appProductList": [
                 "appProductList/appProductList.js"
             ],
             "c/appProductSearch": [
                 "appProductSearch/appProductSearch.js"
+            ],
+            "c/appTable": [
+                "appTable/appTable.js"
             ],
             "c/calculator": [
                 "calculator/calculator.js"
@@ -26,6 +32,9 @@
             ],
             "c/helloWorld": [
                 "helloWorld/helloWorld.js"
+            ],
+            "c/homePageLinks": [
+                "homePageLinks/homePageLinks.js"
             ],
             "c/idsUtils": [
                 "idsUtils/idsUtils.js"
