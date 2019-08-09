@@ -12,6 +12,9 @@
             "c/appInfo": [
                 "appInfo/appInfo.js"
             ],
+            "c/appModal": [
+                "appModal/appModal.js"
+            ],
             "c/appProductList": [
                 "appProductList/appProductList.js"
             ],

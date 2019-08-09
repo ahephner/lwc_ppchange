@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { LightningElement, track, wire, api } from 'lwc';
-import { registerListener, unregisterAllListeners } from 'c/pubsub';
+import { registerListener, unregisterAllListeners, fireEvent } from 'c/pubsub';
 import { CurrentPageReference } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
@@ -95,7 +95,8 @@ export default class AppTable extends LightningElement {
             
                 break;
             case 'show_details':
-                console.log(actionName, + " " +row)
+                console.log('firing row')
+                fireEvent(this.pageRef, 'appSelected', row)
                 break;
             default:
         }

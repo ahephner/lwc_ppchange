@@ -6,15 +6,18 @@
         <div>
             <template if:true={newProdsSelect} for:each={newProds} for:item="prod">
                 <div class="slds-grid slds-wrap" key={prod.Id}>
-                    <div class="slds-col slds-size_2-of-12">
+                        <div class="slds-size_12-of-12 slds-m-bottom_small">
+                            <div class="slds-text-align_left slds-m-around_x-small">App Products</div>
+                        </div> 
+                    <div class="slds-col slds-size_5-of-12 slds-p-top_medium">
                         <p>{prod.Product_Name__c}</p>
                     </div>
                     <div class="slds-col slds-size_2-of-12">
                         <lightning-input class='rate' type="number"  label="Rate" name={prod.numb} value={prod.numb} onchange={newRate}></lightning-input>
                     </div>
-                    <div class="slds-col slds-size_2-of-12">
+                    <div class="slds-col slds-size_1-of-12 slds-m-left_large">
                         <lightning-icon  
-                        class="slds-col slds-size_3-of-12 slds-icon_xx-small"  id={prod.Id}
+                        class="slds-icon_xx-small"  id={prod.Id}
                         icon-name="utility:close" onclick={remove} ></lightning-icon>
                     </div>
                 </div>     
@@ -23,3 +26,9 @@
         <lightning-button variant="brand" label="save" onclick={createApplication__c}></lightning-button>
     </lightning-card>
 </template>
+
+
+ 
+
+
+      
