@@ -1,29 +1,29 @@
-import { LightningElement, track, wire } from 'lwc';
-import { registerListener, unregisterListener } from 'c/pubsub';
-import { CurrentPageReference } from 'lightning/navigation';
+import { LightningElement } from 'lwc';
+// import { registerListener, unregisterListener } from 'c/pubsub';
+// import { CurrentPageReference } from 'lightning/navigation';
 
 export default class AppModal extends LightningElement {
-        @track openAppModal = false; 
+        // @track openAppModal = false; 
 
-        @wire(CurrentPageReference) pageRef;
+        // @wire(CurrentPageReference) pageRef;
 
-        connectedCallback(){
-            registerListener('appSelected', this.appSelected, this);
-        }
+        // connectedCallback(){
+        //     registerListener('appSelected', this.appSelected, this);
+        // }
 
-        disconnectedCallback(){
-            unregisterListener(this);
-        }
+        // disconnectedCallback(){
+        //     unregisterListener(this);
+        // }
 
-        appSelected(){
-            // eslint-disable-next-line no-console
-            console.log('in appSelected')
-            this.openAppModal = true; 
-        }
+        // appSelected(){
+        //     // eslint-disable-next-line no-console
+        //     console.log('in appSelected')
+        //     this.openAppModal = true; 
+        // }
 
-        //can call this in other modals
-        closeModal(){
-            this.openAppModal = false; 
-        }
+        // //can call this in other modals
+        // closeModal(){
+        //     this.openAppModal = false; 
+        // }
 
 }
