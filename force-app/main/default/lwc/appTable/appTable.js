@@ -7,11 +7,14 @@ import { refreshApex } from '@salesforce/apex';
 import getApps from '@salesforce/apex/appProduct.getApps';
 import { deleteRecord } from 'lightning/uiRecordApi';
 
+//table actions bottom of file shows how to handle
 const actions = [
     { label: 'Show details', name: 'show_details' },
     { label: 'Delete', name: 'delete' },
 ];
 
+//table columns calling actions drop down in last place of the array
+//so drop down is always far right of table
 const columns = [
     { label: 'Name', fieldName: 'Name' },
     { label: 'Area', fieldName: 'Area_Name__c', sortable: "true" },
@@ -66,10 +69,11 @@ export default class AppTable extends LightningElement {
             return refreshApex(this.wiredAppList)
         }
 
+        //this will handle the actions selected for the table row 
     handleRowAction(event) {
         const actionName = event.detail.action.name;
         const row = event.detail.row.Id;
-        console.log('row outside '+row)
+        
         switch (actionName) {
             case 'delete':
                 deleteRecord(row)
@@ -101,7 +105,7 @@ export default class AppTable extends LightningElement {
             default:
         }
     }
-    //handle sorting
+    //handle table sorting sorting
     handleSortdata(event) {
         // field name
         this.sortBy = event.detail.fieldName;

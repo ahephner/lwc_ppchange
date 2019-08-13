@@ -1,13 +1,18 @@
 <template>
     <lightning-card>
-    <div class="slds-col slds-size_5-of-12">
-        <lightning-combobox
-            name='category'
-            label='Area'
-            placeholder='Select an area to add app too'
-            value={area}
-            options={areaOptions}
-            onchange={selectArea}></lightning-combobox>
-    </div> 
-</lightning-card>
-</template>
+       <div class='slds-grid'>
+          <div class="slds-col slds-size_5-of-12">
+             <lightning-combobox
+                name='category'
+                label='Area'
+                placeholder='Select an area to add app too'
+                value={area}
+                options={areaOptions}
+                onchange={selectArea}></lightning-combobox>
+          </div>
+          <div class='slds-size_3-of-12 slds-m-top_large'>
+             <lightning-button variant="Neutral" label="Add Area" title="Success" onclick={newArea} class=" slds-m-left_x-small"></lightning-button>
+          </div>
+       </div>
+    </lightning-card>
+ </template>

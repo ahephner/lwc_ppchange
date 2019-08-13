@@ -5,6 +5,7 @@ import {getRecord, getFieldValue } from 'lightning/uiRecordApi'
 import { registerListener, unregisterAllListeners, fireEvent } from 'c/pubsub';
 import addApplication from '@salesforce/apex/addApp.addApplication';
 import addProducts from '@salesforce/apex/addApp.addProducts';
+import appProducts from '@salesforce/apex/appProduct.appProducts'; 
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 import PRODUCT_ID from '@salesforce/schema/Product__c.Id'
@@ -13,7 +14,8 @@ import PRODUCT_NAME from '@salesforce/schema/Product__c.Product_Name__c'
 const fields = [PRODUCT_NAME, PRODUCT_ID];
 export default class AppInfo extends LightningElement {
     recordId; 
-
+    @track notUpdate = true; 
+    @track up;  
     @track appId; 
     @track appName;
     @track appDate; 
@@ -21,6 +23,7 @@ export default class AppInfo extends LightningElement {
     @track name;  
     @track productId;  
     @track newProds = []
+    @track upProds = []; 
     lastId = 0; 
     @wire(CurrentPageReference) pageRef;
 
@@ -51,6 +54,7 @@ export default class AppInfo extends LightningElement {
             //console.log('callback')
             registerListener('productSelected', this.handleProductSelected, this); 
             registerListener('areaSelect', this.handleNewArea, this);
+            registerListener('appSelected', this.update, this); 
         }
         disconnectedCallback(){
             unregisterAllListeners(this);
@@ -60,11 +64,12 @@ export default class AppInfo extends LightningElement {
             // eslint-disable-next-line no-console
             //console.log('handle product ' +prodsId)
             this.recordId = prodsId; 
+             
     }
 
     handleNewArea(v){
         this.areaId = v;
-        console.log(v)
+        //console.log(v)
     }
     date(e){
         this.appDate = e.detail.value; 
@@ -82,12 +87,23 @@ export default class AppInfo extends LightningElement {
      let index = this.newProds.findIndex(prod => prod.numb === e.target.name)
      //console.log("index number" + index);
      this.newProds[index].OZ_M__c = e.detail.value;    
-    // console.log('detail. value')
-    // console.log(e.detail.value) 
-    // console.log('newProds update')
-    // console.log(this.newProds[index])
+    
     }
 
+     updateRate(r){
+         let newRate = this.newProds.findIndex(p => p.Product__c === r.target.name)
+        console.log(this.newProds[newRate].OZ_M__c)
+        console.log(r.detail.value); 
+        this.newProds[newRate].OZ_M__c = r.detail.value;  
+     }
+    cancel(){
+        this.newProds = [];
+        this.appName = ''; 
+        this.appDate = '';
+        this.areaId = ''; 
+        this.notUpdate = true; 
+        this.up = false; 
+    }
     remove(e){
         let x = e.target.id.substr(0,18)
         let i = this.newProds.findIndex(prod => prod.Id === x)
@@ -95,6 +111,7 @@ export default class AppInfo extends LightningElement {
         //console.log(this.newProds.length)
       
     }    
+    //Insert Upsert
     createApplication__c(){
 
         let params = {
@@ -138,6 +155,23 @@ export default class AppInfo extends LightningElement {
                     
                 ) 
             })
+    }
+
+    update(x){
+        this.notUpdate = false; 
+        this.up = true; 
+       appProducts({app:x})
+       .then((resp)=>{
+        this.newProds= resp;  
+        this.appName = resp[0].Application__r.Name;
+        this.appDate = resp[0].Application__r.Date__c; 
+    }).catch((error)=>{
+        console.log(JSON.stringify(error))
+    })
+    }
+    upProd(){
+        console.log(this.newProds)
+        return true;
     }
 }
 
