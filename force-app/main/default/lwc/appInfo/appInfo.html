@@ -32,7 +32,7 @@
 <!--Update app Card-->
 <template if:true={up}>
 <lightning-card>
-        <p>Area  {areaId}</p>
+        <p>Update  {areaId}</p>
         <lightning-input label='App Name' value={appName} onchange={newName} required></lightning-input>
         <lightning-input type='date' name='appDate' label='App Date' value={appDate} onchange={date} ></lightning-input>
         <div>
@@ -50,7 +50,7 @@
                     <div class="slds-col slds-size_1-of-12 slds-m-left_large">
                         <lightning-icon  
                         class="slds-icon_xx-small"  id={prod.Id}
-                        icon-name="utility:close" onclick={remove} ></lightning-icon>
+                        icon-name="utility:close" onclick={upDeleteProd} ></lightning-icon>
                     </div>
                 </div>     
                 </template>
