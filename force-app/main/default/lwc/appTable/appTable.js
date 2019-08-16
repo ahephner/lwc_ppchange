@@ -55,7 +55,7 @@ export default class AppTable extends LightningElement {
         }
         //listen to appInfo for new app
         connectedCallback(){
-
+            
             registerListener('newApp', this.newAppSubmit, this); 
         }
 

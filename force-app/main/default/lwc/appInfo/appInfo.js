@@ -73,7 +73,7 @@ export default class AppInfo extends LightningElement {
 
     handleNewArea(v){
         this.areaId = v;
-        //console.log(v)
+        console.log(v)
     }
     date(e){
         this.appDate = e.detail.value; 
@@ -175,6 +175,7 @@ export default class AppInfo extends LightningElement {
         this.appDate = resp[0].Application__r.Date__c; 
         this.updateAppId = resp[0].Application__c; 
         this.areaId = resp[0].Area__c
+        console.log('here is appId '+ this.updateAppId)
     }).catch((error)=>{
         console.log(JSON.stringify(error))
     })
@@ -199,17 +200,13 @@ export default class AppInfo extends LightningElement {
             
              let products = JSON.stringify(this.newProds)
              updateProducts({products:products});
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Success',
-                    message: 'Application Updated!',
-                    variant: 'success'
-                })
-            );
         }).then(()=>{
+            //adding the newly added products to this application
             //console.log('in the next .then ' + JSON.stringify(this.nap));
             let addTo = JSON.stringify(this.nap);
             addProducts({products:addTo})
+        }).then(()=>{
+            fireEvent(this.pageRef, 'newApp', this); 
         }).then(()=>{
             this.newProds = [];
             this.appName = ''; 
@@ -217,6 +214,13 @@ export default class AppInfo extends LightningElement {
             this.areaId = ''; 
             this.up = false;
             this.notUpdate = true; 
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Success',
+                    message: 'Application Updated!',
+                    variant: 'success'
+                })
+            );
         }).catch((error)=>{
             console.log(JSON.stringify(error))
             this.dispatchEvent(
@@ -260,4 +264,4 @@ export default class AppInfo extends LightningElement {
         
     }
 
-}
+ }

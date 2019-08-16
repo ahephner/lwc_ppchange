@@ -44,8 +44,6 @@ export default class AppArea extends LightningElement {
     }
     //will update the drop down with new value
     addedOption(){
-        // eslint-disable-next-line no-console
-        console.log('in addedOption function')
         return refreshApex(this.areaList)
        
     }

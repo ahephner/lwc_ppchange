@@ -1,9 +1,13 @@
 <template>
     <template if:true={notUpdate}>
     <lightning-card>
-        <p>Area ID: {areaId}</p>
-        <lightning-input label='App Name' value={appName} onchange={newName} required></lightning-input>
-        <lightning-input type='date' name='appDate' label='App Date' value={appDate} onchange={date} ></lightning-input>
+        <div class='slds-grid slds-wrap '>
+            <p class='slds-size_3-of-3' >Area ID: {areaId}</p>
+            <lightning-input class='slds-col slds-size_2-of-6' label='App Name' value={appName} onchange={newName} required></lightning-input>
+            <div class='slds-size_4-of-6'></div>
+            <lightning-input class='slds-col slds-size_2-of-6' type='date' name='appDate' label='App Date' value={appDate} onchange={date} ></lightning-input>
+            <div class='slds-size_4-of-6'></div>
+        </div>    
         <div>
             <template if:true={newProdsSelect} for:each={newProds} for:item="prod">
                 <div class="slds-grid slds-wrap" key={prod.Id}>
@@ -24,17 +28,23 @@
                 </div>     
                 </template>
             </div>
-        <lightning-button id='appBtn' variant="brand" label="save" onclick={createApplication__c}></lightning-button>
-        <lightning-button variant="destructive" label="Cancel" onclick={cancel}></lightning-button>
+                <lightning-button-group class="slds-m-top_xx-small">
+                    <lightning-button id='appBtn' variant="brand" label="save" onclick={createApplication__c}></lightning-button>
+                    <lightning-button variant="destructive" label="Cancel" onclick={cancel}></lightning-button>
+                </lightning-button-group>               
     </lightning-card>
 </template>
 
 <!--Update app Card-->
 <template if:true={up}>
 <lightning-card>
-        <p>Update  {areaId}</p>
-        <lightning-input label='App Name' value={appName} onchange={newName} required></lightning-input>
-        <lightning-input type='date' name='appDate' label='App Date' value={appDate} onchange={date} ></lightning-input>
+    <div class='slds-grid slds-wrap '>
+        <p class='slds-size_3-of-3'>Update  {areaId}</p>
+        <lightning-input class='slds-col slds-size_2-of-6' label='App Name' value={appName} onchange={newName} required></lightning-input>
+        <div class='slds-size_4-of-6'></div>
+        <lightning-input class='slds-col slds-size_2-of-6' type='date' name='appDate' label='App Date' value={appDate} onchange={date} ></lightning-input>
+        <div class='slds-size_4-of-6'></div>
+    </div>    
         <div>
                 <div class="slds-size_12-of-12 slds-m-bottom_small">
                         <div class="slds-text-align_left slds-m-around_x-small">App Products</div>
@@ -55,9 +65,12 @@
                 </div>     
                 </template>
             </div>
-        <lightning-button variant="brand" label="Update" onclick={upProd}></lightning-button>
-        <lightning-button variant="destructive" label="Cancel" onclick={cancel}></lightning-button>
-    </lightning-card>
+                <lightning-button-group class="slds-m-top_xx-small">
+                    <lightning-button variant="brand" label="Update" onclick={upProd}></lightning-button>
+                    <lightning-button variant="destructive" label="Cancel" onclick={cancel}></lightning-button>
+                    <lightning-button variant="success" label="Clone"></lightning-button>
+                </lightning-button-group>            
+            </lightning-card>
 </template>
 </template>
 
