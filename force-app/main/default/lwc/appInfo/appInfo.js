@@ -26,6 +26,7 @@ export default class AppInfo extends LightningElement {
     @track productId;  
     @track newProds = []
     @track upProds = []; 
+    nap = []; 
     updateAppId; 
     lastId = 0; 
     @wire(CurrentPageReference) pageRef;
@@ -49,7 +50,7 @@ export default class AppInfo extends LightningElement {
             this.error = error;
             this.name = undefined;
         }
-    console.log(this.newProds)
+    //console.log(this.newProds)
     }
     
         connectedCallback(){
@@ -162,6 +163,8 @@ export default class AppInfo extends LightningElement {
     }
     //hook fuction from show details on appTable
     //error if no app products nothing gets fired
+    //x is an id grab from the registerListener event up above we pass it to the apex function to get current app products then assign
+    //go the newProds. this allows me to reuse the funtions above like ... spread we will seperate new products from existing products below prior to update
     update(x){
         this.notUpdate = false; 
         this.up = true; 
@@ -179,7 +182,7 @@ export default class AppInfo extends LightningElement {
 //update the actual product here is where we handle the update or insert of products
     upProd(){
         console.log('new Prods '+ this.newProds);
-        
+          
         let updateParams = {
             appName: this.appName,
             appArea: this.areaId,
@@ -190,10 +193,12 @@ export default class AppInfo extends LightningElement {
             console.log(response);  
             //console.log(this.appId);
             // eslint-disable-next-line no-return-assign
-            this.newProds.forEach((x) => x.Application__c = this.updateAppId)
-            let products = JSON.stringify(this.newProds)
-            //console.log(products)
-            updateProducts({products:products})
+            this.nap = this.newProds.filter((x)=>{return x.Id === undefined});
+            this.newProds = this.newProds.filter((x)=>{return x.Id !== undefined});
+            this.nap.forEach((x)=> {x.Application__c = response.Id})
+            
+             let products = JSON.stringify(this.newProds)
+             updateProducts({products:products});
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Success',
@@ -202,10 +207,16 @@ export default class AppInfo extends LightningElement {
                 })
             );
         }).then(()=>{
+            //console.log('in the next .then ' + JSON.stringify(this.nap));
+            let addTo = JSON.stringify(this.nap);
+            addProducts({products:addTo})
+        }).then(()=>{
             this.newProds = [];
             this.appName = ''; 
             this.appDate = '';
             this.areaId = ''; 
+            this.up = false;
+            this.notUpdate = true; 
         }).catch((error)=>{
             console.log(JSON.stringify(error))
             this.dispatchEvent(
