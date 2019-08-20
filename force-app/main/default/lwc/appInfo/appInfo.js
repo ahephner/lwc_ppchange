@@ -42,7 +42,8 @@ export default class AppInfo extends LightningElement {
                Product_Name__c:  this.name = getFieldValue(data, PRODUCT_NAME), 
               OZ_M__c:  "0", 
               numb: this.lastId, 
-              Application__c: '' 
+              Application__c: '',
+              Note__c: '' 
              }]; 
              
             this.error = undefined;
@@ -73,7 +74,7 @@ export default class AppInfo extends LightningElement {
 
     handleNewArea(v){
         this.areaId = v;
-        console.log(v)
+        //console.log(v)
     }
     date(e){
         this.appDate = e.detail.value; 
@@ -116,6 +117,27 @@ export default class AppInfo extends LightningElement {
         //console.log(this.newProds.length)
       
     }    
+//get note options and handle change
+    get noteOptions(){
+        return [
+            {label:'Other/None' , value: 'Other' },
+            {label:'Irrigate w/in 24 hours' , value: 'Irrigate w/in 24 hours' },
+            {label:'Irrigate Immediately' , value: 'Irrigate Immediately' },
+            {label:'Syring prior to app' , value: 'Syringe prior to app' },
+            {label:'ttt' , value: 'ttt' },
+            {label:'weevil/grub' , value: 'weevil/grub' },
+            {label:'syring after app' , value: 'syringe after app' }
+        ]
+    }
+
+    selectNote(e){
+        //console.log(this.newProds)
+        console.log(e.target.name);
+        let index = this.newProds.findIndex(prod => prod.Product_Name__c === e.target.name);
+        this.newProds[index].Note__c = e.detail.value;  
+        //console.log(index);
+        
+    }
     //Insert Upsert
     createApplication__c(){
 

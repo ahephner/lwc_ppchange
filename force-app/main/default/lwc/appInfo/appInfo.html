@@ -20,6 +20,15 @@
                     <div class="slds-col slds-size_2-of-12">
                         <lightning-input class='rate' type="number"  label="Rate" name={prod.numb} value={prod.numb} onchange={newRate}></lightning-input>
                     </div>
+                    <div class="slds-col slds-size_4-of-12">
+                        <lightning-combobox
+                            name={prod.Product_Name__c}
+                            label='Note'
+                            placeholder='None'
+                            value={prod.Note__c}
+                            options={noteOptions}
+                            onchange={selectNote}></lightning-combobox>
+                    </div>
                     <div class="slds-col slds-size_1-of-12 slds-m-left_large">
                         <lightning-icon  
                         class="slds-icon_xx-small"  id={prod.Id}
@@ -56,6 +65,15 @@
                     </div>
                     <div class="slds-col slds-size_2-of-12">
                         <lightning-input class='rate' type="number"  label="Rate" name={prod.Product__c} value={prod.OZ_M__c} onchange={updateRate}></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_4-of-12">
+                        <lightning-combobox
+                            name={prod.Product_Name__c}
+                            label='Note'
+                            placeholder='None'
+                            value={prod.Note__c}
+                            options={noteOptions}
+                            onchange={selectNote}></lightning-combobox>
                     </div>
                     <div class="slds-col slds-size_1-of-12 slds-m-left_large">
                         <lightning-icon  
