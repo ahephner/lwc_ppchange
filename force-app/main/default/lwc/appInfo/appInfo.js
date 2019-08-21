@@ -176,7 +176,7 @@ export default class AppInfo extends LightningElement {
                 this.dispatchEvent(
                     new ShowToastEvent({
                         title: 'Error adding app',
-                        message: JSON.stringify(error),
+                        message: 'Did you select an Area and enter a App Name?',
                         variant: 'error'
                     })
                     

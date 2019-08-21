@@ -2,10 +2,10 @@
     <template if:true={notUpdate}>
     <lightning-card>
         <div class='slds-grid slds-wrap '>
-            <p class='slds-size_3-of-3' >Area ID: {areaId}</p>
-            <lightning-input class='slds-col slds-size_2-of-6' label='App Name' value={appName} onchange={newName} required></lightning-input>
+            <h4 class='slds-size_3-of-3'>New Application</h4>
+            <lightning-input class='slds-col slds-size_2-of-6 slds-m-left_x-small' label='App Name' value={appName} onchange={newName} required></lightning-input>
             <div class='slds-size_4-of-6'></div>
-            <lightning-input class='slds-col slds-size_2-of-6' type='date' name='appDate' label='App Date' value={appDate} onchange={date} ></lightning-input>
+            <lightning-input class='slds-col slds-size_2-of-6 slds-m-left_x-small' type='date' name='appDate' label='App Date' value={appDate} onchange={date} ></lightning-input>
             <div class='slds-size_4-of-6'></div>
         </div>    
         <div>
@@ -37,7 +37,7 @@
                 </div>     
                 </template>
             </div>
-                <lightning-button-group class="slds-m-top_xx-small">
+                <lightning-button-group class="slds-m-top_xx-small slds-m-left_x-small">
                     <lightning-button id='appBtn' variant="brand" label="save" onclick={createApplication__c}></lightning-button>
                     <lightning-button variant="destructive" label="Cancel" onclick={cancel}></lightning-button>
                 </lightning-button-group>               
@@ -48,11 +48,11 @@
 <template if:true={up}>
 <lightning-card>
     <div class='slds-grid slds-wrap '>
-        <p class='slds-size_3-of-3'>Update  {areaId}</p>
-        <lightning-input class='slds-col slds-size_2-of-6' label='App Name' value={appName} onchange={newName} required></lightning-input>
-        <div class='slds-size_4-of-6'></div>
-        <lightning-input class='slds-col slds-size_2-of-6' type='date' name='appDate' label='App Date' value={appDate} onchange={date} ></lightning-input>
-        <div class='slds-size_4-of-6'></div>
+        <h4 class='slds-size_3-of-3 '>Update</h4>
+        <lightning-input class='slds-col slds-size_2-of-6 slds-m-left_x-small' label='App Name' value={appName} onchange={newName} required></lightning-input>
+        <div class='slds-size_4-of-6 '></div>
+        <lightning-input class='slds-col slds-size_2-of-6 slds-m-left_x-small' type='date' name='appDate' label='App Date' value={appDate} onchange={date} ></lightning-input>
+        <div class='slds-size_4-of-6 '></div>
     </div>    
         <div>
                 <div class="slds-size_12-of-12 slds-m-bottom_small">
@@ -63,10 +63,10 @@
                     <div class="slds-col slds-size_5-of-12 slds-p-top_medium">
                         <p>{prod.Product_Name__c}</p>
                     </div>
-                    <div class="slds-col slds-size_2-of-12">
+                    <div class="slds-col slds-size_1-of-12">
                         <lightning-input class='rate' type="number"  label="Rate" name={prod.Product__c} value={prod.OZ_M__c} onchange={updateRate}></lightning-input>
                     </div>
-                    <div class="slds-col slds-size_4-of-12">
+                    <div class="slds-col slds-size_3 -of-12">
                         <lightning-combobox
                             name={prod.Product_Name__c}
                             label='Note'
@@ -83,10 +83,9 @@
                 </div>     
                 </template>
             </div>
-                <lightning-button-group class="slds-m-top_xx-small">
+                <lightning-button-group class="slds-m-top_xx-small slds-m-left_x-small">
                     <lightning-button variant="brand" label="Update" onclick={upProd}></lightning-button>
                     <lightning-button variant="destructive" label="Cancel" onclick={cancel}></lightning-button>
-                    <lightning-button variant="success" label="Clone"></lightning-button>
                 </lightning-button-group>            
             </lightning-card>
 </template>
