@@ -9,16 +9,19 @@
             <div class='slds-size_4-of-6'></div>
         </div>    
         <div>
+                <div class="slds-size_12-of-12 slds-m-bottom_small">
+                    <div class="slds-text-align_left slds-m-around_x-small">App Products</div>
+                </div> 
             <template if:true={newProdsSelect} for:each={newProds} for:item="prod">
-                <div class="slds-grid slds-wrap" key={prod.Id}>
-                        <div class="slds-size_12-of-12 slds-m-bottom_small">
-                            <div class="slds-text-align_left slds-m-around_x-small">App Products</div>
-                        </div> 
-                    <div class="slds-col slds-size_5-of-12 slds-p-top_medium">
+                <div class="slds-grid slds-wrap" key={prod.Id}>   
+                    <div class="slds-col slds-size_4-of-12 slds-p-top_medium">
                         <p>{prod.Product_Name__c}</p>
                     </div>
-                    <div class="slds-col slds-size_2-of-12">
-                        <lightning-input class='rate' type="number"  label="Rate" name={prod.numb} value={prod.numb} onchange={newRate}></lightning-input>
+                    <div class="slds-col slds-size_1-of-12">
+                        <lightning-input class='liquid' type="number"  label="Rate" name={prod.Product__c} value={prod.OZ_M__c} onchange={newRate}></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-12">
+                        <lightning-input class='dry' type="number"  label="LBS/Acre" name={prod.Product__c} value={prod.LBS_ACRE__c} onchange={newRate}></lightning-input>
                     </div>
                     <div class="slds-col slds-size_4-of-12">
                         <lightning-combobox
@@ -60,11 +63,14 @@
                     </div> 
             <template if:true={newProdsSelect} for:each={newProds} for:item="prod">
                 <div class="slds-grid slds-wrap" key={prod.Id}>   
-                    <div class="slds-col slds-size_5-of-12 slds-p-top_medium">
+                    <div class="slds-col slds-size_4-of-12 slds-p-top_medium">
                         <p>{prod.Product_Name__c}</p>
                     </div>
                     <div class="slds-col slds-size_1-of-12">
-                        <lightning-input class='rate' type="number"  label="Rate" name={prod.Product__c} value={prod.OZ_M__c} onchange={updateRate}></lightning-input>
+                        <lightning-input class='liquid' type="number"  label="OZ/M" name={prod.Product__c} value={prod.OZ_M__c} onchange={updateRate}></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-12">
+                        <lightning-input class='dry' type="number"  label="LBS/Acre" name={prod.Product__c} value={prod.LBS_ACRE__c} onchange={updateRate}></lightning-input>
                     </div>
                     <div class="slds-col slds-size_3 -of-12">
                         <lightning-combobox

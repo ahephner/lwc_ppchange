@@ -41,6 +41,7 @@ export default class AppInfo extends LightningElement {
              { Product__c:   this.productId = getFieldValue(data, PRODUCT_ID), 
                Product_Name__c:  this.name = getFieldValue(data, PRODUCT_NAME), 
               OZ_M__c:  "0", 
+              LBS_ACRE__c: "0",
               numb: this.lastId, 
               Application__c: '',
               Note__c: '' 
@@ -89,15 +90,28 @@ export default class AppInfo extends LightningElement {
         return this.newProds.length >= 1; 
     }
     newRate(e){
-     let index = this.newProds.findIndex(prod => prod.numb === e.target.name)
-     //console.log("index number" + index);
-     this.newProds[index].OZ_M__c = e.detail.value;    
-    
+     let index = this.newProds.findIndex(prod => prod.Product__c === e.target.name)
+        console.log(this.newProds[index]);
+        
+      if(e.target.getAttribute('class').includes('dry')){
+        this.newProds[index].LBS_ACRE__c = e.detail.value;
+     }else{
+        this.newProds[index].OZ_M__c = e.detail.value;    
+     }
     }
 //update rate in update app screen 
      updateRate(r){
         let newRate = this.newProds.findIndex(p => p.Product__c === r.target.name); 
-        this.newProds[newRate].OZ_M__c = r.detail.value;  
+        if(r.target.getAttribute('class').includes('dry')){
+             this.newProds[newRate].LBS_ACRE__c = r.detail.value; 
+            
+             
+         }else{
+             this.newProds[newRate].OZ_M__c = r.detail.value;
+            
+               
+         }        
+        
      }
 //close update window
     cancel(){
@@ -170,7 +184,7 @@ export default class AppInfo extends LightningElement {
                 this.newProds = [];
                 this.appName = ''; 
                 this.appDate = '';
-                this.areaId = ''; 
+                //this.areaId = ''; 
             }).catch((error)=>{
                 console.log(JSON.stringify(error))
                 this.dispatchEvent(
