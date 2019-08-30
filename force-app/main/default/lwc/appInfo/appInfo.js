@@ -29,6 +29,8 @@ export default class AppInfo extends LightningElement {
     nap = []; 
     updateAppId; 
     lastId = 0; 
+    @track areaName; 
+
     @wire(CurrentPageReference) pageRef;
 
     @wire(getRecord, {recordId: '$recordId', fields})
@@ -54,7 +56,8 @@ export default class AppInfo extends LightningElement {
         }
     //console.log(this.newProds)
     }
-    
+    //this function listens for fireEvents in other components then sends those events to the correct function
+    //in this componenent. forexample 'areaSelect' comes from appArea.js then the id is sent to handleNewArea(); 
         connectedCallback(){
             // eslint-disable-next-line no-console
             //console.log('callback')
@@ -75,7 +78,7 @@ export default class AppInfo extends LightningElement {
 
     handleNewArea(v){
         this.areaId = v;
-        //console.log(v)
+        //console.log('this is ' + v)
     }
     date(e){
         this.appDate = e.detail.value; 
@@ -99,7 +102,7 @@ export default class AppInfo extends LightningElement {
         this.newProds[index].OZ_M__c = e.detail.value;    
      }
     }
-//update rate in update app screen 
+//update rate in update app screen dry vs liquid classes  
      updateRate(r){
         let newRate = this.newProds.findIndex(p => p.Product__c === r.target.name); 
         if(r.target.getAttribute('class').includes('dry')){

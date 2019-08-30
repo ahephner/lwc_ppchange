@@ -15,6 +15,7 @@ export default class AppArea extends LightningElement {
         areaList
         
      //return label value array from custom apex wrapper
+     //runs on load
      get areaOptions(){
          // eslint-disable-next-line no-console
          console.log('==> '+JSON.stringify(this.areaList.data)); 
@@ -24,7 +25,11 @@ export default class AppArea extends LightningElement {
      selectArea(e){
         fireEvent(this.pageRef, 'areaSelect', e.detail.value )
         // eslint-disable-next-line no-console
-       // console.log(this.area); 
+        console.log(e.detail);
+        //filter off this value set areaName to equal the return then send it to the app info using the fire event.  
+        // eslint-disable-next-line no-console
+        console.log(this.areaList.data);
+        
     }
 
     //open Modal 

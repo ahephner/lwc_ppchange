@@ -2,6 +2,7 @@
     <template if:true={notUpdate}>
     <lightning-card>
         <div class='slds-grid slds-wrap '>
+                <p>Area Name: {areaName}</p>
             <h4 class='slds-size_3-of-3'>New Application</h4>
             <lightning-input class='slds-col slds-size_2-of-6 slds-m-left_x-small' label='App Name' value={appName} onchange={newName} required></lightning-input>
             <div class='slds-size_4-of-6'></div>
