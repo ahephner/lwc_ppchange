@@ -21,15 +21,17 @@ export default class AppArea extends LightningElement {
          console.log('==> '+JSON.stringify(this.areaList.data)); 
          return this.areaList.data; 
      }   
-
+    //this function will fire the value or id to appinfo
+    //then it find the index of the value and the label value to pass to appInfo..then in the appInfo we will handle it in aName()
      selectArea(e){
         fireEvent(this.pageRef, 'areaSelect', e.detail.value )
-        // eslint-disable-next-line no-console
-        console.log(e.detail);
-        //filter off this value set areaName to equal the return then send it to the app info using the fire event.  
-        // eslint-disable-next-line no-console
-        console.log(this.areaList.data);
-        
+            //filter off this value set areaName to equal the return then send it to the app info using the fire event.  
+                let x = this.areaList.data.findIndex(a => a.value === e.detail.value)  
+                let y = this.areaList.data[x].label
+                // eslint-disable-next-line no-console
+                console.log(y);
+                  fireEvent(this.pageRef, 'areaName', y);
+                
     }
 
     //open Modal 

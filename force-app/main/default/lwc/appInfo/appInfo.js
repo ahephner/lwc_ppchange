@@ -21,7 +21,8 @@ export default class AppInfo extends LightningElement {
     @track appId; 
     @track appName;
     @track appDate; 
-    @track areaId; 
+    @track areaId;
+    @track areaName;  
     @track name;  
     @track productId;  
     @track newProds = []
@@ -59,11 +60,10 @@ export default class AppInfo extends LightningElement {
     //this function listens for fireEvents in other components then sends those events to the correct function
     //in this componenent. forexample 'areaSelect' comes from appArea.js then the id is sent to handleNewArea(); 
         connectedCallback(){
-            // eslint-disable-next-line no-console
-            //console.log('callback')
             registerListener('productSelected', this.handleProductSelected, this); 
             registerListener('areaSelect', this.handleNewArea, this);
             registerListener('appSelected', this.update, this); 
+            registerListener('areaName', this.aName, this);
         }
         disconnectedCallback(){
             unregisterAllListeners(this);
@@ -78,7 +78,13 @@ export default class AppInfo extends LightningElement {
 
     handleNewArea(v){
         this.areaId = v;
-        //console.log('this is ' + v)
+        console.log(v + ' i am v');
+        
+    }
+    //this will handle setting the area name shown on the screen 
+    aName(name){
+        //console.log('in areaName ' +name);
+        this.areaName = name; 
     }
     date(e){
         this.appDate = e.detail.value; 
@@ -107,12 +113,10 @@ export default class AppInfo extends LightningElement {
         let newRate = this.newProds.findIndex(p => p.Product__c === r.target.name); 
         if(r.target.getAttribute('class').includes('dry')){
              this.newProds[newRate].LBS_ACRE__c = r.detail.value; 
-            
-             
+ 
          }else{
              this.newProds[newRate].OZ_M__c = r.detail.value;
-            
-               
+ 
          }        
         
      }
@@ -214,6 +218,7 @@ export default class AppInfo extends LightningElement {
         this.appDate = resp[0].Application__r.Date__c; 
         this.updateAppId = resp[0].Application__c; 
         this.areaId = resp[0].Area__c
+        this.areaName = resp[0].Area__c 
         console.log('here is appId '+ this.updateAppId)
     }).catch((error)=>{
         console.log(JSON.stringify(error))
