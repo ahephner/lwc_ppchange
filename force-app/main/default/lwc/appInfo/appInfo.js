@@ -81,23 +81,27 @@ export default class AppInfo extends LightningElement {
         console.log(v + ' i am v');
         
     }
-    //this will handle setting the area name shown on the screen 
+    //this will handle setting the area name shown on the screen for both update and new
     aName(name){
         //console.log('in areaName ' +name);
         this.areaName = name; 
     }
+    //this will set the application date for both update and new app
     date(e){
         this.appDate = e.detail.value; 
         
     }
-
+    //this sets the application name for both update and new
     newName(e){
         this.appName = e.detail.value; 
         this.appId = undefined;
     }
+    //this fires the child drop products
     get newProdsSelect(){
         return this.newProds.length >= 1; 
     }
+    //this will set the rate on the product. It finds the index of the target value then looks to see if the product class is dry or not. If it is dry then it will set the 
+    //lbs/arce other wise set the oz_m__c rate. We can expanded this if we need validation in the future
     newRate(e){
      let index = this.newProds.findIndex(prod => prod.Product__c === e.target.name)
         console.log(this.newProds[index]);
@@ -256,6 +260,7 @@ export default class AppInfo extends LightningElement {
             this.appName = ''; 
             this.appDate = '';
             this.areaId = ''; 
+            this.areaName = ''; 
             this.up = false;
             this.notUpdate = true; 
             this.dispatchEvent(
