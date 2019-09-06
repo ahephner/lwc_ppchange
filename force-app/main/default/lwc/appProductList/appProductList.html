@@ -1,13 +1,13 @@
 <template> 
     <a href="#" onclick={handleSelect}>
-        <lightning-layout vertical-align="center">
-            <lightning-layout-item>
+        <lightning-layout  vertical-align="center">
+            <lightning-layout-item flexibility="auto" padding="horizontal-small">
                 <p>{prods.Name}</p>
             </lightning-layout-item>
-            <lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="horizontal-small">
                 <p>{prods.Product_Name__c}</p>
             </lightning-layout-item>
-            <lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="horizontal-small">
                 <p>{prods.Subcategory__c}</p>
             </lightning-layout-item>
         </lightning-layout>
