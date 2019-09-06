@@ -143,26 +143,27 @@ export default class AppInfo extends LightningElement {
       
     }    
 //get note options and handle change
-    get noteOptions(){
-        return [
-            {label:'Other/None' , value: 'Other' },
-            {label:'Irrigate w/in 24 hours' , value: 'Irrigate w/in 24 hours' },
-            {label:'Irrigate Immediately' , value: 'Irrigate Immediately' },
-            {label:'Syring prior to app' , value: 'Syringe prior to app' },
-            {label:'ttt' , value: 'ttt' },
-            {label:'weevil/grub' , value: 'weevil/grub' },
-            {label:'syring after app' , value: 'syringe after app' }
-        ]
-    }
+    // get noteOptions(){
+    //     return [
+    //         {label:'Other/None' , value: 'Other' },
+    //         {label:'Irrigate w/in 24 hours' , value: 'Irrigate w/in 24 hours' },
+    //         {label:'Irrigate Immediately' , value: 'Irrigate Immediately' },
+    //         {label:'Syring prior to app' , value: 'Syringe prior to app' },
+    //         {label:'ttt' , value: 'ttt' },
+    //         {label:'weevil/grub' , value: 'weevil/grub' },
+    //         {label:'syring after app' , value: 'syringe after app' }
+    //     ]
+    // }
 
-    selectNote(e){
-        //console.log(this.newProds)
-        console.log(e.target.name);
-        let index = this.newProds.findIndex(prod => prod.Product_Name__c === e.target.name);
-        this.newProds[index].Note__c = e.detail.value;  
-        //console.log(index);
+    // selectNote(e){
+    //     //console.log(this.newProds)
+    //     console.log(e.target.name);
+    //     let index = this.newProds.findIndex(prod => prod.Product_Name__c === e.target.name);
+    //     this.newProds[index].Note__c = e.detail.value;  
+    //     //console.log(index);
         
-    }
+    // }
+    
     //Insert Upsert
     createApplication__c(){
 
