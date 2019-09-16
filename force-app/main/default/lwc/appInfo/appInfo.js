@@ -12,8 +12,8 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 import PRODUCT_ID from '@salesforce/schema/Product__c.Id'
 import PRODUCT_NAME from '@salesforce/schema/Product__c.Product_Name__c'
-
-const fields = [PRODUCT_NAME, PRODUCT_ID];
+import PRODUCT_SIZE from '@salesforce/schema/Product__c.Size__c'
+const fields = [PRODUCT_NAME, PRODUCT_ID, PRODUCT_SIZE];
 export default class AppInfo extends LightningElement {
     recordId; 
     @track notUpdate = true; 
@@ -23,7 +23,8 @@ export default class AppInfo extends LightningElement {
     @track appDate; 
     @track areaId;
     @track areaName;  
-    @track name;  
+    @track name; 
+    @track productSize; 
     @track productId;  
     @track newProds = []
     @track upProds = []; 
@@ -42,7 +43,8 @@ export default class AppInfo extends LightningElement {
             this.newProds= [
             ...this.newProds,   
              { Product__c:   this.productId = getFieldValue(data, PRODUCT_ID), 
-               Product_Name__c:  this.name = getFieldValue(data, PRODUCT_NAME), 
+               Product_Name__c:  this.name = getFieldValue(data, PRODUCT_NAME),
+               Product_size__c: this.productSize = getFieldValue(data, PRODUCT_SIZE), 
               OZ_M__c:  "0", 
               LBS_ACRE__c: "0",
               numb: this.lastId, 
@@ -55,7 +57,7 @@ export default class AppInfo extends LightningElement {
             this.error = error;
             this.name = undefined;
         }
-    //console.log(this.newProds)
+    console.log(this.newProds)
     }
     //this function listens for fireEvents in other components then sends those events to the correct function
     //in this componenent. forexample 'areaSelect' comes from appArea.js then the id is sent to handleNewArea(); 
