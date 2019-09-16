@@ -1,4 +1,6 @@
 <template>
+    <lightning-tabset>
+    <lightning-tab label="Build Program">
     <template if:true={notUpdate}>
     <lightning-card>
             <div class='slds-grid slds-wrap '>                    
@@ -26,13 +28,13 @@
                     <div class="slds-col slds-size_1-of-12">
                         <lightning-input class='dry' type="number"  label="LBS/Acre" name={prod.Product__c} value={prod.LBS_ACRE__c} onchange={newRate}></lightning-input>
                     </div>
-                    <div class="slds-col slds-size_2-of-12">
+                    <!-- <div class="slds-col slds-size_2-of-12">
                         <lightning-input  type="number"  label="Unit Price" formatter="currency" ></lightning-input>
                     </div>
                     <div class="slds-col slds-size_2-of-12">
                         <lightning-input type="number" label='Margin'  formatter="percent" step="0.01"></lightning-input>
-                    </div>
-                    <!-- <div class="slds-col slds-size_4-of-12">
+                    </div> -->
+                    <div class="slds-col slds-size_4-of-12">
                         <lightning-combobox
                             name={prod.Product_Name__c}
                             label='Note'
@@ -40,7 +42,7 @@
                             value={prod.Note__c}
                             options={noteOptions}
                             onchange={selectNote}></lightning-combobox>
-                    </div> -->
+                    </div>
                     <div class="slds-col slds-size_1-of-12 slds-m-left_large">
                         <lightning-icon  
                         class="slds-icon_xx-small slds-m-top_large"  id={prod.Id}
@@ -99,14 +101,14 @@
                                              onchange={updateRate}></lightning-input>
                         </div>
 <!--Cost Input-->                        
-                        <div class="slds-col slds-size_2-of-12">
+                        <!-- <div class="slds-col slds-size_2-of-12">
                             <lightning-input  type="number"  label="Unit Price" formatter="currency" ></lightning-input>
                         </div>
                         <div class="slds-col slds-size_2-of-12">
                             <lightning-input type="number" label='Margin'  formatter="percent" step="0.01"></lightning-input>
-                        </div>
+                        </div> -->
 <!--Commented out Note Section-->                        
-                    <!-- <div class="slds-col slds-size_3 -of-12">
+                    <div class="slds-col slds-size_3 -of-12">
                         <lightning-combobox
                             name={prod.Product_Name__c}
                             label='Note'
@@ -114,7 +116,7 @@
                             value={prod.Note__c}
                             options={noteOptions}
                             onchange={selectNote}></lightning-combobox>
-                    </div> -->
+                    </div>
 <!--delete product icon-->
                         <div class="slds-col slds-size_1-of-12 slds-m-left_large">
                             <lightning-icon  
@@ -131,6 +133,11 @@
                 </lightning-button-group>            
             </lightning-card>
 </template>
+</lightning-tab>
+<lightning-tab label="Pricing">
+    <h3>Pricing will go in here!</h3>
+</lightning-tab>
+</lightning-tabset>
 </template>
 
 
