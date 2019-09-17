@@ -136,7 +136,55 @@
 </lightning-tab>
 <!--PRICING TAB-->
     <lightning-tab label="Pricing">
-        <h3>Pricing will go in here!</h3>
+<!--NEW PRODUCT PRICING-->
+        <template if:true={notUpdate}>
+            <lightning-card>
+                
+        <template if:true={newProdsSelect} for:each={newProds} for:item="prod">
+            <div class="slds-grid slds-wrap" key={prod.Id}>
+                <div class="slds-col slds-size_3-of-12 slds-p-top_medium">
+                    <p>{prod.Product_Name__c}</p>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning-input type="number" name={prod.Product__c} readonly value={prod.Units_Required__c} label="Units Req." ></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning-input type="number" name={prod.Product__c}  value={prod.unit_price__c} label="Unit Price" formatter="currency" step="1.00" onchange={newPrice}></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning-input type="number" name={prod.Product__c} value={prod.margin__c} label="Margin" formatter="percent" step="0.01"></lightning-input>
+                </div>                
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning-input type="number" name={prod.Product__c} readonly value={total_price__c} label="Total" ></lightning-input>
+                </div>
+            </div>
+        </template>
+    </lightning-card>    
+    </template> 
+<!--UPDATE PRICING CARD-->
+    <template if:true={up}>
+        <lightning-card>
+            <template if:true={newProdsSelect} for:each={newProds} for:item="prod">
+                <div class="slds-grid slds-wrap" key={prod.Id}>
+                    <div class="slds-col slds-size_3-of-12 slds-p-top_medium">
+                        <p>{prod.Product_Name__c}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-12">
+                        <lightning-input type="number" name={prod.Product__c} readonly value={prod.Units_Required__c} label="Units Req." ></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-12">
+                        <lightning-input type="number" name={prod.Product__c}  value={prod.Unit_Price__c} label="Unit Price" formatter="currency" step="1.00" onchange={newPrice}></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-12">
+                        <lightning-input type="number" name={prod.Product__c} value={prod.margin__c} label="Margin" formatter="percent" step="0.01"></lightning-input>
+                    </div>                
+                    <div class="slds-col slds-size_1-of-12">
+                        <lightning-input type="number" name={prod.Product__c} readonly value={total_price__c} label="Total" ></lightning-input>
+                    </div>
+                </div>
+            </template>
+        </lightning-card>
+    </template>    
     </lightning-tab>
 </lightning-tabset>
 </template>

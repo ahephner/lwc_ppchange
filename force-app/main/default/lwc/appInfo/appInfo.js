@@ -9,11 +9,12 @@ import updateApplication from '@salesforce/apex/addApp.updateApplication'
 import updateProducts from '@salesforce/apex/addApp.updateProducts';
 import appProducts from '@salesforce/apex/appProduct.appProducts'; 
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-
+//import actual product field values 
 import PRODUCT_ID from '@salesforce/schema/Product__c.Id'
 import PRODUCT_NAME from '@salesforce/schema/Product__c.Product_Name__c'
 import PRODUCT_SIZE from '@salesforce/schema/Product__c.Size__c'
-const fields = [PRODUCT_NAME, PRODUCT_ID, PRODUCT_SIZE];
+import AVERAGE_COST from '@salesforce/schema/Product__c.Average_Cost__c'
+const fields = [PRODUCT_NAME, PRODUCT_ID, PRODUCT_SIZE, AVERAGE_COST];
 export default class AppInfo extends LightningElement {
     recordId; 
     @track notUpdate = true; 
@@ -45,11 +46,15 @@ export default class AppInfo extends LightningElement {
              { Product__c:   this.productId = getFieldValue(data, PRODUCT_ID), 
                Product_Name__c:  this.name = getFieldValue(data, PRODUCT_NAME),
                Product_size__c: this.productSize = getFieldValue(data, PRODUCT_SIZE), 
-              OZ_M__c:  "0", 
-              LBS_ACRE__c: "0",
-              numb: this.lastId, 
-              Application__c: '',
-              Note__c: '' 
+               Product_ac: getFieldValue(data, AVERAGE_COST),
+               OZ_M__c:  "0", 
+               LBS_ACRE__c: "0",
+               numb: this.lastId, 
+               Application__c: '',
+               Note__c: '' ,
+               Units_Required__c: '',
+               Unit_Price__c: "0",
+               margin__c: "0"
              }]; 
              
             this.error = undefined;
@@ -57,7 +62,7 @@ export default class AppInfo extends LightningElement {
             this.error = error;
             this.name = undefined;
         }
-    console.log(this.newProds)
+    //console.log(this.newProds)
     }
     //this function listens for fireEvents in other components then sends those events to the correct function
     //in this componenent. forexample 'areaSelect' comes from appArea.js then the id is sent to handleNewArea(); 
@@ -106,7 +111,7 @@ export default class AppInfo extends LightningElement {
     //lbs/arce other wise set the oz_m__c rate. We can expanded this if we need validation in the future
     newRate(e){
      let index = this.newProds.findIndex(prod => prod.Product__c === e.target.name)
-        console.log(this.newProds[index]);
+        //console.log(this.newProds[index]);
         
       if(e.target.getAttribute('class').includes('dry')){
         this.newProds[index].LBS_ACRE__c = e.detail.value;
@@ -114,7 +119,17 @@ export default class AppInfo extends LightningElement {
         this.newProds[index].OZ_M__c = e.detail.value;    
      }
     }
-//update rate in update app screen dry vs liquid classes  
+//PRICING 
+    //new pricing
+    newPrice(x){
+        let index = this.newProds.findIndex(prod => prod.Product__c === x.target.name)
+        console.log(this.newProds[index].margin__c) 
+        this.newProds[index].Unit_Price__c = x.detail.value; 
+        
+        
+    }
+//UPDATES    
+    //update rate in update app screen dry vs liquid classes  
      updateRate(r){
         let newRate = this.newProds.findIndex(p => p.Product__c === r.target.name); 
         if(r.target.getAttribute('class').includes('dry')){
@@ -126,7 +141,7 @@ export default class AppInfo extends LightningElement {
          }        
         
      }
-//close update window
+    //close update window
     cancel(){
         this.newProds = [];
         this.appName = ''; 
@@ -135,8 +150,8 @@ export default class AppInfo extends LightningElement {
         this.notUpdate = true; 
         this.up = false; 
     }
-//remove new application from array
-//will remove it on the screen as an option
+    //remove new application from array
+    //will remove it on the screen as an option
     remove(e){
         let x = e.target.id.substr(0,18)
         let i = this.newProds.findIndex(prod => prod.Id === x)
@@ -144,7 +159,7 @@ export default class AppInfo extends LightningElement {
         //console.log(this.newProds.length)
       
     }    
-//get note options and handle change
+    //get note options and handle change
     get noteOptions(){
         return [
             {label:'Other/None' , value: 'Other' },
@@ -165,7 +180,7 @@ export default class AppInfo extends LightningElement {
         //console.log(index);
         
     }
-    
+//INSERTING UPDATING APPLICATIONS
     //Insert Upsert
     createApplication__c(){
 
@@ -226,14 +241,16 @@ export default class AppInfo extends LightningElement {
         this.updateAppId = resp[0].Application__c; 
         this.areaId = resp[0].Area__c
         this.areaName = resp[0].Area__c 
-        console.log('here is appId '+ this.updateAppId)
+        // this.newProds.forEach(function(xitem){
+        //     console.log(xitem)
+        //             })
     }).catch((error)=>{
         console.log(JSON.stringify(error))
     })
     }
 //update the actual product here is where we handle the update or insert of products
     upProd(){
-        console.log('new Prods '+ this.newProds);
+        //console.log('new Prods '+ this.newProds);
           
         let updateParams = {
             appName: this.appName,
@@ -242,7 +259,7 @@ export default class AppInfo extends LightningElement {
         };
         updateApplication({wrapper:updateParams, id: this.updateAppId })
         .then((response)=>{
-            console.log(response);  
+            //console.log(response);  
             //console.log(this.appId);
             // eslint-disable-next-line no-return-assign
             this.nap = this.newProds.filter((x)=>{return x.Id === undefined});
