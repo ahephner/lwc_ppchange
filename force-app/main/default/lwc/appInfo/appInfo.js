@@ -239,11 +239,10 @@ export default class AppInfo extends LightningElement {
         this.appName = resp[0].Application__r.Name;
         this.appDate = resp[0].Application__r.Date__c; 
         this.updateAppId = resp[0].Application__c; 
-        this.areaId = resp[0].Area__c
+        this.areaId = resp[0].Application__r.Area__c
         this.areaName = resp[0].Area__c 
-        // this.newProds.forEach(function(xitem){
-        //     console.log(xitem)
-        //             })
+        console.log('this area id ' + resp[0].Area__c);
+        
     }).catch((error)=>{
         console.log(JSON.stringify(error))
     })
