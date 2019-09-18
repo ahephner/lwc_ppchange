@@ -166,7 +166,7 @@ export default class AppInfo extends LightningElement {
         this.appName = ''; 
         this.appDate = '';
         this.areaId = ''; 
-        this.notUpdate = true; 
+        this.noArea = true; 
         this.up = false; 
     }
     //remove new application from array
@@ -251,7 +251,7 @@ export default class AppInfo extends LightningElement {
     //x is an id grab from the registerListener event up above we pass it to the apex function to get current app products then assign
     //go the newProds. this allows me to reuse the funtions above like ... spread we will seperate new products from existing products below prior to update
     update(x){
-        this.notUpdate = false; 
+        this.noArea = false; 
         this.up = true; 
        appProducts({app:x})
        .then((resp)=>{

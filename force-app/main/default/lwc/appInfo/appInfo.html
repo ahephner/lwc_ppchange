@@ -183,7 +183,7 @@
                         <lightning-input type="number" name={prod.Product__c} value={prod.margin__c} label="Margin" formatter="percent" step="0.01"></lightning-input>
                     </div>                
                     <div class="slds-col slds-size_1-of-12">
-                        <lightning-input type="number" name={prod.Product__c} readonly value={prod.Total_Price__c} label="Total" ></lightning-input>
+                        <lightning-input type="number" name={prod.Product__c} readonly value={prod.Total_Price__c} label="Total" formatter="currency" ></lightning-input>
                     </div>
                 </div>
             </template>
