@@ -1,6 +1,7 @@
 <template>
     <lightning-tabset>
     <lightning-tab label="Build Program">
+        <template if:true={noArea}>Select an Area First!</template>
     <template if:true={notUpdate}>
     <lightning-card>
             <div class='slds-grid slds-wrap '>                    
@@ -146,16 +147,19 @@
                     <p>{prod.Product_Name__c}</p>
                 </div>
                 <div class="slds-col slds-size_1-of-12">
+                    <lightning-input type="number" name={prod.Product__c} readonly value={prod.Product_ac} label="Avg. Cost" ></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
                     <lightning-input type="number" name={prod.Product__c} readonly value={prod.Units_Required__c} label="Units Req." ></lightning-input>
                 </div>
                 <div class="slds-col slds-size_1-of-12">
                     <lightning-input type="number" name={prod.Product__c}  value={prod.unit_price__c} label="Unit Price" formatter="currency" step="1.00" onchange={newPrice}></lightning-input>
                 </div>
                 <div class="slds-col slds-size_1-of-12">
-                    <lightning-input type="number" name={prod.Product__c} value={prod.margin__c} label="Margin" formatter="percent" step="0.01"></lightning-input>
+                    <lightning-input type="number" name={prod.Product__c} value={prod.Margin__c} label="Margin" formatter="percent" step="0.01"></lightning-input>
                 </div>                
                 <div class="slds-col slds-size_1-of-12">
-                    <lightning-input type="number" name={prod.Product__c} readonly value={total_price__c} label="Total" ></lightning-input>
+                    <lightning-input type="number" name={prod.Product__c} readonly value={prod.Total_Price__c} label="Total" formatter="currency" ></lightning-input>
                 </div>
             </div>
         </template>
@@ -179,7 +183,7 @@
                         <lightning-input type="number" name={prod.Product__c} value={prod.margin__c} label="Margin" formatter="percent" step="0.01"></lightning-input>
                     </div>                
                     <div class="slds-col slds-size_1-of-12">
-                        <lightning-input type="number" name={prod.Product__c} readonly value={total_price__c} label="Total" ></lightning-input>
+                        <lightning-input type="number" name={prod.Product__c} readonly value={prod.Total_Price__c} label="Total" ></lightning-input>
                     </div>
                 </div>
             </template>

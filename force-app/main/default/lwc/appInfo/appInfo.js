@@ -8,6 +8,7 @@ import addProducts from '@salesforce/apex/addApp.addProducts';
 import updateApplication from '@salesforce/apex/addApp.updateApplication'
 import updateProducts from '@salesforce/apex/addApp.updateProducts';
 import appProducts from '@salesforce/apex/appProduct.appProducts'; 
+import areaInfo from '@salesforce/apex/appProduct.areaInfo';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 //import actual product field values 
 import PRODUCT_ID from '@salesforce/schema/Product__c.Id'
@@ -17,22 +18,24 @@ import AVERAGE_COST from '@salesforce/schema/Product__c.Average_Cost__c'
 const fields = [PRODUCT_NAME, PRODUCT_ID, PRODUCT_SIZE, AVERAGE_COST];
 export default class AppInfo extends LightningElement {
     recordId; 
-    @track notUpdate = true; 
+    @track noArea = true;
+    @track notUpdate; 
     @track up;  
     @track appId; 
     @track appName;
     @track appDate; 
     @track areaId;
-    @track areaName;  
+    @track areaName;
+    @track areaSize;   
     @track name; 
     @track productSize; 
     @track productId;  
     @track newProds = []
-    @track upProds = []; 
+    @track upProds = [];
     nap = []; 
     updateAppId; 
     lastId = 0; 
-    @track areaName; 
+    // @track areaName; 
 
     @wire(CurrentPageReference) pageRef;
 
@@ -54,7 +57,8 @@ export default class AppInfo extends LightningElement {
                Note__c: '' ,
                Units_Required__c: '',
                Unit_Price__c: "0",
-               margin__c: "0"
+               Margin__c: "0",
+               Total_Price__c: "0"
              }]; 
              
             this.error = undefined;
@@ -62,7 +66,7 @@ export default class AppInfo extends LightningElement {
             this.error = error;
             this.name = undefined;
         }
-    //console.log(this.newProds)
+    console.log(this.newProds)
     }
     //this function listens for fireEvents in other components then sends those events to the correct function
     //in this componenent. forexample 'areaSelect' comes from appArea.js then the id is sent to handleNewArea(); 
@@ -70,7 +74,6 @@ export default class AppInfo extends LightningElement {
             registerListener('productSelected', this.handleProductSelected, this); 
             registerListener('areaSelect', this.handleNewArea, this);
             registerListener('appSelected', this.update, this); 
-            registerListener('areaName', this.aName, this);
         }
         disconnectedCallback(){
             unregisterAllListeners(this);
@@ -82,17 +85,20 @@ export default class AppInfo extends LightningElement {
             this.recordId = prodsId; 
              
     }
-
+    //get the area idea from the area component then call apex to get further area infor so we can display the name and use for pricing info
     handleNewArea(v){
         this.areaId = v;
-        console.log(v + ' i am v');
-        
+        this.noArea = false;
+        this.notUpdate = true;  
+        areaInfo({ai:v})
+         .then((resp)=>{
+             //console.log(resp[0].Area_Sq_Feet__c);
+             this.areaName = resp[0].Name;
+             this.areaSize = resp[0].Area_Sq_Feet__c;
+             
+         }) 
     }
-    //this will handle setting the area name shown on the screen for both update and new
-    aName(name){
-        //console.log('in areaName ' +name);
-        this.areaName = name; 
-    }
+
     //this will set the application date for both update and new app
     date(e){
         this.appDate = e.detail.value; 
@@ -109,24 +115,37 @@ export default class AppInfo extends LightningElement {
     }
     //this will set the rate on the product. It finds the index of the target value then looks to see if the product class is dry or not. If it is dry then it will set the 
     //lbs/arce other wise set the oz_m__c rate. We can expanded this if we need validation in the future
+    
     newRate(e){
+     let liquidUnits = (oz, areaM, prodSize) => ((oz*areaM)/prodSize).toFixed(2)
+     let dryUnits = (lb, areaD, lbSize) => (lb*(areaD/43.56)/lbSize).toFixed(2)
      let index = this.newProds.findIndex(prod => prod.Product__c === e.target.name)
         //console.log(this.newProds[index]);
         
       if(e.target.getAttribute('class').includes('dry')){
         this.newProds[index].LBS_ACRE__c = e.detail.value;
+        this.newProds[index].Units_Required__c = dryUnits(this.newProds[index].LBS_ACRE__c, this.areaSize, this.newProds[index].Product_size__c )
      }else{
-        this.newProds[index].OZ_M__c = e.detail.value;    
+        window.clearTimeout(this.delay);
+            this.newProds[index].OZ_M__c = e.detail.value;
+             // eslint-disable-next-line @lwc/lwc/no-async-operation
+            this.delay = setTimeout(()=>{
+            //console.log(this.newProds[index].OZ_M__c, this.areaSize ,this.Product_size__c);
+            this.newProds[index].Units_Required__c = liquidUnits(this.newProds[index].OZ_M__c, this.areaSize, this.newProds[index].Product_size__c )
+                
+            },500 )
+            
      }
     }
 //PRICING 
     //new pricing
     newPrice(x){
         let index = this.newProds.findIndex(prod => prod.Product__c === x.target.name)
-        console.log(this.newProds[index].margin__c) 
         this.newProds[index].Unit_Price__c = x.detail.value; 
-        
-        
+        let productMargin = (productCost, unitP) => (1 - (productCost/unitP)).toFixed(2)
+        let total = (units, charge) => (units* charge).toFixed(2)
+        this.newProds[index].Margin__c = productMargin(this.newProds[index].Product_ac,this.newProds[index].Unit_Price__c) 
+        this.newProds[index].Total_Price__c = total(this.newProds[index].Units_Required__c , this.newProds[index].Unit_Price__c)    
     }
 //UPDATES    
     //update rate in update app screen dry vs liquid classes  
@@ -213,7 +232,8 @@ export default class AppInfo extends LightningElement {
                 this.newProds = [];
                 this.appName = ''; 
                 this.appDate = '';
-                //this.areaId = ''; 
+                this.noArea = true;
+                this.notUpdate = false;  
             }).catch((error)=>{
                 console.log(JSON.stringify(error))
                 this.dispatchEvent(
@@ -281,7 +301,7 @@ export default class AppInfo extends LightningElement {
             this.areaId = ''; 
             this.areaName = ''; 
             this.up = false;
-            this.notUpdate = true; 
+            this.noArea = true; 
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Success',
