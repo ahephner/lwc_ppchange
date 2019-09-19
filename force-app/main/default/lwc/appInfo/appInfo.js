@@ -148,30 +148,34 @@ updateRate(r){
     
  }
 //PRICING 
-    //this will get us the app total 
+    //this are reusable functions 
     // eslint-disable-next-line radix
     appTotal = (t, nxt)=> parseInt(t) + parseInt(nxt)
+    lineTotal = (units, charge) => (units* charge).toFixed(2)
+    productMargin = (productCost, unitP) => (1 - (productCost/unitP)).toFixed(2)
+    productPrice = (cost, margin) => (cost/(1 - margin)).toFixed(2)
     //new pricing
     newPrice(x){
         let index = this.newProds.findIndex(prod => prod.Product__c === x.target.name)
-        this.newProds[index].Unit_Price__c = x.detail.value; 
-        let productMargin = (productCost, unitP) => (1 - (productCost/unitP)).toFixed(2)
-        let total = (units, charge) => (units* charge).toFixed(2)
-        this.newProds[index].Margin__c = productMargin(this.newProds[index].Product_ac,this.newProds[index].Unit_Price__c) 
-        this.newProds[index].Total_Price__c = total(this.newProds[index].Units_Required__c , this.newProds[index].Unit_Price__c)   
-        this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)   
-        console.log(this.newProds.map(test => test.Total_Price__c));
-        
+        this.newProds[index].Unit_Price__c = x.detail.value;     
+        this.newProds[index].Margin__c = this.productMargin(this.newProds[index].Product_ac,this.newProds[index].Unit_Price__c) 
+        this.newProds[index].Total_Price__c = this.lineTotal(this.newProds[index].Units_Required__c , this.newProds[index].Unit_Price__c)  
+        window.clearTimeout(this.delay);
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        this.delay = setTimeout(()=>{ 
+            this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)   
+        },1000)       
     }
     newMargin(m){
         let index = this.newProds.findIndex(prod => prod.Product__c === m.target.name)
         this.newProds[index].Margin__c = m.detail.value;
-        let productPrice = (cost, margin) => (cost/(1 - margin)).toFixed(2)
-        let total = (units, charge) => (units* charge).toFixed(2)
-        this.newProds[index].Unit_Price__c = productPrice(this.newProds[index].Product_ac, this.newProds[index].Margin__c)
-        this.newProds[index].Total_Price__c = total(this.newProds[index].Units_Required__c , this.newProds[index].Unit_Price__c)
-        this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
-        console.log(this.newProds.map(test => test.Total_Price__c));
+        this.newProds[index].Unit_Price__c = this.productPrice(this.newProds[index].Product_ac, this.newProds[index].Margin__c)
+        this.newProds[index].Total_Price__c = this.lineTotal(this.newProds[index].Units_Required__c , this.newProds[index].Unit_Price__c)
+        window.clearTimeout(this.delay)
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
+        this.delay = setTimeout(()=>{
+            this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
+    },1000)
     }   
     
     //close update window

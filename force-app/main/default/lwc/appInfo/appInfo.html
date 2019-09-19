@@ -140,11 +140,13 @@
 <!--NEW PRODUCT PRICING-->
         <template if:true={notUpdate}>
             <lightning-card>
+                    <!--Header of Price Card-->
                     <div class='slds-grid slds-wrap '>                    
-                            <h4 class='slds-size_3-of-3'>New Application Pricing</h4>
-                            <lightning-input class='slds-col slds-size_2-of-6 slds-m-left_x-small' readonly type='number'  label='App Total' value={appTotalPrice} formatter="currency"></lightning-input>
-                            <div class='slds-size_4-of-6'></div>
-                        </div> 
+                            <h4 class='slds-size_3-of-6'>New Application Pricing</h4>
+                            <lightning-input class='slds-col slds-size_2-of-6 slds-m-left_x-small' 
+                            readonly type='number'  label='App Total' value={appTotalPrice} formatter="currency"></lightning-input>
+                    </div> 
+                    <!--Body of Pricing-->
         <template if:true={newProdsSelect} for:each={newProds} for:item="prod">
             <div class="slds-grid slds-wrap" key={prod.Id}>
                 <div class="slds-col slds-size_3-of-12 slds-p-top_medium">
