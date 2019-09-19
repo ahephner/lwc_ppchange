@@ -30,6 +30,7 @@ export default class AppInfo extends LightningElement {
     @track name; 
     @track productSize; 
     @track productId;  
+    @track appTotalPrice = 0;
     @track newProds = []
     @track upProds = [];
     nap = []; 
@@ -115,29 +116,41 @@ export default class AppInfo extends LightningElement {
     }
     //this will set the rate on the product. It finds the index of the target value then looks to see if the product class is dry or not. If it is dry then it will set the 
     //lbs/arce other wise set the oz_m__c rate. We can expanded this if we need validation in the future
+    liquidUnits = (oz, areaM, prodSize) => Math.ceil(((oz*areaM)/prodSize))
+    dryUnits = (lb, areaD, lbSize) => Math.ceil((lb*(areaD/43.56)/lbSize))
     
-    newRate(e){
-     let liquidUnits = (oz, areaM, prodSize) => ((oz*areaM)/prodSize).toFixed(2)
-     let dryUnits = (lb, areaD, lbSize) => (lb*(areaD/43.56)/lbSize).toFixed(2)
-     let index = this.newProds.findIndex(prod => prod.Product__c === e.target.name)
-        //console.log(this.newProds[index]);
+    newRate(e){  
+        let index = this.newProds.findIndex(prod => prod.Product__c === e.target.name)
         
-      if(e.target.getAttribute('class').includes('dry')){
-        this.newProds[index].LBS_ACRE__c = e.detail.value;
-        this.newProds[index].Units_Required__c = dryUnits(this.newProds[index].LBS_ACRE__c, this.areaSize, this.newProds[index].Product_size__c )
+        if(e.target.getAttribute('class').includes('dry')){
+            this.newProds[index].LBS_ACRE__c = e.detail.value;
+            this.newProds[index].Units_Required__c = this.dryUnits(this.newProds[index].LBS_ACRE__c, this.areaSize, this.newProds[index].Product_size__c )
      }else{
         window.clearTimeout(this.delay);
             this.newProds[index].OZ_M__c = e.detail.value;
              // eslint-disable-next-line @lwc/lwc/no-async-operation
             this.delay = setTimeout(()=>{
-            //console.log(this.newProds[index].OZ_M__c, this.areaSize ,this.Product_size__c);
-            this.newProds[index].Units_Required__c = liquidUnits(this.newProds[index].OZ_M__c, this.areaSize, this.newProds[index].Product_size__c )
-                
-            },500 )
-            
-     }
+                //console.log(this.newProds[index].OZ_M__c, this.areaSize ,this.Product_size__c);
+                this.newProds[index].Units_Required__c = this.liquidUnits(this.newProds[index].OZ_M__c, this.areaSize, this.newProds[index].Product_size__c )    
+            },500 )    
+         }
     }
+//update rate in update app screen dry vs liquid classes  
+updateRate(r){
+    let newRate = this.newProds.findIndex(p => p.Product__c === r.target.name); 
+    if(r.target.getAttribute('class').includes('dry')){
+         this.newProds[newRate].LBS_ACRE__c = r.detail.value; 
+         this.newProds[newRate].Units_Required__c = this.dryUnits(this.newProds[newRate].LBS_ACRE__c, this.areaSize, this.newProds[newRate].Product_size__c )
+     }else{
+         this.newProds[newRate].OZ_M__c = r.detail.value;
+         this.newProds[newRate].Units_Required__c = this.liquidUnits(this.newProds[newRate].OZ_M__c, this.areaSize, this.newProds[newRate].Product_size__c )
+     }        
+    
+ }
 //PRICING 
+    //this will get us the app total 
+    // eslint-disable-next-line radix
+    appTotal = (t, nxt)=> parseInt(t) + parseInt(nxt)
     //new pricing
     newPrice(x){
         let index = this.newProds.findIndex(prod => prod.Product__c === x.target.name)
@@ -145,21 +158,22 @@ export default class AppInfo extends LightningElement {
         let productMargin = (productCost, unitP) => (1 - (productCost/unitP)).toFixed(2)
         let total = (units, charge) => (units* charge).toFixed(2)
         this.newProds[index].Margin__c = productMargin(this.newProds[index].Product_ac,this.newProds[index].Unit_Price__c) 
-        this.newProds[index].Total_Price__c = total(this.newProds[index].Units_Required__c , this.newProds[index].Unit_Price__c)    
-    }
-//UPDATES    
-    //update rate in update app screen dry vs liquid classes  
-     updateRate(r){
-        let newRate = this.newProds.findIndex(p => p.Product__c === r.target.name); 
-        if(r.target.getAttribute('class').includes('dry')){
-             this.newProds[newRate].LBS_ACRE__c = r.detail.value; 
- 
-         }else{
-             this.newProds[newRate].OZ_M__c = r.detail.value;
- 
-         }        
+        this.newProds[index].Total_Price__c = total(this.newProds[index].Units_Required__c , this.newProds[index].Unit_Price__c)   
+        this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)   
+        console.log(this.newProds.map(test => test.Total_Price__c));
         
-     }
+    }
+    newMargin(m){
+        let index = this.newProds.findIndex(prod => prod.Product__c === m.target.name)
+        this.newProds[index].Margin__c = m.detail.value;
+        let productPrice = (cost, margin) => (cost/(1 - margin)).toFixed(2)
+        let total = (units, charge) => (units* charge).toFixed(2)
+        this.newProds[index].Unit_Price__c = productPrice(this.newProds[index].Product_ac, this.newProds[index].Margin__c)
+        this.newProds[index].Total_Price__c = total(this.newProds[index].Units_Required__c , this.newProds[index].Unit_Price__c)
+        this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
+        console.log(this.newProds.map(test => test.Total_Price__c));
+    }   
+    
     //close update window
     cancel(){
         this.newProds = [];
@@ -251,7 +265,8 @@ export default class AppInfo extends LightningElement {
     //x is an id grab from the registerListener event up above we pass it to the apex function to get current app products then assign
     //go the newProds. this allows me to reuse the funtions above like ... spread we will seperate new products from existing products below prior to update
     update(x){
-        this.noArea = false; 
+        this.noArea = false;
+        this.notUpdate = false;  
         this.up = true; 
        appProducts({app:x})
        .then((resp)=>{

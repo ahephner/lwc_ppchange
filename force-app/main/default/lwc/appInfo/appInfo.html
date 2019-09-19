@@ -140,7 +140,11 @@
 <!--NEW PRODUCT PRICING-->
         <template if:true={notUpdate}>
             <lightning-card>
-                
+                    <div class='slds-grid slds-wrap '>                    
+                            <h4 class='slds-size_3-of-3'>New Application Pricing</h4>
+                            <lightning-input class='slds-col slds-size_2-of-6 slds-m-left_x-small' readonly type='number'  label='App Total' value={appTotalPrice} formatter="currency"></lightning-input>
+                            <div class='slds-size_4-of-6'></div>
+                        </div> 
         <template if:true={newProdsSelect} for:each={newProds} for:item="prod">
             <div class="slds-grid slds-wrap" key={prod.Id}>
                 <div class="slds-col slds-size_3-of-12 slds-p-top_medium">
@@ -153,10 +157,10 @@
                     <lightning-input type="number" name={prod.Product__c} readonly value={prod.Units_Required__c} label="Units Req." ></lightning-input>
                 </div>
                 <div class="slds-col slds-size_1-of-12">
-                    <lightning-input type="number" name={prod.Product__c}  value={prod.unit_price__c} label="Unit Price" formatter="currency" step="1.00" onchange={newPrice}></lightning-input>
+                    <lightning-input type="number" name={prod.Product__c}  value={prod.Unit_Price__c} label="Unit Price" formatter="currency" step="1.00" onchange={newPrice}></lightning-input>
                 </div>
-                <div class="slds-col slds-size_1-of-12">
-                    <lightning-input type="number" name={prod.Product__c} value={prod.Margin__c} label="Margin" formatter="percent" step="0.01"></lightning-input>
+                <div class="slds-col slds-size_2-of-12">
+                    <lightning-input type="number" name={prod.Product__c} value={prod.Margin__c} label="Margin" formatter="percent" step="0.01" onchange={newMargin}></lightning-input>
                 </div>                
                 <div class="slds-col slds-size_1-of-12">
                     <lightning-input type="number" name={prod.Product__c} readonly value={prod.Total_Price__c} label="Total" formatter="currency" ></lightning-input>
