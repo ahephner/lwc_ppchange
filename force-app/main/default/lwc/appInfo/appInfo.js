@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 /* eslint-disable no-console */
 import { LightningElement, track, wire } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
@@ -49,7 +50,7 @@ export default class AppInfo extends LightningElement {
             ...this.newProds,   
              { Product__c:   this.productId = getFieldValue(data, PRODUCT_ID), 
                Product_Name__c:  this.name = getFieldValue(data, PRODUCT_NAME),
-               Product_size__c: this.productSize = getFieldValue(data, PRODUCT_SIZE), 
+               Product_Size__c: this.productSize = getFieldValue(data, PRODUCT_SIZE), 
                Product_ac: getFieldValue(data, AVERAGE_COST),
                OZ_M__c:  "0", 
                LBS_ACRE__c: "0",
@@ -117,13 +118,14 @@ export default class AppInfo extends LightningElement {
     //this will set the rate on the product. It finds the index of the target value then looks to see if the product class is dry or not. If it is dry then it will set the 
     //lbs/arce other wise set the oz_m__c rate. We can expanded this if we need validation in the future
     liquidUnits = (oz, areaM, prodSize) => Math.ceil(((oz*areaM)/prodSize))
-    dryUnits = (lb, areaD, lbSize) => Math.ceil((lb*(areaD/43.56)/lbSize))
+    dryUnits = (lb, areaD, lbSize) => Math.ceil((lb*(areaD/43.56)/parseInt(lbSize)))
     
     newRate(e){  
         let index = this.newProds.findIndex(prod => prod.Product__c === e.target.name)
         
         if(e.target.getAttribute('class').includes('dry')){
             this.newProds[index].LBS_ACRE__c = e.detail.value;
+
             this.newProds[index].Units_Required__c = this.dryUnits(this.newProds[index].LBS_ACRE__c, this.areaSize, this.newProds[index].Product_size__c )
      }else{
         window.clearTimeout(this.delay);
@@ -131,29 +133,33 @@ export default class AppInfo extends LightningElement {
              // eslint-disable-next-line @lwc/lwc/no-async-operation
             this.delay = setTimeout(()=>{
                 //console.log(this.newProds[index].OZ_M__c, this.areaSize ,this.Product_size__c);
-                this.newProds[index].Units_Required__c = this.liquidUnits(this.newProds[index].OZ_M__c, this.areaSize, this.newProds[index].Product_size__c )    
+                this.newProds[index].Units_Required__c = this.liquidUnits(this.newProds[index].OZ_M__c, this.areaSize, this.newProds[index].Product_Size__c )    
             },500 )    
          }
     }
+    
 //update rate in update app screen dry vs liquid classes  
 updateRate(r){
     let newRate = this.newProds.findIndex(p => p.Product__c === r.target.name); 
     if(r.target.getAttribute('class').includes('dry')){
          this.newProds[newRate].LBS_ACRE__c = r.detail.value; 
-         this.newProds[newRate].Units_Required__c = this.dryUnits(this.newProds[newRate].LBS_ACRE__c, this.areaSize, this.newProds[newRate].Product_size__c )
+         this.newProds[newRate].Units_Required__c = this.dryUnits(this.newProds[newRate].LBS_ACRE__c, this.areaSize, this.newProds[newRate].Product_Size__c )
+         this.newProds[newRate].Total_Price__c = this.lineTotal(this.newProds[newRate].Units_Required__c, this.newProds[newRate].Unit_Price__c)
+        
      }else{
          this.newProds[newRate].OZ_M__c = r.detail.value;
-         this.newProds[newRate].Units_Required__c = this.liquidUnits(this.newProds[newRate].OZ_M__c, this.areaSize, this.newProds[newRate].Product_size__c )
-     }        
-    
+         this.newProds[newRate].Units_Required__c = this.liquidUnits(this.newProds[newRate].OZ_M__c, this.areaSize, this.newProds[newRate].Product_Size__c )
+         this.newProds[newRate].Total_Price__c = this.lineTotal(this.newProds[newRate].Units_Required__c, this.newProds[newRate].Unit_Price__c)
+     }     
+     
  }
 //PRICING 
     //this are reusable functions 
     // eslint-disable-next-line radix
     appTotal = (t, nxt)=> parseInt(t) + parseInt(nxt)
     lineTotal = (units, charge) => (units* charge).toFixed(2)
-    productMargin = (productCost, unitP) => (1 - (productCost/unitP)).toFixed(2)
-    productPrice = (cost, margin) => (cost/(1 - margin)).toFixed(2)
+    productMargin = (productCost, unitP) => (1 - (parseInt(productCost)/parseInt(unitP))).toFixed(2)
+    productPrice = (cost, margin) => (parseInt(cost)/(1 - parseInt(margin))).toFixed(2)
     //new pricing
     newPrice(x){
         let index = this.newProds.findIndex(prod => prod.Product__c === x.target.name)
@@ -280,7 +286,9 @@ updateRate(r){
         this.updateAppId = resp[0].Application__c; 
         this.areaId = resp[0].Application__r.Area__c
         this.areaName = resp[0].Area__c 
-        console.log('this area id ' + resp[0].Area__c);
+        // eslint-disable-next-line radix
+        this.areaSize= parseInt(resp[0].Application__r.Area__r.Area_Sq_Feet__c)
+        console.log(typeof this.areaSize);
         
     }).catch((error)=>{
         console.log(JSON.stringify(error))
