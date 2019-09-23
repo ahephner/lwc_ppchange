@@ -175,8 +175,11 @@ updateRate(r){
     newMargin(m){
         let index = this.newProds.findIndex(prod => prod.Product__c === m.target.name)
         this.newProds[index].Margin__c = m.detail.value;
-        this.newProds[index].Unit_Price__c = this.productPrice(this.newProds[index].Product_ac, this.newProds[index].Margin__c)
-        this.newProds[index].Total_Price__c = this.lineTotal(this.newProds[index].Units_Required__c , this.newProds[index].Unit_Price__c)
+        console.log(this.newProds[index]);
+        
+        //need ac 
+        this.newProds[index].Unit_Price__c = this.productPrice(parseInt(this.newProds[index].Product_ac), parseInt(this.newProds[index].Margin__c))
+        this.newProds[index].Total_Price__c = this.lineTotal(parseInt(this.newProds[index].Units_Required__c) , parseInt(this.newProds[index].Unit_Price__c))
         window.clearTimeout(this.delay)
         // eslint-disable-next-line @lwc/lwc/no-async-operation
         this.delay = setTimeout(()=>{
