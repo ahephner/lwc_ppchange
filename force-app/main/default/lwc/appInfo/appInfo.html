@@ -153,7 +153,7 @@
                     <p>{prod.Product_Name__c}</p>
                 </div>
                 <div class="slds-col slds-size_1-of-12">
-                    <lightning-input type="number" name={prod.Product__c} readonly value={prod.Product_ac} label="Avg. Cost" ></lightning-input>
+                    <lightning-input type="number" name={prod.Product__c} readonly value={prod.Product_Cost__c} label="Avg. Cost" ></lightning-input>
                 </div>
                 <div class="slds-col slds-size_1-of-12">
                     <lightning-input type="number" name={prod.Product__c} readonly value={prod.Units_Required__c} label="Units Req." ></lightning-input>
@@ -162,7 +162,7 @@
                     <lightning-input type="number" name={prod.Product__c}  value={prod.Unit_Price__c} label="Unit Price" formatter="currency" step="0.01" onchange={newPrice}></lightning-input>
                 </div>
                 <div class="slds-col slds-size_2-of-12">
-                    <lightning-input type="number" name={prod.Product__c} value={prod.Margin__c} label="Margin" formatter="percent" step="0.01" onchange={newMargin}></lightning-input>
+                    <lightning-input type="number" name={prod.Product__c} value={prod.Margin__c} label="Margin" formatter='percent' step='0.01'  onchange={newMargin}></lightning-input>
                 </div>                
                 <div class="slds-col slds-size_1-of-12">
                     <lightning-input type="number" name={prod.Product__c} readonly value={prod.Total_Price__c} label="Total" formatter="currency" ></lightning-input>
@@ -186,7 +186,7 @@
                         <p>{prod.Product_Name__c}</p>
                     </div>
                     <div class="slds-col slds-size_1-of-12">
-                        <lightning-input type="number" name={prod.Product__c} readonly value={prod.Product_ac} label="Org. Cost" ></lightning-input>
+                        <lightning-input type="number" name={prod.Product__c} readonly value={prod.Product_Cost__c} label="Org. Cost" ></lightning-input>
                     </div>
                     <div class="slds-col slds-size_1-of-12">
                         <lightning-input type="number" name={prod.Product__c} readonly value={prod.Units_Required__c} label="Units Req." ></lightning-input>
@@ -195,7 +195,7 @@
                         <lightning-input type="number" name={prod.Product__c}  value={prod.Unit_Price__c} label="Unit Price" formatter="currency" step="1.00" onchange={newPrice}></lightning-input>
                     </div>
                     <div class="slds-col slds-size_1-of-12">
-                        <lightning-input type="number" name={prod.Product__c} value={prod.Margin__c} label="Margin"  onchange={newMargin}></lightning-input>
+                        <lightning-input type="number" name={prod.Product__c} value={prod.Margin__c} label="Margin %" formatter='percent' step='0.01' onchange={newMargin}></lightning-input>
                     </div>                
                     <div class="slds-col slds-size_1-of-12">
                         <lightning-input type="number" name={prod.Product__c} readonly value={prod.Total_Price__c} label="Total" formatter="currency" ></lightning-input>
