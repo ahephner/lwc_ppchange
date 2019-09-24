@@ -179,10 +179,10 @@ updateRate(r){
         this.delay = setTimeout(()=>{
             
             this.newProds[index].Margin__c = m.detail.value
-            // console.log(this.newProds[index].Margin__c);
-            // console.log(this.newProds[index].Product_Cost__c);
-            this.newProds[index].Unit_Price__c = this.productPrice(this.newProds[index].Product_Cost__c, this.newProds[index].Margin__c)
-            //this.newProds[index].Unit_Price__c = (this.newProds[index].Product_Cost__c/(1-this.newProds[index].Margin__c)).toFixed(2)
+             //console.log(this.newProds[index].Margin__c);
+            //console.log(this.newProds[index].Product_Cost__c);
+            //this.newProds[index].Unit_Price__c = this.productPrice(this.newProds[index].Product_Cost__c, this.newProds[index].Margin__c)
+            this.newProds[index].Unit_Price__c = (this.newProds[index].Product_Cost__c/(1-this.newProds[index].Margin__c)).toFixed(2)
             this.newProds[index].Total_Price__c = this.lineTotal(this.newProds[index].Units_Required__c , this.newProds[index].Unit_Price__c)
             this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
     },1500)
@@ -292,8 +292,13 @@ updateRate(r){
         this.areaName = resp[0].Area__c 
         // eslint-disable-next-line radix
         this.areaSize= parseInt(resp[0].Application__r.Area__r.Area_Sq_Feet__c)
-        console.log(typeof this.areaSize);
-        
+
+        }).then(()=>{
+            this.newProds.forEach(function(k){
+                k.Margin__c = k.Margin__c/100
+                console.log(k.Margin__c);
+                
+            })
     }).catch((error)=>{
         console.log(JSON.stringify(error))
     })
