@@ -7,7 +7,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import AREA_OBJECT from '@salesforce/schema/Area__c'; 
 import NAME_FIELD from '@salesforce/schema/Area__c.Name';
 import DATE_FIELD from '@salesforce/schema/Area__c.Date__c';
-import SQ_FIELD from '@salesforce/schema/Area__c.Area_Sq_Feet__c';
+import SQF_FIELD from '@salesforce/schema/Area__c.Area_Sq_Feet__c';
 import ACRE_FIELD from '@salesforce/schema/Area__c.Area_Acres__c';
 import TYPE_FIELD from '@salesforce/schema/Area__c.Type__c';  
 import PROGRAM_FIELD from '@salesforce/schema/Area__c.Program__c';  
@@ -17,11 +17,11 @@ export default class AppModal extends LightningElement {
         @track note; 
         @track areaName;
         @track areaDate;
-        @track areaSq;
         @track areaAcres;
         @track areaType;
         @track areaId;
         @track proId; 
+        @track feet; 
         @api recordId; 
         //get api values from object settings
         get setNotes(){
@@ -54,14 +54,19 @@ export default class AppModal extends LightningElement {
         newDate(e){
             this.areaDate = e.detail.value;
         }
-        newSq(e){
-            this.areaSq = e.detail.value;
+        newFeet(e){
+            this.feet = e.detail.value;
+            console.log(this.feet);
+            
         }
         newAcre(e){
-            this.areaAcres = e.detail.value;             
+            this.areaAcres = e.detail.value; 
+            console.log(this.areaAcres, ' areaAcre');
+                        
         }
         newType(e){
             this.note = e.detail.value; 
+            console.log(this.note, ' this note');
             
         }
         //open modal
@@ -78,11 +83,12 @@ export default class AppModal extends LightningElement {
             const fields ={}; 
             fields[NAME_FIELD.fieldApiName] = this.areaName;
             fields[DATE_FIELD.fieldApiName] = this.areaDate;
-            fields[SQ_FIELD.fieldApiName] = this.areaSQ;
+            fields[SQF_FIELD.fieldApiName] = this.feet;
             fields[ACRE_FIELD.fieldApiName] = this.areaAcres;
             fields[TYPE_FIELD.fieldApiName] = this.note;
             fields[PROGRAM_FIELD.fieldApiName] = this.recordId;
-         
+            console.log(fields);
+            
             const recordInput = {apiName: AREA_OBJECT.objectApiName, fields};
             //create record
             createRecord(recordInput)
@@ -112,4 +118,3 @@ export default class AppModal extends LightningElement {
     }
             
 }
-
