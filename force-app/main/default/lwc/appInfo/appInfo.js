@@ -156,8 +156,8 @@ updateRate(r){
     // eslint-disable-next-line radix
     appTotal = (t, nxt)=> parseInt(t) + parseInt(nxt)
     lineTotal = (units, charge) => (units* charge).toFixed(2)
-    productMargin = (productCost, unitP) => (1 - (parseInt(productCost)/parseInt(unitP))).toFixed(2)
-    productPrice = (cost, margin) => (cost/(1 - (margin/100))).toFixed(2)
+    //productMargin = (productCost, unitP) => (1 - (parseInt(productCost)/parseInt(unitP))).toFixed(2)
+    //productPrice = (cost, margin) => (cost/(1 - (margin/100))).toFixed(2)
     //new pricing
     newPrice(x){
         window.clearTimeout(this.delay);
@@ -165,12 +165,15 @@ updateRate(r){
         // eslint-disable-next-line @lwc/lwc/no-async-operation
         this.delay = setTimeout(()=>{ 
             
-            this.newProds[index].Unit_Price__c = x.detail.value;     
-            this.newProds[index].Margin__c = this.productMargin(this.newProds[index].Product_Cost__c,this.newProds[index].Unit_Price__c) 
-            this.newProds[index].Total_Price__c = this.lineTotal(this.newProds[index].Units_Required__c , this.newProds[index].Unit_Price__c)  
-            console.log(this.newProds[index]);
+            this.newProds[index].Unit_Price__c = Number(x.detail.value);
+            if(this.newProds[index].Unit_Price__c > 0)
+            this.newProds[index].Margin__c = Number((1 - (this.newProds[index].Product_Cost__c /this.newProds[index].Unit_Price__c))*100);
+            else
+            this.newProds[index].Margin__c = 0;                
+    
+            this.newProds[index].Margin__c = this.newProds[index].Margin__c.toFixed(2);
             this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)   
-        },1500)       
+        },1000)       
     }
     newMargin(m){
         window.clearTimeout(this.delay)
@@ -178,12 +181,13 @@ updateRate(r){
         // eslint-disable-next-line @lwc/lwc/no-async-operation
         this.delay = setTimeout(()=>{
             
-            this.newProds[index].Margin__c = m.detail.value
-             //console.log(this.newProds[index].Margin__c);
-            //console.log(this.newProds[index].Product_Cost__c);
-            //this.newProds[index].Unit_Price__c = this.productPrice(this.newProds[index].Product_Cost__c, this.newProds[index].Margin__c)
-            this.newProds[index].Unit_Price__c = (this.newProds[index].Product_Cost__c/(1-this.newProds[index].Margin__c)).toFixed(2)
-            this.newProds[index].Total_Price__c = this.lineTotal(this.newProds[index].Units_Required__c , this.newProds[index].Unit_Price__c)
+            this.newProds[index].Margin__c = Number(m.detail.value);
+            if(1- this.newProds[index].Margin__c/100 > 0)
+            this.newProds[index].Unit_Price__c = Number(this.newProds[index].Product_Cost__c /(1- this.newProds[index].Margin__c/100));
+            else
+            this.newProds[index].Unit_Price__c = 0;
+    
+            this.newProds[index].Unit_Price__c = this.newProds[index].Unit_Price__c.toFixed(2);
             this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
     },1500)
     }   
@@ -293,13 +297,7 @@ updateRate(r){
         // eslint-disable-next-line radix
         this.areaSize= parseInt(resp[0].Application__r.Area__r.Area_Sq_Feet__c)
 
-        }).then(()=>{
-            this.newProds.forEach(function(k){
-                k.Margin__c = k.Margin__c/100
-                console.log(k.Margin__c);
-                
-            })
-    }).catch((error)=>{
+        }).catch((error)=>{
         console.log(JSON.stringify(error))
     })
     }

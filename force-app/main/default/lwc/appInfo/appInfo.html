@@ -4,6 +4,7 @@
         <template if:true={noArea}>Select an Area First!</template>
     <template if:true={notUpdate}>
     <lightning-card>
+        <div class="outerdiv">
             <div class='slds-grid slds-wrap '>                    
                 <h4 class='slds-size_3-of-3'>New Application</h4>
                 <lightning-input class='slds-col slds-size_2-of-6 slds-m-left_x-small' label='App Name' value={appName} onchange={newName} required></lightning-input>
@@ -15,27 +16,27 @@
             </div>    
         
         <div>
-                <div class="slds-size_12-of-12 slds-m-bottom_small">
-                    <div class="slds-text-align_left slds-m-around_x-small">App Products</div>
+                <div class="slds-size_12-of-12 slds-m-top_medium">
+                    <div class="slds-text-align_left">App Products</div>
                 </div> 
             <template if:true={newProdsSelect} for:each={newProds} for:item="prod">
-                <div class="slds-grid slds-wrap" key={prod.Id}>   
-                    <div class="slds-col slds-size_3-of-12 slds-p-top_medium">
-                        <p>{prod.Product_Name__c}</p>
+                <div class="slds-grid slds-wrap slds-p-left_small" key={prod.Id}>   
+                    <div class="slds-col slds-size_3-of-12">
+                        <p class='pName'>{prod.Product_Name__c}</p>
                     </div>
+                    <div class="slds-col slds-size_1-of-12">
+                        <lightning-input class='liquid' type="number"  label="Unit Price" name={prod.Product__c} value={prod.Unit_Price__c} onchange={newPrice} formatter="currency" step="0.01"></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-12">
+                        <lightning-input class='liquid' type="number"  label="Margin%" name={prod.Product__c} value={prod.Margin__c} onchange={newMargin} step="0.01" ></lightning-input>
+                    </div>  
                     <div class="slds-col slds-size_1-of-12">
                         <lightning-input class='liquid' type="number"  label="Rate" name={prod.Product__c} value={prod.OZ_M__c} onchange={newRate}></lightning-input>
                     </div>
                     <div class="slds-col slds-size_1-of-12">
                         <lightning-input class='dry' type="number"  label="LBS/Acre" name={prod.Product__c} value={prod.LBS_ACRE__c} onchange={newRate}></lightning-input>
                     </div>
-                    <!-- <div class="slds-col slds-size_2-of-12">
-                        <lightning-input  type="number"  label="Unit Price" formatter="currency" ></lightning-input>
-                    </div>
-                    <div class="slds-col slds-size_2-of-12">
-                        <lightning-input type="number" label='Margin'  formatter="percent" step="0.01"></lightning-input>
-                    </div> -->
-                    <div class="slds-col slds-size_4-of-12">
+                    <div class="slds-col slds-size_3-of-12">
                         <lightning-combobox
                             name={prod.Product_Name__c}
                             label='Note'
@@ -44,24 +45,34 @@
                             options={noteOptions}
                             onchange={selectNote}></lightning-combobox>
                     </div>
-                    <div class="slds-col slds-size_1-of-12 slds-m-left_large">
-                        <lightning-icon  
-                        class="slds-icon_xx-small slds-m-top_large"  id={prod.Id}
-                        icon-name="utility:close" onclick={remove} ></lightning-icon>
+                    <div class="slds-col slds-size_1-of-12">
+                        <div class="iconDiv">
+                            <lightning-icon  size="x-small" id={prod.Id} 
+                            icon-name="utility:close" onclick={remove} class="iconClass">
+                            </lightning-icon>
+                        </div>
                     </div>
                 </div>     
                 </template>
             </div>
-                <lightning-button-group class="slds-m-top_xx-small slds-m-left_x-small">
-                    <lightning-button id='appBtn' variant="brand" label="save" onclick={createApplication__c}></lightning-button>
-                    <lightning-button variant="destructive" label="Cancel" onclick={cancel}></lightning-button>
-                </lightning-button-group>               
+            <div class="slds-m-top_x-large slds-m-left_x-small">
+                    <lightning-layout>
+                        <lightning-layout-item padding="horizontal-small">
+                            <lightning-button id='appBtn' variant="brand" label="Save" onclick={createApplication__c}></lightning-button>                               
+                        </lightning-layout-item>
+                        <lightning-layout-item>
+                            <lightning-button variant="destructive" label="Cancel" onclick={cancel}></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>                     
+      </div>         
     </lightning-card>
 </template>
 
 <!--Update app Card-->
 <template if:true={up}>
 <lightning-card>
+    <div class="outerdiv">
         <div class='slds-grid slds-wrap '>
                 <h4 class='slds-size_3-of-3'>Update</h4>
 <!--Application name input--> 
@@ -80,35 +91,28 @@
 <!--Individual Product Lines-->        
         <div>
             <div class="slds-size_12-of-12 slds-m-bottom_small">
-                <div class="slds-text-align_left slds-m-around_x-small">App Products</div>
+                <div class="slds-text-align_left">App Products</div>
             </div> 
                 <template if:true={newProdsSelect} for:each={newProds} for:item="prod">
-                    <div class="slds-grid slds-wrap" key={prod.Id}>   
-                        <div class="slds-col slds-size_4-of-12 slds-p-top_medium">
-                            <p>{prod.Product_Name__c}</p>
+                    <div class="slds-grid slds-wrap slds-p-left_small" key={prod.Id}>   
+                        <div class="slds-col slds-size_3-of-12">
+                            <p class="pName">{prod.Product_Name__c}</p>
                         </div>
 <!--This is the rate input section-->                        
                     <div class="slds-col slds-size_1-of-12">
-                        <lightning-input class='liquid' type="number"  
-                                         label="OZ/M" name={prod.Product__c} 
-                                         value={prod.OZ_M__c} onchange={updateRate}></lightning-input>
-                    </div>
-                        
+                            <lightning-input class='liquid' type="number"  label="Unit Price" name={prod.Product__c} value={prod.Unit_Price__c} onchange={newPrice} formatter="currency"  step="0.01" ></lightning-input>
+                        </div>
                         <div class="slds-col slds-size_1-of-12">
-                            <lightning-input class='dry' type="number" 
-                                             label="LBS/Acre" 
-                                             name={prod.Product__c} 
-                                             value={prod.LBS_ACRE__c} 
-                                             onchange={updateRate}></lightning-input>
-                        </div>
-<!--Cost Input-->                        
-                        <!-- <div class="slds-col slds-size_2-of-12">
-                            <lightning-input  type="number"  label="Unit Price" formatter="currency" ></lightning-input>
-                        </div>
-                        <div class="slds-col slds-size_2-of-12">
-                            <lightning-input type="number" label='Margin'  formatter="percent" step="0.01"></lightning-input>
-                        </div> -->
-<!--Commented out Note Section-->                        
+                            <lightning-input class='liquid' type="number"  label="Margin%" name={prod.Product__c} value={prod.Margin__c} onchange={newMargin} step="0.01" ></lightning-input>
+                        </div>    
+
+                        <div class="slds-col slds-size_1-of-12">
+                        <lightning-input class='liquid' type="number"  label="OZ/M" name={prod.Product__c} value={prod.OZ_M__c} onchange={updateRate}></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-12">
+                        <lightning-input class='dry' type="number"  label="LBS/Acre" name={prod.Product__c} value={prod.LBS_ACRE__c} onchange={updateRate}></lightning-input>
+                    </div>
+                      
                     <div class="slds-col slds-size_3 -of-12">
                         <lightning-combobox
                             name={prod.Product_Name__c}
@@ -119,20 +123,27 @@
                             onchange={selectNote}></lightning-combobox>
                     </div>
 <!--delete product icon-->
-                        <div class="slds-col slds-size_1-of-12 slds-m-left_large">
-                            <lightning-icon  
-                            class="slds-icon_xx-small slds-m-top_large"  id={prod.Id}
-                            icon-name="utility:close" onclick={upDeleteProd} ></lightning-icon>
+                        <div class="slds-col slds-size_1-of-12">
+                                <div class="iconDiv">
+                                <lightning-icon size="x-small" class="iconClass"  id={prod.Id} icon-name="utility:close" onclick={upDeleteProd} ></lightning-icon>
+                            </div>
                         </div>
                     </div>     
                 </template>
-<!--Button Section-->                
             </div>
-                <lightning-button-group class="slds-m-top_xx-small slds-m-left_x-small">
-                    <lightning-button variant="brand" label="Update" onclick={upProd}></lightning-button>
-                    <lightning-button variant="destructive" label="Cancel" onclick={cancel}></lightning-button>
-                </lightning-button-group>            
-            </lightning-card>
+<!--Button Section-->                
+            <div class="slds-m-top_x-large slds-m-left_x-small">
+                    <lightning-layout>
+                        <lightning-layout-item padding="horizontal-small">
+                            <lightning-button variant="brand" label="Update" onclick={upProd}></lightning-button>
+                        </lightning-layout-item>
+                        <lightning-layout-item >
+                            <lightning-button variant="destructive" label="Cancel" onclick={cancel}></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>  
+            </div>        
+    </lightning-card>
 </template>
 </lightning-tab>
 <!--PRICING TAB-->
@@ -140,6 +151,7 @@
 <!--NEW PRODUCT PRICING-->
         <template if:true={notUpdate}>
             <lightning-card>
+              <div class="outerdiv">
                     <!--Header of Price Card-->
                     <div class='slds-grid slds-wrap '>                    
                             <h4 class='slds-size_3-of-6'>New Application Pricing</h4>
@@ -149,8 +161,8 @@
                     <!--Body of Pricing-->
         <template if:true={newProdsSelect} for:each={newProds} for:item="prod">
             <div class="slds-grid slds-wrap" key={prod.Id}>
-                <div class="slds-col slds-size_3-of-12 slds-p-top_medium">
-                    <p>{prod.Product_Name__c}</p>
+                <div class="slds-col slds-size_3-of-12">
+                    <p class='pName'>{prod.Product_Name__c}</p>
                 </div>
                 <div class="slds-col slds-size_1-of-12">
                     <lightning-input type="number" name={prod.Product__c} readonly value={prod.Product_Cost__c} label="Avg. Cost" ></lightning-input>
@@ -162,22 +174,28 @@
                     <lightning-input type="number" name={prod.Product__c}  value={prod.Unit_Price__c} label="Unit Price" formatter="currency" step="0.01" onchange={newPrice}></lightning-input>
                 </div>
                 <div class="slds-col slds-size_2-of-12">
-                    <lightning-input type="number" name={prod.Product__c} value={prod.Margin__c} label="Margin" formatter='percent' step='0.01'  onchange={newMargin}></lightning-input>
+                    <lightning-input type="number" name={prod.Product__c} value={prod.Margin__c} label="Margin"  step='0.01'  onchange={newMargin}></lightning-input>
                 </div>                
                 <div class="slds-col slds-size_1-of-12">
                     <lightning-input type="number" name={prod.Product__c} readonly value={prod.Total_Price__c} label="Total" formatter="currency" ></lightning-input>
                 </div>
             </div>
         </template>
-        <lightning-button-group class="slds-m-top_xx-small slds-m-left_x-small">
-            <lightning-button  variant="brand" label="save" onclick={createApplication__c}></lightning-button>
-            <lightning-button variant="destructive" label="Cancel" onclick={cancel}></lightning-button>
-        </lightning-button-group> 
+            <lightning-layout>
+                <lightning-layout-item padding="horizontal-small">
+                    <lightning-button variant="brand" label="Save" onclick={createApplication__c}></lightning-button>                               
+                </lightning-layout-item>
+                <lightning-layout-item>
+                    <lightning-button variant="destructive" label="Cancel" onclick={cancel}></lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+      </div>
     </lightning-card>    
     </template> 
 <!--UPDATE PRICING CARD-->
     <template if:true={up}>
         <lightning-card>
+            <div class='outerdiv'>
              <!--Header of Price Card-->
              <div class='slds-grid slds-wrap '>                    
                     <h4 class='slds-size_3-of-6'>New Application Pricing</h4>
@@ -186,8 +204,8 @@
             </div> 
             <template if:true={newProdsSelect} for:each={newProds} for:item="prod">
                 <div class="slds-grid slds-wrap" key={prod.Id}>
-                    <div class="slds-col slds-size_3-of-12 slds-p-top_medium">
-                        <p>{prod.Product_Name__c}</p>
+                    <div class="slds-col slds-size_3-of-12">
+                        <p class='pName'>{prod.Product_Name__c}</p>
                     </div>
                     <div class="slds-col slds-size_1-of-12">
                         <lightning-input type="number" name={prod.Product__c} readonly value={prod.Product_Cost__c} label="Org. Cost" ></lightning-input>
@@ -199,7 +217,7 @@
                         <lightning-input type="number" name={prod.Product__c}  value={prod.Unit_Price__c} label="Unit Price" formatter="currency" step="1.00" onchange={newPrice}></lightning-input>
                     </div>
                     <div class="slds-col slds-size_1-of-12">
-                        <lightning-input type="number" name={prod.Product__c} value={prod.Margin__c} label="Margin %" formatter='percent' step='0.01' onchange={newMargin}></lightning-input>
+                        <lightning-input type="number" name={prod.Product__c} value={prod.Margin__c} label="Margin %"  step='0.01' onchange={newMargin}></lightning-input>
                     </div>                
                     <div class="slds-col slds-size_1-of-12">
                         <lightning-input type="number" name={prod.Product__c} readonly value={prod.Total_Price__c} label="Total" formatter="currency" ></lightning-input>
@@ -210,6 +228,7 @@
                 <lightning-button variant="brand" label="Update" onclick={upProd}></lightning-button>
                 <lightning-button variant="destructive" label="Cancel" onclick={cancel}></lightning-button>
             </lightning-button-group>
+            </div>
         </lightning-card>
     </template>    
     </lightning-tab>

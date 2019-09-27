@@ -1,0 +1,28 @@
+.outerdiv {
+    padding-left:15px ;
+    padding-right:15px ;
+}
+
+.liquid {
+    margin-left:5px ;
+}
+
+.dry {
+    margin-left:5px ;
+    margin-right:5px ;
+}
+
+.iconClass {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.iconDiv {
+    margin-top: 2rem;
+    text-align: -webkit-center;
+}
+
+.pName{
+    margin-top: 2rem;
+}
