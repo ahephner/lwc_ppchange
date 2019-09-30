@@ -18,7 +18,7 @@ export default class AppArea extends LightningElement {
      //runs on load
      get areaOptions(){
          // eslint-disable-next-line no-console
-         console.log('==> '+JSON.stringify(this.areaList.data)); 
+         //console.log('==> '+JSON.stringify(this.areaList.data)); 
          return this.areaList.data; 
      }   
     //this function will fire the value or id to appinfo

@@ -30,7 +30,7 @@ export default class AppInfo extends LightningElement {
     @track areaSize;   
     @track name; 
     @track productSize; 
-    @track productId;  
+    @track productId; 
     @track appTotalPrice = 0;
     @track newProds = []
     @track upProds = [];
@@ -52,8 +52,8 @@ export default class AppInfo extends LightningElement {
                Product_Name__c:  this.name = getFieldValue(data, PRODUCT_NAME),
                Product_Size__c: this.productSize = getFieldValue(data, PRODUCT_SIZE), 
                Product_Cost__c: getFieldValue(data, AVERAGE_COST),
-               OZ_M__c:  "0", 
-               LBS_ACRE__c: "0",
+               Rate2__c: "0", 
+               Unit_Area__c: '', 
                numb: this.lastId, 
                Application__c: '',
                Note__c: '' ,
@@ -115,6 +115,19 @@ export default class AppInfo extends LightningElement {
     get newProdsSelect(){
         return this.newProds.length >= 1; 
     }
+//RATES 
+get unitArea(){
+    return [
+        {label:'OZ/M', value:'OZ/M'}, 
+        {label: 'OZ/Acre', value:'OZ/Acre'},
+        {label: 'LB/M', value:'LB/M'},
+        {label: 'LB/Acre', value:'LB/Acre'}
+    ];
+}
+    handleUnitArea(e){
+        let index = this.newProds.findIndex(prod => prod.Product__c === e.target.name)
+        this.newProds[index].Unit_Area__c = e.detail.value; 
+    }
     //this will set the rate on the product. It finds the index of the target value then looks to see if the product class is dry or not. If it is dry then it will set the 
     //lbs/arce other wise set the oz_m__c rate. We can expanded this if we need validation in the future
     liquidUnits = (oz, areaM, prodSize) => Math.ceil(((oz*areaM)/prodSize))
@@ -122,33 +135,32 @@ export default class AppInfo extends LightningElement {
     
     newRate(e){  
         let index = this.newProds.findIndex(prod => prod.Product__c === e.target.name)
-        
-        if(e.target.getAttribute('class').includes('dry')){
-            this.newProds[index].LBS_ACRE__c = e.detail.value;
-            this.newProds[index].Units_Required__c = this.dryUnits(this.newProds[index].LBS_ACRE__c, this.areaSize, this.newProds[index].Product_Size__c )
-     }else{
+
+            //this.newProds[index].Units_Required__c = this.dryUnits(this.newProds[index].Rate2__c, this.areaSize, this.newProds[index].Product_Size__c )
         window.clearTimeout(this.delay);
-            this.newProds[index].OZ_M__c = e.detail.value;
              // eslint-disable-next-line @lwc/lwc/no-async-operation
             this.delay = setTimeout(()=>{
+                this.newProds[index].Rate2__c = e.detail.value;
+                console.log(this.newProds);
+                
                 //console.log(this.newProds[index].OZ_M__c, this.areaSize ,this.Product_size__c);
-                this.newProds[index].Units_Required__c = this.liquidUnits(this.newProds[index].OZ_M__c, this.areaSize, this.newProds[index].Product_Size__c )    
+               // this.newProds[index].Units_Required__c = this.liquidUnits(this.newProds[index].Rate2__c, this.areaSize, this.newProds[index].Product_Size__c )    
             },500 )    
-         }
+         
     }
     
 //update rate in update app screen dry vs liquid classes  
 updateRate(r){
-    let newRate = this.newProds.findIndex(p => p.Product__c === r.target.name); 
-    if(r.target.getAttribute('class').includes('dry')){
-         this.newProds[newRate].LBS_ACRE__c = r.detail.value; 
-         this.newProds[newRate].Units_Required__c = this.dryUnits(this.newProds[newRate].LBS_ACRE__c, this.areaSize, this.newProds[newRate].Product_Size__c )
-         this.newProds[newRate].Total_Price__c = this.lineTotal(this.newProds[newRate].Units_Required__c, this.newProds[newRate].Unit_Price__c)
-    }else{
-         this.newProds[newRate].OZ_M__c = r.detail.value;
-         this.newProds[newRate].Units_Required__c = this.liquidUnits(this.newProds[newRate].OZ_M__c, this.areaSize, this.newProds[newRate].Product_Size__c )
-         this.newProds[newRate].Total_Price__c = this.lineTotal(this.newProds[newRate].Units_Required__c, this.newProds[newRate].Unit_Price__c)
-     }     
+    let index = this.newProds.findIndex(p => p.Product__c === r.target.name); 
+    window.clearTimeout(this.delay);
+    // eslint-disable-next-line @lwc/lwc/no-async-operation
+   this.delay = setTimeout(()=>{
+       this.newProds[index].Rate2__c = r.detail.value;
+       console.log(this.newProds);
+       
+       //console.log(this.newProds[index].OZ_M__c, this.areaSize ,this.Product_size__c);
+      // this.newProds[index].Units_Required__c = this.liquidUnits(this.newProds[index].Rate2__c, this.areaSize, this.newProds[index].Product_Size__c )    
+   },500 ) 
      
  }
 //PRICING 
@@ -205,10 +217,13 @@ updateRate(r){
     //will remove it on the screen as an option
     remove(e){
         let x = e.target.id.substr(0,18)
+        // eslint-disable-next-line no-alert
+        let cf = confirm('Do you want to delete this entry?')
+        if(cf===true){
         let i = this.newProds.findIndex(prod => prod.Id === x)
         this.newProds.splice(i,1)
         //console.log(this.newProds.length)
-      
+        }
     }    
     //get note options and handle change
     get noteOptions(){
@@ -361,6 +376,9 @@ updateRate(r){
     upDeleteProd(e){
         let product = e.target.id.substr(0,18); 
         let i = this.newProds.findIndex(prod => prod.Id === product);
+        // eslint-disable-next-line no-alert
+        let c = confirm('Do you want to delete this entry?')
+        if(c === true){
         deleteRecord(product)
             .then(()=>{
                 this.newProds.splice(i,1)
@@ -383,7 +401,7 @@ updateRate(r){
                     })
                 )
             })
-        
+        }
     }
 
  }

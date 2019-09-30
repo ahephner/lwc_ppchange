@@ -25,17 +25,25 @@
                         <p class='pName'>{prod.Product_Name__c}</p>
                     </div>
                     <div class="slds-col slds-size_1-of-12">
+                        <lightning-input  type="number"  label="Rate" name={prod.Product__c} value={prod.Rate2__c}  onchange={newRate}></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-12">
+                        <lightning-combobox
+                        name={prod.Product__c}
+                        label="Unit Area"
+                        value={prod.Unit_Area__c}
+                        placeholder="Select Measure"
+                        options={unitArea}
+                        onchange={handleUnitArea}
+                        required
+                        ></lightning-combobox>
+                    </div>
+                    <div class="slds-col slds-size_1-of-12">
                         <lightning-input class='liquid' type="number"  label="Unit Price" name={prod.Product__c} value={prod.Unit_Price__c} onchange={newPrice} formatter="currency" step="0.01"></lightning-input>
                     </div>
                     <div class="slds-col slds-size_1-of-12">
                         <lightning-input class='liquid' type="number"  label="Margin%" name={prod.Product__c} value={prod.Margin__c} onchange={newMargin} step="0.01" ></lightning-input>
                     </div>  
-                    <div class="slds-col slds-size_1-of-12">
-                        <lightning-input class='liquid' type="number"  label="Rate" name={prod.Product__c} value={prod.OZ_M__c} onchange={newRate}></lightning-input>
-                    </div>
-                    <div class="slds-col slds-size_1-of-12">
-                        <lightning-input class='dry' type="number"  label="LBS/Acre" name={prod.Product__c} value={prod.LBS_ACRE__c} onchange={newRate}></lightning-input>
-                    </div>
                     <div class="slds-col slds-size_3-of-12">
                         <lightning-combobox
                             name={prod.Product_Name__c}
@@ -98,21 +106,27 @@
                         <div class="slds-col slds-size_3-of-12">
                             <p class="pName">{prod.Product_Name__c}</p>
                         </div>
-<!--This is the rate input section-->                        
+<!--This is the rate input section-->
+                    <div class="slds-col slds-size_1-of-12">
+                        <lightning-input  type="number"  label="Rate" name={prod.Product__c} value={prod.Rate2__c} onchange={newRate}></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-12">
+                        <lightning-combobox
+                        name={prod.Product__c}
+                        label="Unit Area"
+                        value={prod.Unit_Area__c}
+                        placeholder="Select Measure"
+                        options={unitArea}
+                        onchange={handleUnitArea}
+                        
+                        ></lightning-combobox>
+                    </div>                        
                     <div class="slds-col slds-size_1-of-12">
                             <lightning-input class='liquid' type="number"  label="Unit Price" name={prod.Product__c} value={prod.Unit_Price__c} onchange={newPrice} formatter="currency"  step="0.01" ></lightning-input>
                         </div>
                         <div class="slds-col slds-size_1-of-12">
                             <lightning-input class='liquid' type="number"  label="Margin%" name={prod.Product__c} value={prod.Margin__c} onchange={newMargin} step="0.01" ></lightning-input>
-                        </div>    
-
-                        <div class="slds-col slds-size_1-of-12">
-                        <lightning-input class='liquid' type="number"  label="OZ/M" name={prod.Product__c} value={prod.OZ_M__c} onchange={updateRate}></lightning-input>
-                    </div>
-                    <div class="slds-col slds-size_1-of-12">
-                        <lightning-input class='dry' type="number"  label="LBS/Acre" name={prod.Product__c} value={prod.LBS_ACRE__c} onchange={updateRate}></lightning-input>
-                    </div>
-                      
+                        </div>                          
                     <div class="slds-col slds-size_3 -of-12">
                         <lightning-combobox
                             name={prod.Product_Name__c}
