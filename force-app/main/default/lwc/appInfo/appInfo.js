@@ -124,15 +124,16 @@ get unitArea(){
         {label: 'LB/Acre', value:'LB/Acre'}
     ];
 }
+    //this will determine units required
+    unitsRequired = (uOFM, rate, areaS, unitS) => {return uOFM.includes('Acre') ? Math.ceil((((rate/43.56)*areaS))/unitS) : Math.ceil(((rate*areaS)/unitS))}
     handleUnitArea(e){
         let index = this.newProds.findIndex(prod => prod.Product__c === e.target.name)
         this.newProds[index].Unit_Area__c = e.detail.value; 
+            if(this.newProds[index].Rate2__c> 0 ){
+                this.newProds[index].Units_Required__c = this.unitsRequired(this.newProds[index].Unit_Area__c, this.newProds[index].Rate2__c, this.areaSize, this.newProds[index].Product_Size__c )
+            }
     }
-    //this will set the rate on the product. It finds the index of the target value then looks to see if the product class is dry or not. If it is dry then it will set the 
-    //lbs/arce other wise set the oz_m__c rate. We can expanded this if we need validation in the future
-    liquidUnits = (oz, areaM, prodSize) => Math.ceil(((oz*areaM)/prodSize))
-    dryUnits = (lb, areaD, lbSize) => Math.ceil((lb*(areaD/43.56)/lbSize))
-    
+
     newRate(e){  
         let index = this.newProds.findIndex(prod => prod.Product__c === e.target.name)
 
@@ -141,35 +142,19 @@ get unitArea(){
              // eslint-disable-next-line @lwc/lwc/no-async-operation
             this.delay = setTimeout(()=>{
                 this.newProds[index].Rate2__c = e.detail.value;
-                console.log(this.newProds);
-                
                 //console.log(this.newProds[index].OZ_M__c, this.areaSize ,this.Product_size__c);
-               // this.newProds[index].Units_Required__c = this.liquidUnits(this.newProds[index].Rate2__c, this.areaSize, this.newProds[index].Product_Size__c )    
+                this.newProds[index].Units_Required__c = this.unitsRequired(this.newProds[index].Unit_Area__c, this.newProds[index].Rate2__c, this.areaSize, this.newProds[index].Product_Size__c )    
+                this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c)
+                
             },500 )    
          
     }
     
-//update rate in update app screen dry vs liquid classes  
-updateRate(r){
-    let index = this.newProds.findIndex(p => p.Product__c === r.target.name); 
-    window.clearTimeout(this.delay);
-    // eslint-disable-next-line @lwc/lwc/no-async-operation
-   this.delay = setTimeout(()=>{
-       this.newProds[index].Rate2__c = r.detail.value;
-       console.log(this.newProds);
-       
-       //console.log(this.newProds[index].OZ_M__c, this.areaSize ,this.Product_size__c);
-      // this.newProds[index].Units_Required__c = this.liquidUnits(this.newProds[index].Rate2__c, this.areaSize, this.newProds[index].Product_Size__c )    
-   },500 ) 
-     
- }
 //PRICING 
     //this are reusable functions 
     // eslint-disable-next-line radix
     appTotal = (t, nxt)=> parseInt(t) + parseInt(nxt)
     lineTotal = (units, charge) => (units* charge).toFixed(2)
-    //productMargin = (productCost, unitP) => (1 - (parseInt(productCost)/parseInt(unitP))).toFixed(2)
-    //productPrice = (cost, margin) => (cost/(1 - (margin/100))).toFixed(2)
     //new pricing
     newPrice(x){
         window.clearTimeout(this.delay);
@@ -178,13 +163,16 @@ updateRate(r){
         this.delay = setTimeout(()=>{ 
             
             this.newProds[index].Unit_Price__c = Number(x.detail.value);
-            if(this.newProds[index].Unit_Price__c > 0)
-            this.newProds[index].Margin__c = Number((1 - (this.newProds[index].Product_Cost__c /this.newProds[index].Unit_Price__c))*100);
-            else
-            this.newProds[index].Margin__c = 0;                
-    
-            this.newProds[index].Margin__c = this.newProds[index].Margin__c.toFixed(2);
-            this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)   
+                    if(this.newProds[index].Unit_Price__c > 0){
+                    this.newProds[index].Margin__c = Number((1 - (this.newProds[index].Product_Cost__c /this.newProds[index].Unit_Price__c))*100);
+                    this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c)
+                }else{
+                    this.newProds[index].Margin__c = 0;                
+                    this.newProds[index].Margin__c = this.newProds[index].Margin__c.toFixed(2);
+                    this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c)
+                    console.log(this.newProds[index].Total_Price__c, 'here price');
+                    this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)   
+            }
         },1000)       
     }
     newMargin(m){
@@ -192,15 +180,16 @@ updateRate(r){
         let index = this.newProds.findIndex(prod => prod.Product__c === m.target.name)
         // eslint-disable-next-line @lwc/lwc/no-async-operation
         this.delay = setTimeout(()=>{
-            
-            this.newProds[index].Margin__c = Number(m.detail.value);
-            if(1- this.newProds[index].Margin__c/100 > 0)
-            this.newProds[index].Unit_Price__c = Number(this.newProds[index].Product_Cost__c /(1- this.newProds[index].Margin__c/100));
-            else
-            this.newProds[index].Unit_Price__c = 0;
-    
-            this.newProds[index].Unit_Price__c = this.newProds[index].Unit_Price__c.toFixed(2);
-            this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
+                this.newProds[index].Margin__c = Number(m.detail.value);
+                if(1- this.newProds[index].Margin__c/100 > 0){
+                    this.newProds[index].Unit_Price__c = Number(this.newProds[index].Product_Cost__c /(1- this.newProds[index].Margin__c/100));
+                    this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c)
+                }else{
+                    this.newProds[index].Unit_Price__c = 0;
+                    this.newProds[index].Unit_Price__c = this.newProds[index].Unit_Price__c.toFixed(2);
+                    this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c)   
+                    this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
+                }
     },1500)
     }   
     
