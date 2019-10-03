@@ -153,7 +153,7 @@ get unitArea(){
 //PRICING 
     //this are reusable functions 
     // eslint-disable-next-line radix
-    appTotal = (t, nxt)=> parseInt(t) + parseInt(nxt)
+    appTotal = (t, nxt)=> (t + nxt).toFixed(2)
     lineTotal = (units, charge) => (units* charge).toFixed(2)
     //new pricing
     newPrice(x){
@@ -166,12 +166,15 @@ get unitArea(){
                     if(this.newProds[index].Unit_Price__c > 0){
                     this.newProds[index].Margin__c = Number((1 - (this.newProds[index].Product_Cost__c /this.newProds[index].Unit_Price__c))*100);
                     this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c)
+                    this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
+                    console.log( this.appTotalPrice);
                 }else{
                     this.newProds[index].Margin__c = 0;                
                     this.newProds[index].Margin__c = this.newProds[index].Margin__c.toFixed(2);
                     this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c)
                     console.log(this.newProds[index].Total_Price__c, 'here price');
-                    this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)   
+                    this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
+                    console.log( this.appTotalPrice);   
             }
         },1000)       
     }
@@ -184,11 +187,15 @@ get unitArea(){
                 if(1- this.newProds[index].Margin__c/100 > 0){
                     this.newProds[index].Unit_Price__c = Number(this.newProds[index].Product_Cost__c /(1- this.newProds[index].Margin__c/100));
                     this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c)
+                    this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
+                    console.log( this.appTotalPrice);
                 }else{
                     this.newProds[index].Unit_Price__c = 0;
                     this.newProds[index].Unit_Price__c = this.newProds[index].Unit_Price__c.toFixed(2);
                     this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c)   
                     this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
+                    console.log(this.appTotalPrice);
+                    
                 }
     },1500)
     }   
@@ -199,6 +206,7 @@ get unitArea(){
         this.appName = ''; 
         this.appDate = '';
         this.areaId = ''; 
+        this.appTotalPrice = '0'
         this.noArea = true; 
         this.up = false; 
     }
@@ -300,7 +308,7 @@ get unitArea(){
         this.areaName = resp[0].Area__c 
         // eslint-disable-next-line radix
         this.areaSize= parseInt(resp[0].Application__r.Area__r.Area_Sq_Feet__c)
-
+        this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
         }).catch((error)=>{
         console.log(JSON.stringify(error))
     })

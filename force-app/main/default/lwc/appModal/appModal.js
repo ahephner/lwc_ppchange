@@ -56,12 +56,12 @@ export default class AppModal extends LightningElement {
         }
         newFeet(e){
             this.feet = e.detail.value;
-            console.log(this.feet);
+            this.areaAcres = this.feet/43.56
             
         }
         newAcre(e){
             this.areaAcres = e.detail.value; 
-            console.log(this.areaAcres, ' areaAcre');
+            this.feet = this.areaAcres * 43.56; 
                         
         }
         newType(e){
