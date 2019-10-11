@@ -27,7 +27,8 @@ export default class AppInfo extends LightningElement {
     @track appDate; 
     @track areaId;
     @track areaName;
-    @track areaSize;   
+    @track areaSize;  
+    @track areaUM; 
     @track name; 
     @track productSize; 
     @track productId; 
@@ -53,7 +54,7 @@ export default class AppInfo extends LightningElement {
                Product_Size__c: this.productSize = getFieldValue(data, PRODUCT_SIZE), 
                Product_Cost__c: getFieldValue(data, AVERAGE_COST),
                Rate2__c: "0", 
-               Unit_Area__c: '', 
+               Unit_Area__c: this.areaUM, 
                numb: this.lastId, 
                Application__c: '',
                Note__c: '' ,
@@ -69,6 +70,8 @@ export default class AppInfo extends LightningElement {
             this.name = undefined;
         }
     console.log(this.newProds)
+    console.log(this.areaUM);
+    
     }
     //this function listens for fireEvents in other components then sends those events to the correct function
     //in this componenent. forexample 'areaSelect' comes from appArea.js then the id is sent to handleNewArea(); 
@@ -97,6 +100,7 @@ export default class AppInfo extends LightningElement {
              //console.log(resp[0].Area_Sq_Feet__c);
              this.areaName = resp[0].Name;
              this.areaSize = resp[0].Area_Sq_Feet__c;
+             this.areaUM = resp[0].Pref_U_of_M__c; 
              
          }) 
     }
