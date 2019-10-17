@@ -29,6 +29,14 @@
                                         onchange={newType}
                                        ></lightning-combobox>
                                     <lightning-input type='number' label="Area Acres" onchange={newAcre}></lightning-input>
+                                    <lightning-combobox
+                                    name='UofM'
+                                    label='Pref Unit of Measure'
+                                    placeholder='--None--'
+                                    value={prefUM}
+                                    options={setSize}
+                                    onchange={newUM}
+                                    ></lightning-combobox>
                                 </div>
                     </div>
                 <footer class="slds-modal__footer">
