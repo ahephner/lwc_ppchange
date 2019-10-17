@@ -16,7 +16,8 @@ import PRODUCT_ID from '@salesforce/schema/Product__c.Id'
 import PRODUCT_NAME from '@salesforce/schema/Product__c.Product_Name__c'
 import PRODUCT_SIZE from '@salesforce/schema/Product__c.Size__c'
 import AVERAGE_COST from '@salesforce/schema/Product__c.Average_Cost__c'
-const fields = [PRODUCT_NAME, PRODUCT_ID, PRODUCT_SIZE, AVERAGE_COST];
+import PRODUCT_TYPE from '@salesforce/schema/Product__c.Product_Type__c'
+const fields = [PRODUCT_NAME, PRODUCT_ID, PRODUCT_SIZE, AVERAGE_COST, PRODUCT_TYPE];
 export default class AppInfo extends LightningElement {
     recordId; 
     @track noArea = true;
@@ -53,8 +54,9 @@ export default class AppInfo extends LightningElement {
                Product_Name__c:  this.name = getFieldValue(data, PRODUCT_NAME),
                Product_Size__c: this.productSize = getFieldValue(data, PRODUCT_SIZE), 
                Product_Cost__c: getFieldValue(data, AVERAGE_COST),
+               //Product_Type__c: getFieldValue(data, PRODUCT_TYPE), 
                Rate2__c: "0", 
-               Unit_Area__c: this.areaUM, 
+               Unit_Area__c: this.pref(this.areaUM, getFieldValue(data, PRODUCT_TYPE)) , 
                numb: this.lastId, 
                Application__c: '',
                Note__c: '' ,
@@ -63,6 +65,7 @@ export default class AppInfo extends LightningElement {
                Margin__c: "0",
                Total_Price__c: "0"
              }]; 
+             
              
             this.error = undefined;
         }else if (error){
@@ -84,10 +87,17 @@ export default class AppInfo extends LightningElement {
             unregisterAllListeners(this);
         }
 
-        handleProductSelected(prodsId){
-            // eslint-disable-next-line no-console
-            //console.log('handle product ' +prodsId)
-            this.recordId = prodsId; 
+     pref = (areaUm, type)=>{ 
+        // eslint-disable-next-line no-return-assign
+        return areaUm ==='M' && type==='Dry' ? this.newProds.Unit_Area__c = 'LB/M':
+        areaUm ==='M' && type==='Liquid' ? this.newProds.Unit_Area__c = 'OZ/M':
+        areaUm ==='Acre' && type==='Dry' ? this.newProds.Unit_Area__c = 'LB/Acre':
+        this.newProds.Unit_Area__c = 'OZ/Acre'
+    }
+    handleProductSelected(prodsId){
+        // eslint-disable-next-line no-console
+        //console.log('handle product ' +prodsId)
+        this.recordId = prodsId; 
              
     }
     //get the area idea from the area component then call apex to get further area infor so we can display the name and use for pricing info
