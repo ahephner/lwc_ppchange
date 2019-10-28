@@ -156,11 +156,12 @@ get unitArea(){
         window.clearTimeout(this.delay);
              // eslint-disable-next-line @lwc/lwc/no-async-operation
             this.delay = setTimeout(()=>{
-                this.newProds[index].Rate2__c = e.detail.value;
-                //console.log(this.newProds[index].OZ_M__c, this.areaSize ,this.Product_size__c);
-                this.newProds[index].Units_Required__c = this.unitsRequired(this.newProds[index].Unit_Area__c, this.newProds[index].Rate2__c, this.areaSize, this.newProds[index].Product_Size__c )    
-                this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c)
-                
+                if(this.newProds[index].Unit_Area__c != null){
+                    this.newProds[index].Rate2__c = e.detail.value;
+                    //console.log(this.newProds[index].OZ_M__c, this.areaSize ,this.Product_size__c);
+                    this.newProds[index].Units_Required__c = this.unitsRequired(this.newProds[index].Unit_Area__c, this.newProds[index].Rate2__c, this.areaSize, this.newProds[index].Product_Size__c )    
+                    this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)
+                } 
             },500 )    
          
     }
@@ -177,19 +178,22 @@ get unitArea(){
         // eslint-disable-next-line @lwc/lwc/no-async-operation
         this.delay = setTimeout(()=>{ 
             
-            this.newProds[index].Unit_Price__c = Number(x.detail.value);
+            this.newProds[index].Unit_Price__c = parseFloat(x.detail.value).toFixed(2);
+                    console.log(typeof parseFloat(x.detail.value).toFixed(2) +' detail type');
+                    
                     if(this.newProds[index].Unit_Price__c > 0){
-                    this.newProds[index].Margin__c = Number((1 - (this.newProds[index].Product_Cost__c /this.newProds[index].Unit_Price__c))*100);
-                    this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c)
-                    this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
+                    this.newProds[index].Margin__c = Number((1 - (this.newProds[index].Product_Cost__c /this.newProds[index].Unit_Price__c))*100).toFixed(2);
+                    this.newProds[index].Total_Price__c = parseInt(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)
+                    console.log(typeof this.newProds[index].Total_Price__c +' Type') 
+                    this.appTotalPrice = this.newProds.map(el=>Number(el.Total_Price__c)).reduce(this.appTotal)
                     console.log( this.appTotalPrice);
                 }else{
                     this.newProds[index].Margin__c = 0;                
                     this.newProds[index].Margin__c = this.newProds[index].Margin__c.toFixed(2);
-                    this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c)
+                    this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)
                     console.log(this.newProds[index].Total_Price__c, 'here price');
-                    this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
-                    console.log( this.appTotalPrice);   
+                    this.appTotalPrice = this.newProds.map(el=> Number(el.Total_Price__c)).reduce(this.appTotal)
+                    console.log( this.appTotalPrice + 'appTotal');   
             }
         },1000)       
     }
