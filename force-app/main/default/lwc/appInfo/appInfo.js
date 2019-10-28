@@ -143,21 +143,24 @@ get unitArea(){
     unitsRequired = (uOFM, rate, areaS, unitS) => {return uOFM.includes('Acre') ? Math.ceil((((rate/43.56)*areaS))/unitS) : Math.ceil(((rate*areaS)/unitS))}
     handleUnitArea(e){
         let index = this.newProds.findIndex(prod => prod.Product__c === e.target.name)
-        this.newProds[index].Unit_Area__c = e.detail.value; 
+        this.newProds[index].Unit_Area__c = e.detail.value;
+        console.log('above rate2 ' + this.newProds[index].Rate2__c);
+         
             if(this.newProds[index].Rate2__c> 0 ){
-                this.newProds[index].Units_Required__c = this.unitsRequired(this.newProds[index].Unit_Area__c, this.newProds[index].Rate2__c, this.areaSize, this.newProds[index].Product_Size__c )
+                
+                this.newProds[index].Units_Required__c = this.unitsRequired(this.newProds[index].Unit_Area__c, this.newProds[index].Rate2__c, this.areaSize, this.newProds[index].Product_Size__c );
+                this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)
             }
     }
-
+//Important that the new rate is set above the if. If not then it wont run when the new area is selected. Without the if we are getting no value errors
     newRate(e){  
         let index = this.newProds.findIndex(prod => prod.Product__c === e.target.name)
-
             //this.newProds[index].Units_Required__c = this.dryUnits(this.newProds[index].Rate2__c, this.areaSize, this.newProds[index].Product_Size__c )
         window.clearTimeout(this.delay);
              // eslint-disable-next-line @lwc/lwc/no-async-operation
             this.delay = setTimeout(()=>{
-                if(this.newProds[index].Unit_Area__c != null){
-                    this.newProds[index].Rate2__c = e.detail.value;
+                this.newProds[index].Rate2__c = e.detail.value;
+                if(this.newProds[index].Unit_Area__c !== '' && this.newProds[index].Unit_Area__c !== null ){
                     //console.log(this.newProds[index].OZ_M__c, this.areaSize ,this.Product_size__c);
                     this.newProds[index].Units_Required__c = this.unitsRequired(this.newProds[index].Unit_Area__c, this.newProds[index].Rate2__c, this.areaSize, this.newProds[index].Product_Size__c )    
                     this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)
@@ -169,7 +172,7 @@ get unitArea(){
 //PRICING 
     //this are reusable functions 
     // eslint-disable-next-line radix
-    appTotal = (t, nxt)=> (t + nxt).toFixed(2)
+    appTotal = (t, nxt)=> (t + nxt)
     lineTotal = (units, charge) => (units* charge).toFixed(2)
     //new pricing
     newPrice(x){
@@ -178,18 +181,19 @@ get unitArea(){
         // eslint-disable-next-line @lwc/lwc/no-async-operation
         this.delay = setTimeout(()=>{ 
             
-            this.newProds[index].Unit_Price__c = parseFloat(x.detail.value).toFixed(2);
-                    console.log(typeof parseFloat(x.detail.value).toFixed(2) +' detail type');
+            this.newProds[index].Unit_Price__c = x.detail.value;
+            this.newProds[index].Unit_Price__c = Number(this.newProds[index].Unit_Price__c);
+            console.log(typeof this.newProds[index].Unit_Price__c +' unit Type');          
                     
                     if(this.newProds[index].Unit_Price__c > 0){
-                    this.newProds[index].Margin__c = Number((1 - (this.newProds[index].Product_Cost__c /this.newProds[index].Unit_Price__c))*100).toFixed(2);
-                    this.newProds[index].Total_Price__c = parseInt(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)
-                    console.log(typeof this.newProds[index].Total_Price__c +' Type') 
+                    this.newProds[index].Margin__c = Number((1 - (this.newProds[index].Product_Cost__c /this.newProds[index].Unit_Price__c))*100).toFixed(2)
+                    this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)
+                    
                     this.appTotalPrice = this.newProds.map(el=>Number(el.Total_Price__c)).reduce(this.appTotal)
                     console.log( this.appTotalPrice);
                 }else{
                     this.newProds[index].Margin__c = 0;                
-                    this.newProds[index].Margin__c = this.newProds[index].Margin__c.toFixed(2);
+                    this.newProds[index].Margin__c = this.newProds[index].Margin__c.toFixed(2)
                     this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)
                     console.log(this.newProds[index].Total_Price__c, 'here price');
                     this.appTotalPrice = this.newProds.map(el=> Number(el.Total_Price__c)).reduce(this.appTotal)
@@ -204,14 +208,14 @@ get unitArea(){
         this.delay = setTimeout(()=>{
                 this.newProds[index].Margin__c = Number(m.detail.value);
                 if(1- this.newProds[index].Margin__c/100 > 0){
-                    this.newProds[index].Unit_Price__c = Number(this.newProds[index].Product_Cost__c /(1- this.newProds[index].Margin__c/100));
-                    this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c)
+                    this.newProds[index].Unit_Price__c = Number(this.newProds[index].Product_Cost__c /(1- this.newProds[index].Margin__c/100)).toFixed(2);
+                    this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)
                     this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
                     console.log( this.appTotalPrice);
                 }else{
                     this.newProds[index].Unit_Price__c = 0;
                     this.newProds[index].Unit_Price__c = this.newProds[index].Unit_Price__c.toFixed(2);
-                    this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c)   
+                    this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)   
                     this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
                     console.log(this.appTotalPrice);
                     
