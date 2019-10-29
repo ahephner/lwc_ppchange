@@ -55,7 +55,7 @@
                     </div>
                     <div class="slds-col slds-size_1-of-12">
                         <div class="iconDiv">
-                            <lightning-icon  size="x-small" id={prod.Id} 
+                            <lightning-icon  size="x-small" id={prod.Product__c} 
                             icon-name="utility:close" onclick={remove} class="iconClass">
                             </lightning-icon>
                         </div>
@@ -115,7 +115,7 @@
                         name={prod.Product__c}
                         label="Unit Area"
                         value={prod.Unit_Area__c}
-                        placeholder="Select new"
+                        placeholder="U of M "
                         options={unitArea}
                         onchange={handleUnitArea}
                         
@@ -139,7 +139,7 @@
 <!--delete product icon-->
                         <div class="slds-col slds-size_1-of-12">
                                 <div class="iconDiv">
-                                <lightning-icon size="x-small" class="iconClass"  id={prod.Id} icon-name="utility:close" onclick={upDeleteProd} ></lightning-icon>
+                                <lightning-icon size="x-small" class="iconClass"  id={prod.Product__c} icon-name="utility:close" onclick={upDeleteProd} ></lightning-icon>
                             </div>
                         </div>
                     </div>     
@@ -228,7 +228,7 @@
                         <lightning-input type="number" name={prod.Product__c} readonly value={prod.Units_Required__c} label="Units Req." ></lightning-input>
                     </div>
                     <div class="slds-col slds-size_1-of-12">
-                        <lightning-input type="number" name={prod.Product__c}  value={prod.Unit_Price__c} label="Unit Price" formatter="currency" step="1.00" onchange={newPrice}></lightning-input>
+                        <lightning-input type="number" name={prod.Product__c}  value={prod.Unit_Price__c} label="Unit Price" formatter="currency"  onchange={newPrice}></lightning-input>
                     </div>
                     <div class="slds-col slds-size_1-of-12">
                         <lightning-input type="number" name={prod.Product__c} value={prod.Margin__c} label="Margin %"  step='0.01' onchange={newMargin}></lightning-input>

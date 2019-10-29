@@ -236,11 +236,15 @@ get unitArea(){
     //remove new application from array
     //will remove it on the screen as an option
     remove(e){
-        let x = e.target.id.substr(0,18)
+        let x = e.target.id.substr(0,18);
+        console.log(x + ' Product__c');
+        
         // eslint-disable-next-line no-alert
         let cf = confirm('Do you want to delete this entry?')
         if(cf===true){
-        let i = this.newProds.findIndex(prod => prod.Id === x)
+        let i = this.newProds.findIndex(prod => prod.Product__c === x)
+        console.log(i +' here is i');
+        
         this.newProds.splice(i,1)
         //console.log(this.newProds.length)
         }
@@ -395,6 +399,8 @@ get unitArea(){
     //delete single products from an application 
     upDeleteProd(e){
         let product = e.target.id.substr(0,18); 
+        console.log(product + ' new Id');
+        
         let i = this.newProds.findIndex(prod => prod.Id === product);
         // eslint-disable-next-line no-alert
         let c = confirm('Do you want to delete this entry?')
