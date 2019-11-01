@@ -64,8 +64,8 @@ export default class AppInfo extends LightningElement {
                Margin__c: "0",
                Total_Price__c: "0"
              }]; 
-             
-             
+             //if we don't do below it is cached and we can't call this product again till we refresh the screen 
+            this.recordId = ''; 
             this.error = undefined;
         }else if (error){
             this.error = error;
@@ -97,7 +97,7 @@ export default class AppInfo extends LightningElement {
     }
     handleProductSelected(prodsId){
         // eslint-disable-next-line no-console
-        //console.log('handle product ' +prodsId)
+        console.log('handle product ' +prodsId)
         this.recordId = prodsId; 
              
     }
@@ -398,35 +398,47 @@ get unitArea(){
 
     //delete single products from an application 
     upDeleteProd(e){
-        let product = e.target.id.substr(0,18); 
-        console.log(product + ' new Id');
-        
+        if(e.target.id !== "undefined"){
+        let product = e.target.id.substr(0,18);
         let i = this.newProds.findIndex(prod => prod.Id === product);
+                console.log(e.target.id + ' id');
+                
         // eslint-disable-next-line no-alert
         let c = confirm('Do you want to delete this entry?')
         if(c === true){
-        deleteRecord(product)
+            deleteRecord(product)
             .then(()=>{
                 this.newProds.splice(i,1)
             })
-            .then(() => {
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Success', 
-                        message: 'Product    Deleted', 
-                        variant: 'success'
-                    }) 
-                );
-            })
-            .catch(error => {
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Error deleting record',
-                        message: JSON.stringify(error),
-                        variant: 'error'
-                    })
-                )
-            })
+                .then(() => {
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Success', 
+                            message: 'Product    Deleted', 
+                            variant: 'success'
+                        }) 
+                    );
+                })
+                .catch(error => {
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Error deleting record',
+                            message: JSON.stringify(error),
+                            variant: 'error'
+                        })
+                    )
+                })
+            }
+        }else{
+           let newProduct = e.target.name.substr(0,18);
+           let i = this.newProds.findIndex(prod => prod.name === newProduct);
+           console.log('lower else');
+           
+           // eslint-disable-next-line no-alert
+           let c = confirm('Do you want to delete this entry?')
+           if(c === true){
+               this.newProds.splice(i,1);
+           }
         }
     }
 
