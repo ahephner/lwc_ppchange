@@ -183,21 +183,21 @@ get unitArea(){
             
             this.newProds[index].Unit_Price__c = x.detail.value;
             this.newProds[index].Unit_Price__c = Number(this.newProds[index].Unit_Price__c);
-            console.log(typeof this.newProds[index].Unit_Price__c +' unit Type');          
+            //console.log(typeof this.newProds[index].Unit_Price__c +' unit Type');          
                     
                     if(this.newProds[index].Unit_Price__c > 0){
                     this.newProds[index].Margin__c = Number((1 - (this.newProds[index].Product_Cost__c /this.newProds[index].Unit_Price__c))*100).toFixed(2)
                     this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)
                     
                     this.appTotalPrice = this.newProds.map(el=>Number(el.Total_Price__c)).reduce(this.appTotal)
-                    console.log( this.appTotalPrice);
+                    //console.log('newPrice if ' + this.appTotalPrice);
                 }else{
                     this.newProds[index].Margin__c = 0;                
                     this.newProds[index].Margin__c = this.newProds[index].Margin__c.toFixed(2)
                     this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)
-                    console.log(this.newProds[index].Total_Price__c, 'here price');
+                    //console.log(this.newProds[index].Total_Price__c, 'here price');
                     this.appTotalPrice = this.newProds.map(el=> Number(el.Total_Price__c)).reduce(this.appTotal)
-                    console.log( this.appTotalPrice + 'appTotal');   
+                    //console.log('price else '+ this.appTotalPrice);   
             }
         },1000)       
     }
@@ -210,14 +210,14 @@ get unitArea(){
                 if(1- this.newProds[index].Margin__c/100 > 0){
                     this.newProds[index].Unit_Price__c = Number(this.newProds[index].Product_Cost__c /(1- this.newProds[index].Margin__c/100)).toFixed(2);
                     this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)
-                    this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
-                    console.log( this.appTotalPrice);
+                    this.appTotalPrice = this.newProds.map(el=> Number(el.Total_Price__c)).reduce(this.appTotal)
+                   // console.log('margin if ' +this.appTotalPrice);
                 }else{
                     this.newProds[index].Unit_Price__c = 0;
                     this.newProds[index].Unit_Price__c = this.newProds[index].Unit_Price__c.toFixed(2);
                     this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)   
-                    this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
-                    console.log(this.appTotalPrice);
+                    this.appTotalPrice = this.newProds.map(el=> Number(el.Total_Price__c)).reduce(this.appTotal)
+                    //console.log('margin else ' +this.appTotalPrice);
                     
                 }
     },1500)
