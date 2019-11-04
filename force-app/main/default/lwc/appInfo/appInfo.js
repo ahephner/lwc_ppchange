@@ -232,6 +232,7 @@ get unitArea(){
         this.appTotalPrice = '0'
         this.noArea = true; 
         this.up = false; 
+        this.notUpdate = false; 
     }
     //remove new application from array
     //will remove it on the screen as an option

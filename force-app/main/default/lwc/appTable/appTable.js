@@ -75,7 +75,11 @@ export default class AppTable extends LightningElement {
         const row = event.detail.row.Id;
         
         switch (actionName) {
-            case 'delete':
+            case 'delete':{
+                    // eslint-disable-next-line no-case-declarations
+                    // eslint-disable-next-line no-alert
+                    let cf = confirm('Do you want to delete this entry?')
+                    if(cf===true){
                 deleteRecord(row)
                     .then(() => {
                         this.dispatchEvent(
@@ -96,7 +100,8 @@ export default class AppTable extends LightningElement {
                             })
                         )
                     })
-            
+                }
+            }
                 break;
             case 'show_details':
                 console.log('firing row')
