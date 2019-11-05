@@ -53,6 +53,9 @@
             ],
             "c/reportComp": [
                 "reportComp/reportComp.js"
+            ],
+            "c/steelGreenQuestions": [
+                "steelGreenQuestions/steelGreenQuestions.js"
             ]
         }
     },
