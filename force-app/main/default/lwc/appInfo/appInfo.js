@@ -223,9 +223,12 @@ get unitArea(){
                 }
     },1500)
     }   
-    
+//open and close quick convert    
     openConvert(){
         this.convert = true; 
+    }
+    closeConvert(){
+        this.convert = false; 
     }
     //close update window
     cancel(){

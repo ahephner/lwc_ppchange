@@ -12,9 +12,11 @@
                     <p class='slds-m-top_xx-small'>Area:</p><p class='slds-m-top_xx-small slds-m-left_xx-small'>{areaName} </p>
                 </div>
                 <div class='slds-col slds-size_2-of-6'>
-                    <a href="#" onclick={openConvert}>Convert out here</a>
+                    <p>Quick Calc.</p>
+                    <lightning-button-icon-stateful icon-name="utility:formula" size="x-small" onclick={openConvert} alternative-text="Open" data-button-number="01"></lightning-button-icon-stateful>
                         <template if:true={convert}>
-                            <p>hey guys</p>
+                            <c-app-rate-convert></c-app-rate-convert>
+                             <p  onclick={closeConvert}>close</p> 
                         </template> 
                 </div>
                 <lightning-input class='slds-col slds-size_2-of-6 slds-m-left_x-small' type='date' name='appDate' label='App Date' value={appDate} onchange={date} ></lightning-input>
@@ -93,16 +95,27 @@
                     <lightning-input class='slds-col slds-size_2-of-6 slds-m-left_x-small' label='App Name' 
                                      value={appName} onchange={newName} required></lightning-input>
 <!--This is the area name -->
-                    <div class='slds-size_3-of-6 '>
+                    <div class='slds-size_1-of-6 '>
                         <p class='slds-m-top_xx-small'>Area Name:</p>
                         <p class='slds-m-top_xx-small slds-m-left_xx-small'>{areaName}</p>
+                    </div>
+<!--Quick Calc Area-->                    
+                    <div class='slds-col slds-size_2-of-6'>
+                        <div style='display:inline;'>
+                            <p onclick={openConvert}>Quick Calc.</p>
+                            <lightning-button-icon-stateful icon-name="utility:formula" 
+                                size="x-small" onclick={openConvert} alternative-text="Open" data-button-number="01"></lightning-button-icon-stateful>
+                        </div>    
+                            <template if:true={convert}>
+                                <c-app-rate-convert></c-app-rate-convert>
+                                 <p onclick={closeConvert}>close</p> 
+                            </template> 
                     </div>
 <!--Application date input & rate calculator-->
                 <lightning-input class='slds-col slds-size_2-of-6 slds-m-left_x-small' type='date' 
                                  name='appDate' label='App Date' value={appDate} onchange={date} ></lightning-input>
                 
-                    <lightning-input class='slds-col slds-size_1-of-6 slds-m-left_x-small'  
-                                    type='decimal' name='Rate Calc.' label='Convert' ></lightning-input>                 
+                                    
                 <div class='slds-size_4-of-6 '></div>
             </div>
 <!--Individual Product Lines-->        
