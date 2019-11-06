@@ -8,13 +8,17 @@
             <div class='slds-grid slds-wrap '>                    
                 <h4 class='slds-size_3-of-3'>New Application</h4>
                 <lightning-input class='slds-col slds-size_2-of-6 slds-m-left_x-small' label='App Name' value={appName} onchange={newName} required></lightning-input>
-                <div class='slds-size_3-of-6 slds-m-left_x-small'>
+                <div class='slds-size_1-of-6 slds-m-left_x-small'>
                     <p class='slds-m-top_xx-small'>Area:</p><p class='slds-m-top_xx-small slds-m-left_xx-small'>{areaName} </p>
                 </div>
+                <div class='slds-col slds-size_2-of-6'>
+                    <a href="#" onclick={openConvert}>Convert out here</a>
+                        <template if:true={convert}>
+                            <p>hey guys</p>
+                        </template> 
+                </div>
                 <lightning-input class='slds-col slds-size_2-of-6 slds-m-left_x-small' type='date' name='appDate' label='App Date' value={appDate} onchange={date} ></lightning-input>
-                <lightning-input class='slds-col slds-size_1-of-6 slds-m-left_x-small' type='decimal' name='Rate Calc.' label='Rate convert' ></lightning-input>
-
-                <div class='slds-size_4-of-6'></div>
+                <!-- <lightning-input class='slds-col slds-size_1-of-6 slds-m-left_x-small' type='decimal' name='Rate Calc.' label='Rate convert' ></lightning-input> -->
             </div>    
         
         <div>

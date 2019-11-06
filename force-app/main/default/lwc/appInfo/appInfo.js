@@ -21,6 +21,7 @@ const fields = [PRODUCT_NAME, PRODUCT_ID, PRODUCT_SIZE, AVERAGE_COST, PRODUCT_TY
 export default class AppInfo extends LightningElement {
     recordId; 
     @track noArea = true;
+    @track convert = false; 
     @track notUpdate; 
     @track up;  
     @track appId; 
@@ -223,6 +224,9 @@ get unitArea(){
     },1500)
     }   
     
+    openConvert(){
+        this.convert = true; 
+    }
     //close update window
     cancel(){
         this.newProds = [];

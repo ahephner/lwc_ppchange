@@ -21,6 +21,9 @@
             "c/appProductSearch": [
                 "appProductSearch/appProductSearch.js"
             ],
+            "c/appRateConvert": [
+                "appRateConvert/appRateConvert.js"
+            ],
             "c/appTable": [
                 "appTable/appTable.js"
             ],

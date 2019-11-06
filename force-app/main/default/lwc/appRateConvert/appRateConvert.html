@@ -1,0 +1,10 @@
+<template>
+    <lightning-card class='card' variant="Narrow">
+        <div class='slds-grid slds-gutters '>
+            <lightning-input class="slds-col slds-size_1-of-3" value={input} 
+                label='enter number' onchange={info} type='decimal'></lightning-input>
+            <lightning-input readonly label='number / 43.56' class="slds-col slds-size_1-of-3" value={m}></lightning-input>
+            <lightning-input readonly label='number * 43.56' class="slds-col slds-size_1-of-3" value={acre}></lightning-input>
+        </div>
+    </lightning-card>
+</template>
