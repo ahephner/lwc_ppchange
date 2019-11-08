@@ -104,9 +104,11 @@ export default class AppInfo extends LightningElement {
     }
     //get the area idea from the area component then call apex to get further area infor so we can display the name and use for pricing info
     handleNewArea(v){
+        console.log(this.notUpdate + ' before update?');
+        
         this.areaId = v;
         this.noArea = false;
-        this.notUpdate = true;  
+         
         areaInfo({ai:v})
          .then((resp)=>{
              //console.log(resp[0].Area_Sq_Feet__c);
@@ -114,6 +116,11 @@ export default class AppInfo extends LightningElement {
              this.areaSize = resp[0].Area_Sq_Feet__c;
              this.areaUM = resp[0].Pref_U_of_M__c; 
              
+         })
+         .then(()=>{
+            if(this.notUpdate === undefined){
+                this.notUpdate = true; 
+            }
          }) 
     }
 
@@ -239,7 +246,7 @@ get unitArea(){
         this.appTotalPrice = '0'
         this.noArea = true; 
         this.up = false; 
-        this.notUpdate = false; 
+        this.notUpdate = undefined; 
     }
     //remove new application from array
     //will remove it on the screen as an option
@@ -312,7 +319,7 @@ get unitArea(){
                 this.appName = ''; 
                 this.appDate = '';
                 this.noArea = true;
-                this.notUpdate = false;  
+                this.notUpdate = undefined;  
             }).catch((error)=>{
                 console.log(JSON.stringify(error))
                 this.dispatchEvent(
@@ -330,8 +337,10 @@ get unitArea(){
     //x is an id grab from the registerListener event up above we pass it to the apex function to get current app products then assign
     //go the newProds. this allows me to reuse the funtions above like ... spread we will seperate new products from existing products below prior to update
     update(x){
+        console.log('this.area');
+        
         this.noArea = false;
-        this.notUpdate = false;  
+        this.notUpdate = undefined;  
         this.up = true; 
        appProducts({app:x})
        .then((resp)=>{
@@ -341,6 +350,8 @@ get unitArea(){
         this.updateAppId = resp[0].Application__c; 
         this.areaId = resp[0].Application__r.Area__c
         this.areaName = resp[0].Area__c 
+        console.log(this.areaName + ' area name on update');
+        
         // eslint-disable-next-line radix
         this.areaSize= parseInt(resp[0].Application__r.Area__r.Area_Sq_Feet__c)
         this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
