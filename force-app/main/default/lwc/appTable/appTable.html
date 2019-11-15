@@ -1,14 +1,25 @@
 <template>
-    <div style="height: 300px;">
-        <lightning-datatable
-                key-field="id"
-                data={appList}
-                columns={columns}
-                sorted-by={sortBy}
-                sorted-direction={sortDirection}
-                onsort={handleSortdata}
-                onrowaction={handleRowAction}
-                hide-checkbox-column="true">
-        </lightning-datatable>
+    <lightning-card>
+    <div class="slds-grid  slds-wrap" style="height: 300px;">
+        <div class="slds-col slds-size_2-of-3 slds-m-bottom_none">
+            <p class="slds-m-left_small">Applications</p>
+        </div>
+            <div class="slds-col slds-size_1-of-3 slds-m-bottom_none">
+                <lightning-input  type="text" label="Search app names" 
+                    value={query} onchange={look}></lightning-input >
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-m-top_none">
+            <lightning-datatable
+                    key-field="id"
+                    data={copy}
+                    columns={columns}
+                    sorted-by={sortBy}
+                    sorted-direction={sortDirection}
+                    onsort={handleSortdata}
+                    onrowaction={handleRowAction}
+                    hide-checkbox-column="true">
+            </lightning-datatable>
+            </div>
     </div>
+</lightning-card>
 </template>

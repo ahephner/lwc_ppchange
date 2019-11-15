@@ -337,10 +337,10 @@ get unitArea(){
     //x is an id grab from the registerListener event up above we pass it to the apex function to get current app products then assign
     //go the newProds. this allows me to reuse the funtions above like ... spread we will seperate new products from existing products below prior to update
     update(x){
-        console.log('this.area');
+        //console.log('x ' +x);
         
         this.noArea = false;
-        this.notUpdate = undefined;  
+        this.notUpdate = false;  
         this.up = true; 
        appProducts({app:x})
        .then((resp)=>{
@@ -356,7 +356,7 @@ get unitArea(){
         this.areaSize= parseInt(resp[0].Application__r.Area__r.Area_Sq_Feet__c)
         this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
         }).catch((error)=>{
-        console.log(JSON.stringify(error))
+        console.log(JSON.stringify(error)+ ' error in update')
     })
     }
 //update the actual product here is where we handle the update or insert of products
@@ -393,7 +393,8 @@ get unitArea(){
             this.areaId = ''; 
             this.areaName = ''; 
             this.up = false;
-            this.noArea = true; 
+            this.noArea = true;
+            this.notUpdate = undefined;  
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Success',
