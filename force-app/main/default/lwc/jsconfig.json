@@ -59,6 +59,9 @@
             ],
             "c/steelGreenQuestions": [
                 "steelGreenQuestions/steelGreenQuestions.js"
+            ],
+            "c/appPDF": [
+                "appPDF/appPDF.js"
             ]
         }
     },
