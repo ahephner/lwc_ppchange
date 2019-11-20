@@ -15,6 +15,9 @@
             "c/appModal": [
                 "appModal/appModal.js"
             ],
+            "c/appPDF": [
+                "appPDF/appPDF.js"
+            ],
             "c/appProductList": [
                 "appProductList/appProductList.js"
             ],
@@ -59,9 +62,6 @@
             ],
             "c/steelGreenQuestions": [
                 "steelGreenQuestions/steelGreenQuestions.js"
-            ],
-            "c/appPDF": [
-                "appPDF/appPDF.js"
             ]
         }
     },

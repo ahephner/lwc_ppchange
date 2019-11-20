@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track, api, wire } from 'lwc';
+import getAreas from '@salesforce/apex/appProduct.getAreas';
+import getAppPDF from '@salesforce/apex/appProduct.getAppPDF';
 
 export default class AppPDF extends LightningElement {
     @track _selected = [];
@@ -8,12 +10,13 @@ export default class AppPDF extends LightningElement {
     @track aa; 
     @track sp; 
     @track sa; 
+    @api recordId; 
 
     get choices(){
         return[
             {label: 'All Product Summary', value: 'AP'},
             {label: 'All App Spray Sheet', value: 'AA'},
-            {label: 'Select Products', value: 'SP'},
+            {label: 'Select Area', value: 'SP'},
             {label: 'Select Applications', value: 'SA'}
         ]
     }
@@ -34,24 +37,19 @@ export default class AppPDF extends LightningElement {
         }
     }
 
-    //get id's as value 
-    get prodOptions() {
-        return [
-            { label: 'Dismiss', value: 'ds' },
-            { label: 'Quicksilver', value: 'qs' },
-            { label: 'Insignia', value: 'isg' },
-            { label: 'Seed', value: 'se' },
-            { label: '22-0-5 .067 prod.', value: 'fert' },
-            { label: 'Round Up', value: 'rp' },
-        ];
+    @wire(getAreas,{recordId: '$recordId'})
+        areaList
+    
+    @wire(getAppPDF, {recordId: '$recordId'})
+        appList
+    get areaOptions(){
+        return this.areaList.data; 
     }
+
     get appOptions(){
-        return [
-            {label: 'June 1', value:'J'},
-            {label: 'Dollar Spot', value:'DS'},
-            {label: 'Weed and Feed', value:'WF'},
-        ]
+        return this.appList.data; 
     }
+
     get selected() {
         return this._selected.length ? this._selected : 'none';
     }
@@ -61,6 +59,9 @@ export default class AppPDF extends LightningElement {
     }
 
     handleClick(){
-        console.log('Ouch I was clicked')
+        console.log(this._selected)
+    }
+    goBack(){
+        window.history.back(); 
     }
 }
