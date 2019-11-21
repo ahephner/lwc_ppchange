@@ -1,6 +1,6 @@
 <template>
     <template if:true={openAppModal}>
-    <div class="newArea" style="height: 1000px;">
+    <div class="newArea">
         <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" 
         aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
                     <div class="slds-modal__container">
@@ -21,14 +21,22 @@
                                 </div>
                                 <div class="slds-col slds-size_1-of-2">
                                         <lightning-combobox
-                                        name='category'
-                                        label='Type'
+                                        name='UofM'
+                                        label='Pref Unit of Measure'
                                         placeholder='--None--'
-                                        value={note}
-                                        options={setNotes}
-                                        onchange={newType}
-                                       ></lightning-combobox>
+                                        value={prefUM}
+                                        options={setSize}
+                                        onchange={newUM}
+                                        ></lightning-combobox>
                                     <lightning-input type='number' label="Area Acres" onchange={newAcre}></lightning-input>
+                                    <lightning-combobox
+                                    name='category'
+                                    label='Type'
+                                    placeholder='--None--'
+                                    value={note}
+                                    options={setNotes}
+                                    onchange={newType}
+                                   ></lightning-combobox>
                                 </div>
                     </div>
                 <footer class="slds-modal__footer">

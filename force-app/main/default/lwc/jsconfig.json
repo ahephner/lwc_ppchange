@@ -15,11 +15,17 @@
             "c/appModal": [
                 "appModal/appModal.js"
             ],
+            "c/appPDF": [
+                "appPDF/appPDF.js"
+            ],
             "c/appProductList": [
                 "appProductList/appProductList.js"
             ],
             "c/appProductSearch": [
                 "appProductSearch/appProductSearch.js"
+            ],
+            "c/appRateConvert": [
+                "appRateConvert/appRateConvert.js"
             ],
             "c/appTable": [
                 "appTable/appTable.js"
@@ -53,6 +59,9 @@
             ],
             "c/reportComp": [
                 "reportComp/reportComp.js"
+            ],
+            "c/steelGreenQuestions": [
+                "steelGreenQuestions/steelGreenQuestions.js"
             ]
         }
     },

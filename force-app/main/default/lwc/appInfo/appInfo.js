@@ -16,10 +16,12 @@ import PRODUCT_ID from '@salesforce/schema/Product__c.Id'
 import PRODUCT_NAME from '@salesforce/schema/Product__c.Product_Name__c'
 import PRODUCT_SIZE from '@salesforce/schema/Product__c.Size__c'
 import AVERAGE_COST from '@salesforce/schema/Product__c.Average_Cost__c'
-const fields = [PRODUCT_NAME, PRODUCT_ID, PRODUCT_SIZE, AVERAGE_COST];
+import PRODUCT_TYPE from '@salesforce/schema/Product__c.Product_Type__c'
+const fields = [PRODUCT_NAME, PRODUCT_ID, PRODUCT_SIZE, AVERAGE_COST, PRODUCT_TYPE];
 export default class AppInfo extends LightningElement {
     recordId; 
     @track noArea = true;
+    @track convert = false; 
     @track notUpdate; 
     @track up;  
     @track appId; 
@@ -27,10 +29,11 @@ export default class AppInfo extends LightningElement {
     @track appDate; 
     @track areaId;
     @track areaName;
-    @track areaSize;   
+    @track areaSize;  
+    @track areaUM; 
     @track name; 
     @track productSize; 
-    @track productId;  
+    @track productId; 
     @track appTotalPrice = 0;
     @track newProds = []
     @track upProds = [];
@@ -52,8 +55,8 @@ export default class AppInfo extends LightningElement {
                Product_Name__c:  this.name = getFieldValue(data, PRODUCT_NAME),
                Product_Size__c: this.productSize = getFieldValue(data, PRODUCT_SIZE), 
                Product_Cost__c: getFieldValue(data, AVERAGE_COST),
-               OZ_M__c:  "0", 
-               LBS_ACRE__c: "0",
+               Rate2__c: "0", 
+               Unit_Area__c: this.pref(this.areaUM, getFieldValue(data, PRODUCT_TYPE)) , 
                numb: this.lastId, 
                Application__c: '',
                Note__c: '' ,
@@ -62,13 +65,16 @@ export default class AppInfo extends LightningElement {
                Margin__c: "0",
                Total_Price__c: "0"
              }]; 
-             
+             //if we don't do below it is cached and we can't call this product again till we refresh the screen 
+            this.recordId = ''; 
             this.error = undefined;
         }else if (error){
             this.error = error;
             this.name = undefined;
         }
     console.log(this.newProds)
+    console.log(this.areaUM);
+    
     }
     //this function listens for fireEvents in other components then sends those events to the correct function
     //in this componenent. forexample 'areaSelect' comes from appArea.js then the id is sent to handleNewArea(); 
@@ -80,24 +86,41 @@ export default class AppInfo extends LightningElement {
         disconnectedCallback(){
             unregisterAllListeners(this);
         }
-
-        handleProductSelected(prodsId){
-            // eslint-disable-next-line no-console
-            //console.log('handle product ' +prodsId)
-            this.recordId = prodsId; 
+    //this function takes in the selected area's prefered unit of measure and the application products type and then will determine what the 
+    //initial unit of measure for the product is. This initial value can be overwritten by the user if desired. It is invoked above upon product selection
+     pref = (areaUm, type)=>{ 
+        // eslint-disable-next-line no-return-assign
+        return areaUm ==='M' && type==='Dry' ? this.newProds.Unit_Area__c = 'LB/M':
+        areaUm ==='M' && type==='Liquid' ? this.newProds.Unit_Area__c = 'OZ/M':
+        areaUm ==='Acre' && type==='Dry' ? this.newProds.Unit_Area__c = 'LB/Acre':
+        areaUm ==='Acre' && type==='Liquid' ? this.newProds.Unit_Area__c = 'OZ/Acre':
+        this.newProds.Unit_Area__c = ''
+    }
+    handleProductSelected(prodsId){
+        // eslint-disable-next-line no-console
+        console.log('handle product ' +prodsId)
+        this.recordId = prodsId; 
              
     }
     //get the area idea from the area component then call apex to get further area infor so we can display the name and use for pricing info
     handleNewArea(v){
+        console.log(this.notUpdate + ' before update?');
+        
         this.areaId = v;
         this.noArea = false;
-        this.notUpdate = true;  
+         
         areaInfo({ai:v})
          .then((resp)=>{
              //console.log(resp[0].Area_Sq_Feet__c);
              this.areaName = resp[0].Name;
              this.areaSize = resp[0].Area_Sq_Feet__c;
+             this.areaUM = resp[0].Pref_U_of_M__c; 
              
+         })
+         .then(()=>{
+            if(this.notUpdate === undefined){
+                this.notUpdate = true; 
+            }
          }) 
     }
 
@@ -115,49 +138,50 @@ export default class AppInfo extends LightningElement {
     get newProdsSelect(){
         return this.newProds.length >= 1; 
     }
-    //this will set the rate on the product. It finds the index of the target value then looks to see if the product class is dry or not. If it is dry then it will set the 
-    //lbs/arce other wise set the oz_m__c rate. We can expanded this if we need validation in the future
-    liquidUnits = (oz, areaM, prodSize) => Math.ceil(((oz*areaM)/prodSize))
-    dryUnits = (lb, areaD, lbSize) => Math.ceil((lb*(areaD/43.56)/lbSize))
-    
+//RATES 
+get unitArea(){
+    return [
+        {label:'OZ/M', value:'OZ/M'}, 
+        {label: 'OZ/Acre', value:'OZ/Acre'},
+        {label: 'LB/M', value:'LB/M'},
+        {label: 'LB/Acre', value:'LB/Acre'}
+    ];
+}
+    //this will determine units required
+    unitsRequired = (uOFM, rate, areaS, unitS) => {return uOFM.includes('Acre') ? Math.ceil((((rate/43.56)*areaS))/unitS) : Math.ceil(((rate*areaS)/unitS))}
+    handleUnitArea(e){
+        let index = this.newProds.findIndex(prod => prod.Product__c === e.target.name)
+        this.newProds[index].Unit_Area__c = e.detail.value;
+        console.log('above rate2 ' + this.newProds[index].Rate2__c);
+         
+            if(this.newProds[index].Rate2__c> 0 ){
+                
+                this.newProds[index].Units_Required__c = this.unitsRequired(this.newProds[index].Unit_Area__c, this.newProds[index].Rate2__c, this.areaSize, this.newProds[index].Product_Size__c );
+                this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)
+            }
+    }
+//Important that the new rate is set above the if. If not then it wont run when the new area is selected. Without the if we are getting no value errors
     newRate(e){  
         let index = this.newProds.findIndex(prod => prod.Product__c === e.target.name)
-        
-        if(e.target.getAttribute('class').includes('dry')){
-            this.newProds[index].LBS_ACRE__c = e.detail.value;
-            this.newProds[index].Units_Required__c = this.dryUnits(this.newProds[index].LBS_ACRE__c, this.areaSize, this.newProds[index].Product_Size__c )
-     }else{
+            //this.newProds[index].Units_Required__c = this.dryUnits(this.newProds[index].Rate2__c, this.areaSize, this.newProds[index].Product_Size__c )
         window.clearTimeout(this.delay);
-            this.newProds[index].OZ_M__c = e.detail.value;
              // eslint-disable-next-line @lwc/lwc/no-async-operation
             this.delay = setTimeout(()=>{
-                //console.log(this.newProds[index].OZ_M__c, this.areaSize ,this.Product_size__c);
-                this.newProds[index].Units_Required__c = this.liquidUnits(this.newProds[index].OZ_M__c, this.areaSize, this.newProds[index].Product_Size__c )    
+                this.newProds[index].Rate2__c = e.detail.value;
+                if(this.newProds[index].Unit_Area__c !== '' && this.newProds[index].Unit_Area__c !== null ){
+                    //console.log(this.newProds[index].OZ_M__c, this.areaSize ,this.Product_size__c);
+                    this.newProds[index].Units_Required__c = this.unitsRequired(this.newProds[index].Unit_Area__c, this.newProds[index].Rate2__c, this.areaSize, this.newProds[index].Product_Size__c )    
+                    this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)
+                } 
             },500 )    
-         }
+         
     }
     
-//update rate in update app screen dry vs liquid classes  
-updateRate(r){
-    let newRate = this.newProds.findIndex(p => p.Product__c === r.target.name); 
-    if(r.target.getAttribute('class').includes('dry')){
-         this.newProds[newRate].LBS_ACRE__c = r.detail.value; 
-         this.newProds[newRate].Units_Required__c = this.dryUnits(this.newProds[newRate].LBS_ACRE__c, this.areaSize, this.newProds[newRate].Product_Size__c )
-         this.newProds[newRate].Total_Price__c = this.lineTotal(this.newProds[newRate].Units_Required__c, this.newProds[newRate].Unit_Price__c)
-    }else{
-         this.newProds[newRate].OZ_M__c = r.detail.value;
-         this.newProds[newRate].Units_Required__c = this.liquidUnits(this.newProds[newRate].OZ_M__c, this.areaSize, this.newProds[newRate].Product_Size__c )
-         this.newProds[newRate].Total_Price__c = this.lineTotal(this.newProds[newRate].Units_Required__c, this.newProds[newRate].Unit_Price__c)
-     }     
-     
- }
 //PRICING 
     //this are reusable functions 
     // eslint-disable-next-line radix
-    appTotal = (t, nxt)=> parseInt(t) + parseInt(nxt)
+    appTotal = (t, nxt)=> (t + nxt)
     lineTotal = (units, charge) => (units* charge).toFixed(2)
-    productMargin = (productCost, unitP) => (1 - (parseInt(productCost)/parseInt(unitP))).toFixed(2)
-    productPrice = (cost, margin) => (cost/(1 - (margin/100))).toFixed(2)
     //new pricing
     newPrice(x){
         window.clearTimeout(this.delay);
@@ -165,46 +189,80 @@ updateRate(r){
         // eslint-disable-next-line @lwc/lwc/no-async-operation
         this.delay = setTimeout(()=>{ 
             
-            this.newProds[index].Unit_Price__c = x.detail.value;     
-            this.newProds[index].Margin__c = this.productMargin(this.newProds[index].Product_Cost__c,this.newProds[index].Unit_Price__c) 
-            this.newProds[index].Total_Price__c = this.lineTotal(this.newProds[index].Units_Required__c , this.newProds[index].Unit_Price__c)  
-            console.log(this.newProds[index]);
-            this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)   
-        },1500)       
+            this.newProds[index].Unit_Price__c = x.detail.value;
+            this.newProds[index].Unit_Price__c = Number(this.newProds[index].Unit_Price__c);
+            //console.log(typeof this.newProds[index].Unit_Price__c +' unit Type');          
+                    
+                    if(this.newProds[index].Unit_Price__c > 0){
+                    this.newProds[index].Margin__c = Number((1 - (this.newProds[index].Product_Cost__c /this.newProds[index].Unit_Price__c))*100).toFixed(2)
+                    this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)
+                    
+                    this.appTotalPrice = this.newProds.map(el=>Number(el.Total_Price__c)).reduce(this.appTotal)
+                    //console.log('newPrice if ' + this.appTotalPrice);
+                }else{
+                    this.newProds[index].Margin__c = 0;                
+                    this.newProds[index].Margin__c = this.newProds[index].Margin__c.toFixed(2)
+                    this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)
+                    //console.log(this.newProds[index].Total_Price__c, 'here price');
+                    this.appTotalPrice = this.newProds.map(el=> Number(el.Total_Price__c)).reduce(this.appTotal)
+                    //console.log('price else '+ this.appTotalPrice);   
+            }
+        },1000)       
     }
     newMargin(m){
         window.clearTimeout(this.delay)
         let index = this.newProds.findIndex(prod => prod.Product__c === m.target.name)
         // eslint-disable-next-line @lwc/lwc/no-async-operation
         this.delay = setTimeout(()=>{
-            
-            this.newProds[index].Margin__c = m.detail.value
-             //console.log(this.newProds[index].Margin__c);
-            //console.log(this.newProds[index].Product_Cost__c);
-            //this.newProds[index].Unit_Price__c = this.productPrice(this.newProds[index].Product_Cost__c, this.newProds[index].Margin__c)
-            this.newProds[index].Unit_Price__c = (this.newProds[index].Product_Cost__c/(1-this.newProds[index].Margin__c)).toFixed(2)
-            this.newProds[index].Total_Price__c = this.lineTotal(this.newProds[index].Units_Required__c , this.newProds[index].Unit_Price__c)
-            this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
+                this.newProds[index].Margin__c = Number(m.detail.value);
+                if(1- this.newProds[index].Margin__c/100 > 0){
+                    this.newProds[index].Unit_Price__c = Number(this.newProds[index].Product_Cost__c /(1- this.newProds[index].Margin__c/100)).toFixed(2);
+                    this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)
+                    this.appTotalPrice = this.newProds.map(el=> Number(el.Total_Price__c)).reduce(this.appTotal)
+                   // console.log('margin if ' +this.appTotalPrice);
+                }else{
+                    this.newProds[index].Unit_Price__c = 0;
+                    this.newProds[index].Unit_Price__c = this.newProds[index].Unit_Price__c.toFixed(2);
+                    this.newProds[index].Total_Price__c = Number(this.newProds[index].Units_Required__c * this.newProds[index].Unit_Price__c).toFixed(2)   
+                    this.appTotalPrice = this.newProds.map(el=> Number(el.Total_Price__c)).reduce(this.appTotal)
+                    //console.log('margin else ' +this.appTotalPrice);
+                    
+                }
     },1500)
     }   
-    
+//open and close quick convert    
+    openConvert(){
+        this.convert = true; 
+    }
+    closeConvert(){
+        this.convert = false; 
+    }
     //close update window
     cancel(){
         this.newProds = [];
         this.appName = ''; 
         this.appDate = '';
         this.areaId = ''; 
+        this.appTotalPrice = '0'
         this.noArea = true; 
         this.up = false; 
+        this.notUpdate = undefined; 
     }
     //remove new application from array
     //will remove it on the screen as an option
     remove(e){
-        let x = e.target.id.substr(0,18)
-        let i = this.newProds.findIndex(prod => prod.Id === x)
+        let x = e.target.id.substr(0,18);
+        console.log(x + ' Product__c');
+        
+        // eslint-disable-next-line no-alert
+        let cf = confirm('Do you want to delete this entry?')
+        if(cf===true){
+        let i = this.newProds.findIndex(prod => prod.Product__c === x)
+        console.log(i +' here is i');
+        
         this.newProds.splice(i,1)
         //console.log(this.newProds.length)
-      
+        }
     }    
     //get note options and handle change
     get noteOptions(){
@@ -261,7 +319,7 @@ updateRate(r){
                 this.appName = ''; 
                 this.appDate = '';
                 this.noArea = true;
-                this.notUpdate = false;  
+                this.notUpdate = undefined;  
             }).catch((error)=>{
                 console.log(JSON.stringify(error))
                 this.dispatchEvent(
@@ -279,6 +337,8 @@ updateRate(r){
     //x is an id grab from the registerListener event up above we pass it to the apex function to get current app products then assign
     //go the newProds. this allows me to reuse the funtions above like ... spread we will seperate new products from existing products below prior to update
     update(x){
+        //console.log('x ' +x);
+        
         this.noArea = false;
         this.notUpdate = false;  
         this.up = true; 
@@ -290,17 +350,13 @@ updateRate(r){
         this.updateAppId = resp[0].Application__c; 
         this.areaId = resp[0].Application__r.Area__c
         this.areaName = resp[0].Area__c 
+        console.log(this.areaName + ' area name on update');
+        
         // eslint-disable-next-line radix
         this.areaSize= parseInt(resp[0].Application__r.Area__r.Area_Sq_Feet__c)
-
-        }).then(()=>{
-            this.newProds.forEach(function(k){
-                k.Margin__c = k.Margin__c/100
-                console.log(k.Margin__c);
-                
-            })
-    }).catch((error)=>{
-        console.log(JSON.stringify(error))
+        this.appTotalPrice = this.newProds.map(el=> el.Total_Price__c).reduce(this.appTotal)
+        }).catch((error)=>{
+        console.log(JSON.stringify(error)+ ' error in update')
     })
     }
 //update the actual product here is where we handle the update or insert of products
@@ -337,7 +393,8 @@ updateRate(r){
             this.areaId = ''; 
             this.areaName = ''; 
             this.up = false;
-            this.noArea = true; 
+            this.noArea = true;
+            this.notUpdate = undefined;  
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Success',
@@ -361,31 +418,48 @@ updateRate(r){
 
     //delete single products from an application 
     upDeleteProd(e){
-        let product = e.target.id.substr(0,18); 
+        if(e.target.id !== "undefined"){
+        let product = e.target.id.substr(0,18);
         let i = this.newProds.findIndex(prod => prod.Id === product);
-        deleteRecord(product)
+                console.log(e.target.id + ' id');
+                
+        // eslint-disable-next-line no-alert
+        let c = confirm('Do you want to delete this entry?')
+        if(c === true){
+            deleteRecord(product)
             .then(()=>{
                 this.newProds.splice(i,1)
             })
-            .then(() => {
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Success', 
-                        message: 'Product    Deleted', 
-                        variant: 'success'
-                    }) 
-                );
-            })
-            .catch(error => {
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Error deleting record',
-                        message: JSON.stringify(error),
-                        variant: 'error'
-                    })
-                )
-            })
-        
+                .then(() => {
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Success', 
+                            message: 'Product    Deleted', 
+                            variant: 'success'
+                        }) 
+                    );
+                })
+                .catch(error => {
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Error deleting record',
+                            message: JSON.stringify(error),
+                            variant: 'error'
+                        })
+                    )
+                })
+            }
+        }else{
+           let newProduct = e.target.name.substr(0,18);
+           let i = this.newProds.findIndex(prod => prod.name === newProduct);
+           console.log('lower else');
+           
+           // eslint-disable-next-line no-alert
+           let c = confirm('Do you want to delete this entry?')
+           if(c === true){
+               this.newProds.splice(i,1);
+           }
+        }
     }
 
  }

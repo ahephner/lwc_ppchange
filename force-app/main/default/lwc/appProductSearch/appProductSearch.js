@@ -47,7 +47,8 @@ export default class AppProductSearch extends LightningElement {
     }
     
     handleProductSelect(event){
-        
+        //handle click and clear the search field right away! 
+        this.searchKey = ''; 
         fireEvent(this.pageRef, 'productSelected', event.target.prods.Id); 
     }
 }

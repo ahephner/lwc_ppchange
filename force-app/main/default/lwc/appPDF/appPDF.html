@@ -1,0 +1,75 @@
+<template>
+    <lightning-card>
+       <div class="slds-grid slds-wrap container"> 
+        <div class="slds-col slds-size_2-of-12">
+            <lightning-combobox
+            name="progress"
+            label="Select PDF Type"
+            value={pdfOptions}
+            placeholder="Options"
+            options={choices}
+            onchange={userSelect} ></lightning-combobox>
+        </div>
+        <template if:true={ap}>
+            <div class='slds-col'>
+                <lightning-button-group>
+                <lightning-button variant="brand" label="Save" title="Primary action" 
+                    onclick={allProds} class="slds-m-left_x-small btn"></lightning-button>
+                    <lightning-button variant="destructive" label="cancel" title="Primary action" 
+                    onclick={goBack} class="slds-m-left_x-small btn"></lightning-button>               
+                </lightning-button-group>
+            </div>
+        </template>
+
+        <template if:true={aa}>
+            <div class='slds-col'>
+                <lightning-button-group> 
+                    <lightning-button variant="brand" label="Save" title="Primary action" 
+                    onclick={allApps} class="slds-m-left_x-small btn"></lightning-button>
+                    <lightning-button variant="destructive" label="cancel" title="Primary action" 
+                    onclick={goBack} class="slds-m-left_x-small btn"></lightning-button>               
+                </lightning-button-group>
+            </div>
+        </template>
+
+    <template if:true={sp}> 
+    <div class="slds-col slds-size_3-of-12 slds-m-left_small">
+        <lightning-dual-listbox name="areas"
+                                label="Select Areas"
+                                source-label="Available"
+                                selected-label="Selected"
+                                field-level-help="select areas for pdf"
+                                options={areaOptions}
+                                onchange={handleChange}></lightning-dual-listbox>
+        </div>
+        <div class="slds-col slds-size_1-of-12">
+            <lightning-button-group class='btnGroup'> 
+                <lightning-button variant="brand" label="Save" title="Primary action" 
+                onclick={handleClick} class="slds-m-left_x-small btn"></lightning-button>
+                <lightning-button variant="destructive" label="cancel" title="Primary action" 
+                onclick={goBack} class="slds-m-left_x-small btn"></lightning-button>               
+            </lightning-button-group>
+        </div>
+    </template>
+    <template if:true={sa}> 
+        <div class="slds-col slds-size_3-of-12 slds-m-left_small">
+            <lightning-dual-listbox name="languages"
+                                label="Select Apps"
+                                source-label="Available"
+                                selected-label="Selected"
+                                field-level-help="Select the apps for pdf"
+                                options={appOptions}
+                                onchange={handleChange}></lightning-dual-listbox>
+        </div>
+        <div class="slds-col slds-size_1-of-12">
+            <lightning-button-group class='btnGroup'> 
+                <lightning-button variant="brand" label="Save" title="Primary action" 
+                onclick={handleClick} class="slds-m-left_x-small btn"></lightning-button>
+                <lightning-button variant="destructive" label="cancel" title="Primary action" 
+                onclick={goBack} class="slds-m-left_x-small btn"></lightning-button>               
+            </lightning-button-group>
+        </div>
+    </template>
+    </div>    
+    </lightning-card>
+</template>

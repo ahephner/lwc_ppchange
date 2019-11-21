@@ -11,9 +11,10 @@ export default class AppProductList extends LightningElement {
         //
         const selectEvent = new CustomEvent('productselect', {
             bubbles: true
-          
+            
         }); 
         
+
         
         this.dispatchEvent(selectEvent); 
     }

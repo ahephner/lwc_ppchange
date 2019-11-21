@@ -1,0 +1,36 @@
+<template>
+    <lightning-card title="QUALIFYING QUESTIONS FOR STEEL GREEN LEADS:">
+        <div class="slds-m-around_medium">
+            <lightning-record-edit-form
+                object-api-name={objectApiName}
+                record-id={recordId}
+            >
+                <lightning-messages></lightning-messages>
+                <lightning-input-field
+                    field-name="Current_User__c"
+                ></lightning-input-field>
+                <lightning-input-field
+                    field-name="Fleet_Size__c"
+                ></lightning-input-field>
+                <lightning-input-field
+                    field-name="Current_Brand__c"
+                ></lightning-input-field>
+                <lightning-input-field
+                    field-name="Equip_Age__c"
+                ></lightning-input-field>
+                <lightning-input-field
+                    field-name="Parts_Dealer__c"
+                ></lightning-input-field>
+                <div class="slds-m-top_medium">
+                    <lightning-button
+                        variant="brand"
+                        type="submit"
+                        name="save"
+                        label="Save"
+                        onclick={success}
+                    ></lightning-button>
+                </div>
+            </lightning-record-edit-form>
+        </div>
+    </lightning-card>
+</template>

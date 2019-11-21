@@ -11,6 +11,7 @@ import SQF_FIELD from '@salesforce/schema/Area__c.Area_Sq_Feet__c';
 import ACRE_FIELD from '@salesforce/schema/Area__c.Area_Acres__c';
 import TYPE_FIELD from '@salesforce/schema/Area__c.Type__c';  
 import PROGRAM_FIELD from '@salesforce/schema/Area__c.Program__c';  
+import PREFUOFM from '@salesforce/schema/Area__c.Pref_U_of_M__c'; 
 
 export default class AppModal extends LightningElement {
         @track openAppModal = false; 
@@ -22,6 +23,7 @@ export default class AppModal extends LightningElement {
         @track areaId;
         @track proId; 
         @track feet; 
+        @track prefUM; 
         @api recordId; 
         //get api values from object settings
         get setNotes(){
@@ -35,6 +37,12 @@ export default class AppModal extends LightningElement {
                 {label:'Other' , value: 'Other'} 
             ]
         }   
+        get setSize(){
+            return [
+                {label:'Acre', value: 'Acre'},
+                {label: 'M', value:'M'}
+            ]
+        }
 
         @wire(CurrentPageReference) pageRef;
 
@@ -56,18 +64,21 @@ export default class AppModal extends LightningElement {
         }
         newFeet(e){
             this.feet = e.detail.value;
-            console.log(this.feet);
+            this.areaAcres = this.feet/43.56
             
         }
         newAcre(e){
             this.areaAcres = e.detail.value; 
-            console.log(this.areaAcres, ' areaAcre');
+            this.feet = this.areaAcres * 43.56; 
                         
         }
         newType(e){
             this.note = e.detail.value; 
-            console.log(this.note, ' this note');
+            //console.log(this.note, ' this note');
             
+        }
+        newUM(e){
+            this.prefUM = e.detail.value; 
         }
         //open modal
         appSelected(){
@@ -87,6 +98,7 @@ export default class AppModal extends LightningElement {
             fields[ACRE_FIELD.fieldApiName] = this.areaAcres;
             fields[TYPE_FIELD.fieldApiName] = this.note;
             fields[PROGRAM_FIELD.fieldApiName] = this.recordId;
+            fields[PREFUOFM.fieldApiName]= this.prefUM;
             console.log(fields);
             
             const recordInput = {apiName: AREA_OBJECT.objectApiName, fields};
