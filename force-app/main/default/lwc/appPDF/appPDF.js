@@ -2,7 +2,7 @@
 import { LightningElement, track, api, wire } from 'lwc';
 import getAreas from '@salesforce/apex/appProduct.getAreas';
 import getAppPDF from '@salesforce/apex/appProduct.getAppPDF';
-
+import allProds from '@salesforce/apex/programPDF.allProds'; 
 export default class AppPDF extends LightningElement {
     @track _selected = [];
     @track pdfOptions; 
@@ -58,10 +58,24 @@ export default class AppPDF extends LightningElement {
         this._selected = e.detail.value;
     }
 
-    handleClick(){
-        console.log(this._selected)
-    }
     goBack(){
         window.history.back(); 
+    }
+    //All products 
+    allProds(){
+        allProds({id: this.recordId})
+        .then((resp)=>{
+            console.log(resp);
+            
+        })
+    }
+    //All apps
+    allApps(){
+        console.log(this.recordId); 
+    }
+
+    //select clicks 
+        handleClick(){
+        console.log(this._selected)
     }
 }
