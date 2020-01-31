@@ -121,7 +121,7 @@ export default class AppTable extends LightningElement {
                     break;
                 case 'clone_app':
                     console.log('Clone hit');
-                    fireEvent(this.pageRef, 'appClone', this)
+                    fireEvent(this.pageRef, 'appClone', row)
                     break;
                     
                 default:

@@ -5,7 +5,7 @@ import { registerListener, unregisterListener } from 'c/pubsub';
 
 export default class AppCloneModal extends LightningElement {
     @track openAppClone 
-
+    @track appId 
     @wire(CurrentPageReference) pageRef; 
     connectedCallback(){
         console.log('in appClone');
@@ -16,8 +16,9 @@ export default class AppCloneModal extends LightningElement {
         unregisterListener(this); 
     }
 
-    openClone(){
+    openClone(apID){
         this.openAppClone = true; 
+        this.appId = apID; 
     }
     closeAppClone(){
         this.openAppClone = false; 
