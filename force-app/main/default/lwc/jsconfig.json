@@ -9,6 +9,9 @@
             "c/appArea": [
                 "appArea/appArea.js"
             ],
+            "c/appCloneModal": [
+                "appCloneModal/appCloneModal.js"
+            ],
             "c/appInfo": [
                 "appInfo/appInfo.js"
             ],
@@ -62,9 +65,6 @@
             ],
             "c/steelGreenQuestions": [
                 "steelGreenQuestions/steelGreenQuestions.js"
-            ],
-            "c/appCloneModal": [
-                "appCloneModal/appCloneModal.js"
             ]
         }
     },
