@@ -62,6 +62,9 @@
             ],
             "c/steelGreenQuestions": [
                 "steelGreenQuestions/steelGreenQuestions.js"
+            ],
+            "c/appCloneModal": [
+                "appCloneModal/appCloneModal.js"
             ]
         }
     },
