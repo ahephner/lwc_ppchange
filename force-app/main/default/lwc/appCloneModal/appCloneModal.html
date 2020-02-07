@@ -37,7 +37,11 @@
              <lightning-datatable
                  key-field="id"
                  data={data}
-                 columns={columns}>
+                 columns={columns}
+                 sorted-by={sortBy}
+                 sorted-direction={sortDirection}
+                 onsort={handleSortdata}
+                 hide-checkbox-column="true">
          </lightning-datatable>
          </div>
          
