@@ -16,16 +16,18 @@
              icon-class="slds-button_icon-inverse"
              onclick={closeAppClone}
          ></lightning-button-icon>
-         <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Clone App</h2>
+         <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Clone App: {appName}</h2>
          </header>
          <!--clone info--> 
          <div  class="slds-modal__content slds-p-around_medium slds-grid slds-wrap" 
                id="modal-content-id-2">
              <lightning-input class="slds-size_1-of-4"  
-                              label="Number of Apps">
+                              label="Number of Apps"
+                              onchange={numberOfClones}>
              </lightning-input>
               <lightning-input class="slds-size_1-of-4 slds-p-left_small" 
-                               label="Weeks Apart">
+                               label="Weeks Apart"
+                               onchange={time}>
              </lightning-input>
               <h4 class="slds-size_1-of-4">V2 product search here</h4>
          </div>
