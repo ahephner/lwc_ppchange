@@ -1,33 +1,53 @@
 <template>
-   <template if:true={openAppClone}>
-    <section role="dialog"
-    tabindex="-1"
-    aria-labelledby="modal-heading-01"
-    aria-modal="true"
-    aria-describedby="modal-content-id-1"
-    class="slds-modal slds-fade-in-open slds-modal_medium"
-    >
-        <div class="slds-modal__container">
-        <header class="slds-modal__header">
-            <lightning-button-icon
-            class="slds-modal__close"
-            title="Close"
-            icon-name="utility:close"
-            icon-class="slds-button_icon-inverse"
-            onclick={closeAppClone}
-        ></lightning-button-icon>
-        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Modal Header</h2>
-        </header>
-        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-            {appId} -app Id 
-        </div>
-        <footer class="slds-modal__footer">
-        <button class="slds-button slds-button_neutral" onclick={closeAppClone}>Cancel</button>
-        <button class="slds-button slds-button_brand">Save</button>
-        </footer>
-        </div>
-        </section>
-        <div class="slds-backdrop slds-backdrop_open"></div>
-   </template> 
-</template>
+    <template if:true={openAppClone}>
+     <section role="dialog"
+     tabindex="-1"
+     aria-labelledby="modal-heading-01"
+     aria-modal="true"
+     aria-describedby="modal-content-id-1"
+     class="slds-modal slds-fade-in-open slds-modal_large"
+     >
+         <div class="slds-modal__container">
+         <header class="slds-modal__header">
+             <lightning-button-icon
+             class="slds-modal__close"
+             title="Close"
+             icon-name="utility:close"
+             icon-class="slds-button_icon-inverse"
+             onclick={closeAppClone}
+         ></lightning-button-icon>
+         <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Clone App</h2>
+         </header>
+         <!--clone info--> 
+         <div  class="slds-modal__content slds-p-around_medium slds-grid slds-wrap" 
+               id="modal-content-id-2">
+             <lightning-input class="slds-size_1-of-4"  
+                              label="Number of Apps">
+             </lightning-input>
+              <lightning-input class="slds-size_1-of-4 slds-p-left_small" 
+                               label="Weeks Apart">
+             </lightning-input>
+              <h4 class="slds-size_1-of-4">V2 product search here</h4>
+         </div>
+         
+         <!--table-->
+         <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+             <lightning-datatable
+                 key-field="id"
+                 data={data}
+                 columns={columns}>
+         </lightning-datatable>
+         </div>
+         
+         <!--footer--> 
+         <footer class="slds-modal__footer">
+         <button class="slds-button slds-button_neutral" onclick={closeAppClone}>Cancel</button>
+         <button class="slds-button slds-button_brand">Save</button>
+         </footer>
+         </div>
+         </section>
+         <div class="slds-backdrop slds-backdrop_open"></div>
+    </template> 
+ </template>
+ 
 

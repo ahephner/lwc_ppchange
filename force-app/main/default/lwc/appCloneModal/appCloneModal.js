@@ -3,9 +3,17 @@ import { LightningElement, track, wire } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
 import { registerListener, unregisterListener } from 'c/pubsub';
 
+const columns = [
+    { label: 'Name', fieldName: 'Name' },
+    { label: 'Rate', fieldName: 'Rate', sortable: "true" },
+    { label: 'Price', fieldName: 'Price', sortable: "true"},
+    { label: 'Margin', fieldName: 'Margin', sortable: "true"},
+
+];
 export default class AppCloneModal extends LightningElement {
     @track openAppClone 
-    @track appId 
+    @track appId
+    @track columns = columns; 
     @wire(CurrentPageReference) pageRef; 
     connectedCallback(){
         console.log('in appClone');
