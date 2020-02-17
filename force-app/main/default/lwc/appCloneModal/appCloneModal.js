@@ -2,12 +2,13 @@
 import { LightningElement, track, wire } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
 import { registerListener, unregisterListener } from 'c/pubsub';
+//import { deleteRecord } from 'lightning/uiRecordApi';
 import cloneProducts from '@salesforce/apex/ProgramCloneWithApps_Controller.cloneProducts';
 const columns = [
     { label: 'Name', fieldName: 'Product_Name__c',  cellAttributes: { alignment: 'left' },  sortable: "true" },
     { label: 'Rate', fieldName: 'Report_Rate__c',   cellAttributes: { alignment: 'left' }},
     { label: 'Price', fieldName: 'Unit_Price__c', type:'currency',  cellAttributes: { alignment: 'left' },  sortable: "true"},
-    { label: 'Margin %', fieldName: 'Margin__c', type:'number',  cellAttributes: { alignment: 'left'},  sortable: "true"},
+    { label: 'Margin %', fieldName: 'Margin__c', type:'number',  cellAttributes: { alignment: 'left' },  sortable: "true"},
 
 ];
 export default class AppCloneModal extends LightningElement {
@@ -20,12 +21,13 @@ export default class AppCloneModal extends LightningElement {
     @track appName;
     @track initialDate 
     @track area; 
-
+    @track toRemove = []; 
+    
     @wire(CurrentPageReference) pageRef; 
     
     @wire(cloneProducts, {app: '$appId'})
         wiredList(result){
-            console.log('going' + this.appId);
+           // console.log('going' + this.appId);
             
             if(result.data){        
                 //console.log(result.data);
@@ -65,6 +67,28 @@ export default class AppCloneModal extends LightningElement {
     closeAppClone(){
         this.openAppClone = false; 
     }
+
+    removeProds(){
+        const table = this.template.querySelector('lightning-datatable')
+        let selected = table.getSelectedRows();
+        // eslint-disable-next-line guard-for-in
+        for(const y in selected){
+            if(Object.prototype.hasOwnProperty.call(selected, y)){
+            this.toRemove.push(selected[y].Id)
+            }
+        }
+        this.toDelete(this.toRemove)
+        
+    }
+
+
+    toDelete(rows){
+        rows.forEach(x => console.log('to delete ' +x)
+        )
+    }
+
+
+
 
     //sorting
     handleSortdata(event) {
