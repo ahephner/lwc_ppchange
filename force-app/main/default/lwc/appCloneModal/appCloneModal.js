@@ -2,8 +2,9 @@
 import { LightningElement, track, wire } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
 import { registerListener, unregisterListener } from 'c/pubsub';
-//import { deleteRecord } from 'lightning/uiRecordApi';
+import { deleteRecord } from 'lightning/uiRecordApi';
 import cloneProducts from '@salesforce/apex/ProgramCloneWithApps_Controller.cloneProducts';
+import { refreshApex } from '@salesforce/apex';
 const columns = [
     { label: 'Name', fieldName: 'Product_Name__c',  cellAttributes: { alignment: 'left' },  sortable: "true" },
     { label: 'Rate', fieldName: 'Report_Rate__c',   cellAttributes: { alignment: 'left' }},
@@ -30,7 +31,7 @@ export default class AppCloneModal extends LightningElement {
            // console.log('going' + this.appId);
             
             if(result.data){        
-                //console.log(result.data);
+                console.log(result.data);
                 this.data = result.data;
                 this.appName = result.data[0].Application__r.Name;
                 this.initialDate = result.data[0].Application__r.Date__c
@@ -83,8 +84,11 @@ export default class AppCloneModal extends LightningElement {
 
 
     toDelete(rows){
-        rows.forEach(x => console.log('to delete ' +x)
-        )
+        rows.forEach(x => {
+            console.log(x) 
+            deleteRecord(x)
+            return refreshApex(this.data)
+        })
     }
 
 
