@@ -28,9 +28,10 @@ export default class AppCloneModal extends LightningElement {
     
     @wire(cloneProducts, {app: '$appId'})
         wiredList(result){
-           // console.log('going' + this.appId);
+            //console.log('going' + this.appId);
             
-            if(result.data){        
+            if(result.data){
+                console.log('data');         
                 console.log(result.data);
                 this.data = result.data;
                 this.appName = result.data[0].Application__r.Name;
@@ -89,6 +90,8 @@ export default class AppCloneModal extends LightningElement {
             deleteRecord(x)
             return refreshApex(this.data)
         })
+            
+        
     }
 
 
