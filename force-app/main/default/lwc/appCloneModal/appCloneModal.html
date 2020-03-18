@@ -1,0 +1,62 @@
+<template>
+    <template if:true={openAppClone}>
+     <section role="dialog"
+     tabindex="-1"
+     aria-labelledby="modal-heading-01"
+     aria-modal="true"
+     aria-describedby="modal-content-id-1"
+     class="slds-modal slds-fade-in-open slds-modal_large"
+     >
+         <div class="slds-modal__container">
+         <header class="slds-modal__header">
+             <lightning-button-icon
+             class="slds-modal__close"
+             title="Close"
+             icon-name="utility:close"
+             icon-class="slds-button_icon-inverse"
+             onclick={closeAppClone}
+         ></lightning-button-icon>
+         <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Clone App: {appName}</h2>
+         </header>
+         <!--clone info--> 
+         <div  class="slds-modal__content slds-p-around_medium slds-grid slds-wrap" 
+               id="modal-content-id-2">
+             <lightning-input class="slds-size_1-of-4"  
+                              label="Number of Apps"
+                              onchange={numberOfClones}>
+             </lightning-input>
+              <lightning-input class="slds-size_1-of-4 slds-p-left_small" 
+                               label="Weeks Apart"
+                               onchange={time}>
+             </lightning-input>
+              <p class="slds-size_1-of-4">will delete the product from app...cached though and apex is not letting me dump...have to refresh to see. delete prod then try again look at console it's a bad request cause its gone also remove app id so it wont touch original</p>
+         </div>
+         <lightning-button-group class='slds-modal__content' id='modal-content-id-3'>
+             <lightning-button variant='destructive' label='remove products' onclick={removeProds}></lightning-button>
+         </lightning-button-group>
+         <!--table-->
+         <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+             <lightning-datatable
+                 key-field="id"
+                 data={data}
+                 columns={columns}
+                 show-row-number-column
+                 sorted-by={sortBy}
+                 sorted-direction={sortDirection}
+                 onsort={handleSortdata}
+                 >
+         </lightning-datatable>
+         </div>
+         
+         <!--footer--> 
+         <footer class="slds-modal__footer">
+         <button class="slds-button slds-button_neutral" onclick={closeAppClone}>Cancel</button>
+         <button class="slds-button slds-button_brand">Save</button>
+         </footer>
+         </div>
+         </section>
+         <div class="slds-backdrop slds-backdrop_open"></div>
+    </template> 
+ </template>
+ 
+

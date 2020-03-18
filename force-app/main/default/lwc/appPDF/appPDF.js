@@ -3,6 +3,7 @@ import { LightningElement, track, api, wire } from 'lwc';
 import getAreas from '@salesforce/apex/appProduct.getAreas';
 import getAppPDF from '@salesforce/apex/appProduct.getAppPDF';
 import allProds from '@salesforce/apex/programPDF.allProds'; 
+import allArea from '@salesforce/apex/programPDF.allArea'; 
 export default class AppPDF extends LightningElement {
     @track _selected = [];
     @track pdfOptions; 
@@ -15,7 +16,7 @@ export default class AppPDF extends LightningElement {
     get choices(){
         return[
             {label: 'All Product Summary', value: 'AP'},
-            {label: 'All App Spray Sheet', value: 'AA'},
+            {label: 'All Areas', value: 'AA'},
             {label: 'Select Area', value: 'SP'},
             {label: 'Select Applications', value: 'SA'}
         ]
@@ -69,9 +70,18 @@ export default class AppPDF extends LightningElement {
             
         })
     }
-    //All apps
-    allApps(){
-        console.log(this.recordId); 
+    //All areas
+    allAreas(){
+        console.log(this.recordId);
+        
+        allArea({proId: this.recordId})
+        .then((resp)=>{
+            console.log(resp);       
+        })
+        // .then(()=>{
+        //     location.reload(); 
+        //     window.history.back()
+        // })
     }
 
     //select clicks 

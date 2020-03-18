@@ -5,12 +5,14 @@ import { CurrentPageReference } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
 import getApps from '@salesforce/apex/appProduct.getApps';
+//import cloneProgram from '@salesforce/apex/ProgramCloneWithApps_Controller.cloneProgram'
 import { deleteRecord } from 'lightning/uiRecordApi';
 
 //table actions bottom of file shows how to handle
 const actions = [
     { label: 'Show details', name: 'show_details' },
     { label: 'Delete', name: 'delete' },
+    {label: 'Clone App', name: 'clone_app'}
 ];
 
 //table columns calling actions drop down in last place of the array
@@ -117,6 +119,11 @@ export default class AppTable extends LightningElement {
                     console.log('firing row')
                     fireEvent(this.pageRef, 'appSelected', row)
                     break;
+                case 'clone_app':
+                    console.log('Clone hit');
+                    fireEvent(this.pageRef, 'appClone', row)
+                    break;
+                    
                 default:
             }
     }
