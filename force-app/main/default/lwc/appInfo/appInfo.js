@@ -40,6 +40,10 @@ export default class AppInfo extends LightningElement {
     nap = []; 
     updateAppId; 
     lastId = 0; 
+    @track numberApps ='doesNotRepeat';
+    @track weeksApart;
+    @track customNumberApp;
+
     // @track areaName; 
 
     @wire(CurrentPageReference) pageRef;
@@ -82,6 +86,7 @@ export default class AppInfo extends LightningElement {
             registerListener('productSelected', this.handleProductSelected, this); 
             registerListener('areaSelect', this.handleNewArea, this);
             registerListener('appSelected', this.update, this); 
+            registerListener('customApps', this.customApps, this);
         }
         disconnectedCallback(){
             unregisterAllListeners(this);
@@ -230,6 +235,31 @@ get unitArea(){
                 }
     },1500)
     }   
+//Number of apps for multiple insert add new values here like daily then need to handle 
+//in apex method. 
+    get numOptions(){
+        return [
+            {label:'Does Not Repeat', value:'doesNotRepeat'},
+            {label:'Weekly', value:'weekly'},
+            {label:'Monthly', value:'monthly'},
+            {label: 'custom', value:'custom'},
+        ]
+    }
+    //get the values from the custom amount of app inserts
+    //will use value when inserting apps
+    customApps(numaps){
+        this.weeksApart = numaps.detail.weeks; 
+        this.customApps = numaps.detail.number;
+    }
+//this is how we know the number of apps to make and if it's a custom it will open
+//appCloneModal
+    handleNumchange(event){
+        this.numberApps = event.detail.value; 
+        if(this.numberApps === 'custom'){
+        fireEvent(this.pageRef, 'custom', this);            
+        console.log('talking');
+        }
+    }
 //open and close quick convert    
     openConvert(){
         this.convert = true; 
@@ -288,49 +318,50 @@ get unitArea(){
 //INSERTING UPDATING APPLICATIONS
     //Insert Upsert
     createApplication__c(){
-
-        let params = {
-           appName: this.appName,
-           appArea: this.areaId,
-           appDate: this.appDate
-       };
-       //console.log(params)
-        addApplication({wrapper:params})
-            .then((resp)=>{
-                this.appId = resp.Id; 
-                //console.log(this.appId);
-                // eslint-disable-next-line no-return-assign
-                this.newProds.forEach((x) => x.Application__c = this.appId)
-                let products = JSON.stringify(this.newProds)
-                //console.log(products)
-                addProducts({products:products})
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Success',
-                        message: 'Application Added!',
-                        variant: 'success'
-                    })
-                );
-            }).then(()=>{
-                //console.log("sending new app to table "+this.appId); 
-                fireEvent(this.pageRef, 'newApp', this.appId)
-            }).then(()=>{
-                this.newProds = [];
-                this.appName = ''; 
-                this.appDate = '';
-                this.noArea = true;
-                this.notUpdate = undefined;  
-            }).catch((error)=>{
-                console.log(JSON.stringify(error))
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Error adding app',
-                        message: 'Did you select an Area and enter a App Name?',
-                        variant: 'error'
-                    })
-                    
-                ) 
-            })
+       if(this.numberApps === 'doesNotRepeat'){ 
+            let params = {
+            appName: this.appName,
+            appArea: this.areaId,
+            appDate: this.appDate
+        };
+        //console.log(params)
+            addApplication({wrapper:params})
+                .then((resp)=>{
+                    this.appId = resp.Id; 
+                    //console.log(this.appId);
+                    // eslint-disable-next-line no-return-assign
+                    this.newProds.forEach((x) => x.Application__c = this.appId)
+                    let products = JSON.stringify(this.newProds)
+                    //console.log(products)
+                    addProducts({products:products})
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Success',
+                            message: 'Application Added!',
+                            variant: 'success'
+                        })
+                    );
+                }).then(()=>{
+                    //console.log("sending new app to table "+this.appId); 
+                    fireEvent(this.pageRef, 'newApp', this.appId)
+                }).then(()=>{
+                    this.newProds = [];
+                    this.appName = ''; 
+                    this.appDate = '';
+                    this.noArea = true;
+                    this.notUpdate = undefined;  
+                }).catch((error)=>{
+                    console.log(JSON.stringify(error))
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Error adding app',
+                            message: 'Did you select an Area and enter a App Name?',
+                            variant: 'error'
+                        })
+                        
+                    ) 
+                })
+            }
     }
     //hook fuction from show details on appTable
     //error if no app products nothing gets fired

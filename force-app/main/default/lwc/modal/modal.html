@@ -1,13 +1,12 @@
+<!-- Dont forget to still add modal to the page -->
 <template>
-    <lightning-card title='Areas'>
-        <div class="slds-m-around_medium">
-            <lightning-button
-            label="Add Area"
-            onclick={handleShowModal}
-        ></lightning-button>
             <template if:true={openmodal}>
-                    <div class="newArea" style="height: 640px;">
-                            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                            <section role="dialog" 
+                            tabindex="-1" 
+                            aria-labelledby="modal-heading-01" 
+                            aria-modal="true" 
+                            aria-describedby="modal-content-id-1" 
+                            class="slds-modal slds-fade-in-open">
                                     <div class="slds-modal__container">
                                         <header class="slds-modal__header">
                                             <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
@@ -15,12 +14,18 @@
                                                 </lightning-icon>
                                                 <span class="slds-assistive-text">Close</span>
                                             </button>
-                                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">New Area</h2>
+                                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">App Recurrence</h2>
                                         </header>
-                                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-                                            <center><h2><b>Welcome to Salesforce Code Crack</b></h2><br/>
-                                                <p>Happy Learning!!!</p>
-                                            </center>
+                                        <div class="slds-modal__content slds-p-around_medium slds-grid" id="modal-content-id-1">
+                                               <lightning-input class="slds-col" type="number"
+                                                name="input1" 
+                                                label="Number of Apps"
+                                                onchange={number}></lightning-input>
+                                               <lightning-input class="slds-col slds-m-left_xx-small" 
+                                                type="number" 
+                                                name='weeksApart' 
+                                                label="Weeks Apart"
+                                                onchange={weeks}></lightning-input> 
                                         </div>
                                         <footer class="slds-modal__footer">
                                             <lightning-button label="Cancel" variant="neutral" onclick={closeModal}></lightning-button>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -28,10 +33,7 @@
                                         </footer>
                                     </div>
                                 </section>
-                    </div>
+                                <!-- this is what turns tha back ground dark -->
+                   <div class='slds-backdrop slds-backdrop_open'></div> 
             </template>
-        </div>
-        
-</lightning-card>
 </template>
-

@@ -72,15 +72,25 @@
                 </template>
             </div>
             <div class="slds-m-top_x-large slds-m-left_x-small">
-                    <lightning-layout>
-                        <lightning-layout-item padding="horizontal-small">
-                            <lightning-button id='appBtn' variant="brand" label="Save" onclick={createApplication__c}></lightning-button>                               
-                        </lightning-layout-item>
-                        <lightning-layout-item>
-                            <lightning-button variant="destructive" label="Cancel" onclick={cancel}></lightning-button>
-                        </lightning-layout-item>
-                    </lightning-layout>
-                </div>                     
+                <lightning-layout>
+                    <lightning-layout-item class='slds-m-top_medium' padding="horizontal-small">
+                        <lightning-button id='appBtn' variant="brand" label="Save" onclick={createApplication__c}></lightning-button>                               
+                    </lightning-layout-item>
+                    <lightning-layout-item class='slds-m-top_medium'>
+                        <lightning-button variant="destructive" label="Cancel" onclick={cancel}></lightning-button>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="horizontal-small">
+                        <lightning-combobox
+                        name='clone'
+                        label=''
+                        value={numberApps}
+                        placeholder="Does Not Repeat"
+                        options={numOptions}
+                        onchange={handleNumchange}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>                     
       </div>         
     </lightning-card>
 </template>

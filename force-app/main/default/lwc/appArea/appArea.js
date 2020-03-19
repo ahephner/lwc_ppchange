@@ -34,7 +34,7 @@ export default class AppArea extends LightningElement {
                 
     }
 
-    //open Modal 
+    //open appModal lwc
     newArea(){
         // eslint-disable-next-line no-console
         console.log('in app area ' +this.recordId)
