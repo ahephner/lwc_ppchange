@@ -8,8 +8,9 @@ import { CurrentPageReference } from 'lightning/navigation';
 export default class Modal extends LightningElement {
     @track openmodal = false;
     @api recordId; 
-    @track numberOfApps;
-    @track weeksApart; 
+    @track timeApart;
+    @track total; 
+    @track value; 
 
     @wire(CurrentPageReference) pageRef;
 
@@ -22,28 +23,39 @@ export default class Modal extends LightningElement {
         unregisterListener(this);
     }
 
+    get options() {
+        return [
+            { label: 'Day', value: 'day' },
+            { label: 'Week', value: 'week' },
+            { label: 'Month', value: 'month' },
+        ];
+    }
     handleShowModal() {
         console.log('listening');
         this.openmodal = true; 
     }
 
-
+    handleOption(event){
+        this.value = event.detail.value; 
+    }
     closeModal(){
         this.openmodal = false; 
     }
-    weeks(event){
-        this.weeksApart = event.detail.value;
+    totalApps(event){
+        this.total = event.detail.value;
+        console.log(this.total);
+        
     }
     number(event){
-        this.numberOfApps = event.detail.value;
-        console.log(this.numberOfApps);
+        this.timeApart = event.detail.value;
         
     }
     saveArea(){
         const value = new CustomEvent('custApp',{
             detail:{
-                weeks: this.weeksApart,
-                number: this.numberOfApps
+                total: this.total,
+                timeBetween: this.timeApart,
+                spread: this.value
             }
         });
         fireEvent(this.pageRef, 'customApps',value); 

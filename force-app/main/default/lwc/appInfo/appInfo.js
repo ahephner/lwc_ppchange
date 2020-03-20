@@ -41,8 +41,9 @@ export default class AppInfo extends LightningElement {
     updateAppId; 
     lastId = 0; 
     @track numberApps ='doesNotRepeat';
-    @track weeksApart;
-    @track customNumberApp;
+    @track spreadApps;
+    @track totalApps;
+    @track timeBetweenApps
 
     // @track areaName; 
 
@@ -248,8 +249,11 @@ get unitArea(){
     //get the values from the custom amount of app inserts
     //will use value when inserting apps
     customApps(numaps){
-        this.weeksApart = numaps.detail.weeks; 
-        this.customApps = numaps.detail.number;
+        this.totalApps = numaps.detail.total; 
+        this.timeBetweenApps = numaps.detail.timeBetween;
+        this.spreadApps = numaps.detail.spread
+        console.log('totalApps ' +this.totalApps + ' timeBetweenApps ' + this.timeBetweenApps + ' spreadApps ' +this.spreadApps);
+        
     }
 //this is how we know the number of apps to make and if it's a custom it will open
 //appCloneModal
