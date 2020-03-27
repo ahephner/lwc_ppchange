@@ -25,24 +25,26 @@ export default class Modal extends LightningElement {
 
     get options() {
         return [
-            { label: 'Day', value: 'day' },
-            { label: 'Week', value: 'week' },
-            { label: 'Month', value: 'month' },
+            { label: 'Day', value: '1' },
+            { label: 'Week', value: '7' },
+            { label: 'Month', value: '30' },
         ];
     }
+    //gets from connectedCallBack
     handleShowModal() {
-        console.log('listening');
         this.openmodal = true; 
     }
-
+//weeks days months drop down
     handleOption(event){
         this.value = event.detail.value; 
     }
     closeModal(){
         this.openmodal = false; 
     }
+    //the reason why I subtract by one is that the apex job is getting the original insert so if i wanted 3 apps 
+    //and put 3 in I will get 4 apps 3 copies plus original 
     totalApps(event){
-        this.total = event.detail.value;
+        this.total = event.detail.value -1;
         console.log(this.total);
         
     }
@@ -50,12 +52,16 @@ export default class Modal extends LightningElement {
         this.timeApart = event.detail.value;
         
     }
+    //this sends the info to appInfo.js 
     saveArea(){
+        this.value = this.value * this.timeApart; 
+        
+        //send this to appInfo. If we want to grab more info from this page
+        //we can add a new key value pair the function in appInfo.js is customApps()
         const value = new CustomEvent('custApp',{
             detail:{
                 total: this.total,
-                timeBetween: this.timeApart,
-                spread: this.value
+                timeBetween: this.value
             }
         });
         fireEvent(this.pageRef, 'customApps',value); 

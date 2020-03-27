@@ -10,6 +10,7 @@ import updateApplication from '@salesforce/apex/addApp.updateApplication'
 import updateProducts from '@salesforce/apex/addApp.updateProducts';
 import appProducts from '@salesforce/apex/appProduct.appProducts'; 
 import areaInfo from '@salesforce/apex/appProduct.areaInfo';
+import multiInsert from '@salesforce/apex/addApp.multiInsert';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 //import actual product field values 
 import PRODUCT_ID from '@salesforce/schema/Product__c.Id'
@@ -22,6 +23,7 @@ export default class AppInfo extends LightningElement {
     recordId; 
     @track noArea = true;
     @track convert = false; 
+    @track loaded = true; 
     @track notUpdate; 
     @track up;  
     @track appId; 
@@ -41,7 +43,6 @@ export default class AppInfo extends LightningElement {
     updateAppId; 
     lastId = 0; 
     @track numberApps ='doesNotRepeat';
-    @track spreadApps;
     @track totalApps;
     @track timeBetweenApps
 
@@ -237,23 +238,20 @@ get unitArea(){
     },1500)
     }   
 //Number of apps for multiple insert add new values here like daily then need to handle 
-//in apex method. 
+//in apex method. for  weekly or month past numbers
     get numOptions(){
         return [
             {label:'Does Not Repeat', value:'doesNotRepeat'},
-            {label:'Weekly', value:'weekly'},
-            {label:'Monthly', value:'monthly'},
-            {label: 'custom', value:'custom'},
+            {label:'Weekly', value:'7'},
+            {label:'Monthly', value:'30'},
+            {label: 'Custom', value:'custom'},
         ]
     }
     //get the values from the custom amount of app inserts
-    //will use value when inserting apps
+    //will use value when inserting apps the timeBetween used in Apex function is calculated in modal.js
     customApps(numaps){
         this.totalApps = numaps.detail.total; 
         this.timeBetweenApps = numaps.detail.timeBetween;
-        this.spreadApps = numaps.detail.spread
-        console.log('totalApps ' +this.totalApps + ' timeBetweenApps ' + this.timeBetweenApps + ' spreadApps ' +this.spreadApps);
-        
     }
 //this is how we know the number of apps to make and if it's a custom it will open
 //appCloneModal
@@ -261,7 +259,6 @@ get unitArea(){
         this.numberApps = event.detail.value; 
         if(this.numberApps === 'custom'){
         fireEvent(this.pageRef, 'custom', this);            
-        console.log('talking');
         }
     }
 //open and close quick convert    
@@ -322,7 +319,7 @@ get unitArea(){
 //INSERTING UPDATING APPLICATIONS
     //Insert Upsert
     createApplication__c(){
-       if(this.numberApps === 'doesNotRepeat'){ 
+        this.loaded = false; 
             let params = {
             appName: this.appName,
             appArea: this.areaId,
@@ -338,13 +335,18 @@ get unitArea(){
                     let products = JSON.stringify(this.newProds)
                     //console.log(products)
                     addProducts({products:products})
-                    this.dispatchEvent(
-                        new ShowToastEvent({
-                            title: 'Success',
-                            message: 'Application Added!',
-                            variant: 'success'
-                        })
-                    );
+                    // this.dispatchEvent(
+                    //     new ShowToastEvent({
+                    //         title: 'Success',
+                    //         message: 'Application Added!',
+                    //         variant: 'success'
+                    //     })
+                    // );
+                }).then(()=>{
+                    if(this.numberApps != 'doesNotRepeat'){ 
+                    multiInsert({appId:this.appId,occurance:this.totalApps, daysBetween:this.timeBetweenApps})
+                    console.log('multiInsert');
+                    }
                 }).then(()=>{
                     //console.log("sending new app to table "+this.appId); 
                     fireEvent(this.pageRef, 'newApp', this.appId)
@@ -354,6 +356,8 @@ get unitArea(){
                     this.appDate = '';
                     this.noArea = true;
                     this.notUpdate = undefined;  
+                    this.numberApps ='doesNotRepeat';
+                    this.loaded = true; 
                 }).catch((error)=>{
                     console.log(JSON.stringify(error))
                     this.dispatchEvent(
@@ -365,7 +369,7 @@ get unitArea(){
                         
                     ) 
                 })
-            }
+            
     }
     //hook fuction from show details on appTable
     //error if no app products nothing gets fired

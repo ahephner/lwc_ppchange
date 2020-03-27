@@ -4,6 +4,7 @@
         <template if:true={noArea}>Select an Area First!</template>
     <template if:true={notUpdate}>
     <lightning-card>
+        <template if:true={loaded}>
         <div class="outerdiv">
             <div class='slds-grid slds-wrap '>                    
                 <h4 class='slds-size_3-of-3'>New Application CLONED APPS CURRENTLY WONT SHOW UP</h4>
@@ -91,7 +92,12 @@
                     </lightning-layout-item>
                 </lightning-layout>
             </div>                     
-      </div>         
+      </div>  
+    </template>
+      <!-- spinner -->
+      <template if:false={loaded}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template>       
     </lightning-card>
 </template>
 
