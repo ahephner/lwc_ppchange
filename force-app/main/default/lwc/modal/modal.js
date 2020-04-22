@@ -44,7 +44,7 @@ export default class Modal extends LightningElement {
     //the reason why I subtract by one is that the apex job is getting the original insert so if i wanted 3 apps 
     //and put 3 in I will get 4 apps 3 copies plus original 
     totalApps(event){
-        this.total = event.detail.value -1;
+        this.total = event.detail.value ;
         console.log(this.total);
         
     }
