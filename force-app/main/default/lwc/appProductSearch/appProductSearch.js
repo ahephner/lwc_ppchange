@@ -29,7 +29,7 @@ export default class AppProductSearch extends LightningElement {
    @wire(searchProduct, {searchKey: '$searchKey', cat:'$cat'})
         loadProd(results){
             this.prod = results; 
-            //console.log(this.prod);
+            console.log(this.prod);
 
         }
     get hasResults(){
