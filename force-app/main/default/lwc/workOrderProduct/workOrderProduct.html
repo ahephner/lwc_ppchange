@@ -1,0 +1,15 @@
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text='Loading' variant='brand'></lightning-spinner>
+     </template>
+     <template if:false={isLoading}>
+        <lightning-datatable
+                key-field='Id'
+                data={wop}
+                columns={columns}
+                onsave={handleSave}
+                draft-values={draftValues}
+                hide-checkbox-column>  
+            </lightning-datatable>
+          </template>
+</template>
