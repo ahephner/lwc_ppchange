@@ -10,14 +10,14 @@ export default class WorkOrderProduct extends LightningElement {
        {label: 'Goal', fieldName: 'nameURL', type:'url', typeAttributes: {label: {fieldName: 'LineItemNumber'}}, target: '_blank'},
        {label:'Product', fieldName: 'Product_Name__c', type:'text', editable: false},
         {label:'Code', fieldName: 'Product_Code__c',  type:'text', editable: false},
-        {label:'Qty', fieldName:'Quantity',  type:'number', editable: true },
-        {label:'Cost', fieldName:'Cost__c',  type:'currency', editable: true },
-        {label:'Unit Price', fieldName:'UnitPrice',  type:'currency', editable: true },
-        {label:'Total Price', fieldName:'TotalPrice',  type:'currency', editable: true },
-        {label:'Ship Prod To', fieldName:'Ship_Product_To__c',  type:'text', editable: false },
-        {label:'Ship Vend', fieldName:'Ship_Product_Vendor__c',  type:'text', editable: false },
-        {label:'Ship #', fieldName:'Ship_Product__c',  type:'text', editable: true },
-        {label:'Valid', fieldName:'Cost_Validated__c',  type:'boolean', editable: true },
+        {label:'Qty', fieldName:'Quantity',  type:'number',cellAttributes: { alignment: 'center' }, editable: true },
+        {label:'Cost', fieldName:'Cost__c',  type:'currency',cellAttributes: { alignment: 'center' }, editable: true },
+        {label:'Unit Price', fieldName:'UnitPrice',  type:'currency',cellAttributes: { alignment: 'center' }, editable: true },
+        {label:'Total Price', fieldName:'TotalPrice',  type:'currency',cellAttributes: { alignment: 'center' }, editable: true },
+       // {label:'Ship Prod To', fieldName:'Ship_Product_To__c',  type:'text', editable: false },
+        //{label:'Ship Vend', fieldName:'Ship_Product_Vendor__c',  type:'text', editable: false },
+        //{label:'Ship #', fieldName:'Ship_Product__c',  type:'text', editable: true },
+        {label:'Cost Valid', fieldName:'Cost_Validated__c',  type:'boolean',cellAttributes: { alignment: 'center' }, editable: true },
     ]
     
     //private
