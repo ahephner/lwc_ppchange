@@ -1,4 +1,4 @@
-import { LightningElement, api } from 'lwc';
+import { LightningElement, api, wire } from 'lwc';
 import getWorkOrderProd from '@salesforce/apex/workOrderProducts.getWorkOrderProd';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { updateRecord } from 'lightning/uiRecordApi';
@@ -6,8 +6,9 @@ import { refreshApex } from '@salesforce/apex';
 
 export default class WorkOrderProduct extends LightningElement {
     columns = [
-        {label: 'Line Numb', fieldName:'LineItemNumber', type:'text', editable: false },
-        {label:'Product', fieldName: 'Product_Name__c', type:'text', editable: false},
+       // {label: 'Line Numb', fieldName:'LineItemNumber', type:'text', editable: false },
+       {label: 'Goal', fieldName: 'nameURL', type:'url', typeAttributes: {label: {fieldName: 'LineItemNumber'}}, target: '_blank'},
+       {label:'Product', fieldName: 'Product_Name__c', type:'text', editable: false},
         {label:'Code', fieldName: 'Product_Code__c',  type:'text', editable: false},
         {label:'Qty', fieldName:'Quantity',  type:'number', editable: true },
         {label:'Cost', fieldName:'Cost__c',  type:'currency', editable: true },
@@ -22,6 +23,7 @@ export default class WorkOrderProduct extends LightningElement {
     //private
     workOrder
     isLoading
+    workOrderProductList
     wop 
     error 
     @api
@@ -31,23 +33,39 @@ export default class WorkOrderProduct extends LightningElement {
     set recordId(value){
         this.setAttribute('workOrder', value);
         this.workOrder = value; 
-        this.getProd(); 
+        //this.getProd(); 
     }
 
-    getProd(){
-            if(this.workOrder == null || this.workOrder == undefined){
-                return; 
+    @wire(getWorkOrderProd, {recordId: '$workOrder'})
+        wiredWO(result){
+            this.workOrderProductList = result; 
+            if(result.data){
+                let nameURL;
+                this.wop = result.data.map(row=>{
+                    nameURL = `/${row.Id}`
+                    return {...row, nameURL}
+                });
+            }else if(result.error){
+                this.wop = undefined;
+                console.log(result.error);
+                
             }
-            this.isLoading = true
-            getWorkOrderProd({recordId: this.recordId})
-              .then((resp)=>{
-                  this.wop = resp;
-                  console.log(this.wop);
+        }
+
+    // getProd(){
+    //         if(this.workOrder == null || this.workOrder == undefined){
+    //             return; 
+    //         }
+    //         this.isLoading = true
+    //         getWorkOrderProd({recordId: this.recordId})
+    //           .then((resp)=>{
+    //               this.wop = resp;
+    //               console.log('apex ' +this.wop);
                   
-              }).catch((error)=>{
-                  this.error = error.message; 
-              }).finally(()=> this.isLoading = false)
-    }
+    //           }).catch((error)=>{
+    //               this.error = error.message; 
+    //           }).finally(()=> this.isLoading = false)
+    // }
 
     handleSave(event){
         this.isLoading = true;
@@ -65,9 +83,10 @@ export default class WorkOrderProduct extends LightningElement {
                     variant: 'success'
                 })
             );
-
+                
+            
              // Display fresh data in the datatable
-           return this.refresh()
+           return this.refresh();
         }).catch(error => {
             
             // Handle error
@@ -79,6 +98,8 @@ export default class WorkOrderProduct extends LightningElement {
                 })
             )
         }).finally(() => {
+            console.log('finally');
+            
             this.draftValues = []; 
             this.isLoading = false
             
@@ -87,7 +108,8 @@ export default class WorkOrderProduct extends LightningElement {
     @api
     async refresh(){
         this.isLoading = true;
-        await refreshApex(this.wop)
+        console.log('refresh');
+        await refreshApex(this.workOrderProductList);
         this.isLoading = false;
     }
 }
