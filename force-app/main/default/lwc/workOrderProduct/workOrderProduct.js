@@ -18,6 +18,7 @@ export default class WorkOrderProduct extends LightningElement {
         //{label:'Ship Vend', fieldName:'Ship_Product_Vendor__c',  type:'text', editable: false },
         //{label:'Ship #', fieldName:'Ship_Product__c',  type:'text', editable: true },
         {label:'Cost Valid', fieldName:'Cost_Validated__c',  type:'boolean',cellAttributes: { alignment: 'center' }, editable: true },
+        {label:'Line Desc', fieldName:'Line_Description__c',  type:'text', editable: true }
     ]
     
     //private
