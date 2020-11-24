@@ -1,0 +1,28 @@
+.warm{
+    color: #313131; 
+    text-align: center;
+    font-weight: bold;
+    position: relative;
+    font-size: 25px;
+    -webkit-animation: colorchange 20s 2 alternate;
+}
+@keyframes colorchange{
+    0%{
+      color: red;  
+    }
+    20%{
+        color: orangered;
+    }
+    40%{
+        color: orange;
+    }
+    60%{
+        color: #fdb42d;
+    }
+    80%{
+        color: orange
+    }
+    100%{
+        color:orangered; 
+    }
+}
