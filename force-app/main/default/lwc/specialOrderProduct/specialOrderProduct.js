@@ -100,6 +100,16 @@ export default class SpecialOrderProduct extends LightningElement {
                 
             });  
         } 
-
+        //Mobile stuff
+        handleMargin(m){
+           let newMargin = m.detail.value;
+           console.log('margin '+newMargin);
+           
+        }
+        //save mobile
+        saveMobile(e){
+            console.log('save ');
+            
+        }
 
 }
