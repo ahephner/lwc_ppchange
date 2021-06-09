@@ -325,6 +325,8 @@ get unitArea(){
             appArea: this.areaId,
             appDate: this.appDate
         };
+        console.log('products '+this.newProds);
+        
         //console.log(params)
             addApplication({wrapper:params})
                 .then((resp)=>{

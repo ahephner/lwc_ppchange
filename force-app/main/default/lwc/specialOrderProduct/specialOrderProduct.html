@@ -1,0 +1,29 @@
+<template>
+    <div class={flexipageRegionWidth}>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="small" variant='brand'></lightning-spinner>
+    </template>
+    <template if:false={isLoading}>
+        <template if:true={formSize}>
+            <lightning-datatable
+                key-field='Id'
+                data={items}
+                columns={columns}
+                hide-checkbox-column>
+
+            </lightning-datatable>
+        </template>
+
+        <template if:false={formSize}>
+            <lightning-layout multiple-rows="true">
+                <template for:each={items} for:item='item'>
+                    <lightning-layout-item size="12" key={item.Id} class="slds-box slds-p-around_none slds-m-top_x-small slds-m-bottom_medium slds-m-horizontal_none">
+                        <lightning-input id={item.Id} value={item.product} type='text' label='Product' readonly></lightning-input>
+                        <lightning-input id={item.Id} value={item.Sales_Margin__c} label='Sales Margin' type='number'></lightning-input>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+        </template>
+    </template>
+</div>
+</template>
