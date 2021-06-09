@@ -9,6 +9,8 @@
                 key-field='Id'
                 data={items}
                 columns={columns}
+                onsave={handleSave}
+                draft-values={draftValues}
                 hide-checkbox-column>
 
             </lightning-datatable>
@@ -17,7 +19,8 @@
         <template if:false={formSize}>
             <lightning-layout multiple-rows="true">
                 <template for:each={items} for:item='item'>
-                    <lightning-layout-item size="12" key={item.Id} class="slds-box slds-p-around_none slds-m-top_x-small slds-m-bottom_medium slds-m-horizontal_none">
+                    <lightning-layout-item size="8" key={item.Id} class="slds-box slds-p-around_none 
+                    slds-m-top_x-small slds-m-bottom_medium slds-m-horizontal_none">
                         <lightning-input id={item.Id} value={item.product} type='text' label='Product' readonly></lightning-input>
                         <lightning-input id={item.Id} value={item.Sales_Margin__c} label='Sales Margin' type='number'></lightning-input>
                     </lightning-layout-item>
