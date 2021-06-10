@@ -1,4 +1,4 @@
-import { LightningElement, api, wire } from 'lwc';
+import { LightningElement, api, wire, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import FORM_FACTOR from '@salesforce/client/formFactor';
 import getItems from '@salesforce/apex/specialOrderCloneWProducts.getOrderRequestItems';
@@ -8,7 +8,7 @@ import { refreshApex } from '@salesforce/apex';
 const columns = [
     {label:'Product Requested', 'fieldName':'nameURL', type:'url', typeAttributes:{label:{fieldName:'product'}},target:'_blank' },
     {label:'QTY', 'fieldName':'Quantity_Requested__c', type:'number' },
-    {label:'Unit Cost', 'fieldName':'Unit_Cost__c', type:'currency'},    
+    {label:'Unit Cost', 'fieldName':'Cost__c', type:'currency'},    
     {label:'Min Margin', 'fieldName':'Minimum_Margin__c', type:'percent-fixed' },
     {label:'Sales Margin', 'fieldName':'Sales_Margin__c', type:'percent-fixed',  editable:true},
     {label:'Price', 'fieldName':'Unit_Price__c', type:'currency', editable:true},
@@ -21,7 +21,7 @@ export default class SpecialOrderProduct extends LightningElement {
     @api prop1; 
     columns = columns;
     requestItems;
-    items; 
+    @track items; 
     formSize; 
     connectedCallback(){
         this.formSize= this.screenSize(FORM_FACTOR);
@@ -60,7 +60,7 @@ export default class SpecialOrderProduct extends LightningElement {
             this.isLoading = false;
         }
      
-        //save From the Table
+//DESKTOP VERSION
         handleSave(event){
             this.isLoading = true;
         
@@ -100,16 +100,31 @@ export default class SpecialOrderProduct extends LightningElement {
                 
             });  
         } 
-        //Mobile stuff
+//Mobile stuff//////
         handleMargin(m){
-           let newMargin = m.detail.value;
-           console.log('margin '+newMargin);
+            window.clearTimeout(this.delay); 
+           let index = this.items.findIndex(prod => prod.Id === m.target.name);
+           this.delay = setTimeout(()=>{
+               console.log('margin');
+            if(100- this.items[index].Sales_Margin__c > 0){
+                this.items[index].Unit_Price__c = Number(this.items[index].Cost__c /(1 - this.items[index].Sales_Margin__c/100)).toFixed(2);
+            }else{
+                this.items[index].Unit_Price__c = 0;
+                this.items[index].Unit_Price__c = this.items[index].Unit_Price__c.toFixed(2);
+                
+            }
+},800)
+           
            
         }
         //save mobile
         saveMobile(e){
             console.log('save ');
             
+        }
+
+        cancel(e){
+            this.refresh(); 
         }
 
 }

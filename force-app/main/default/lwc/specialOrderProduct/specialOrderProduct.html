@@ -28,7 +28,7 @@
                            <p>Minimum Margin</p> <lightning-formatted-number id={item.Id} value={item.Minimum_Margin__c} label='Sales Margin' format-style="percent-fixed" readonly></lightning-formatted-number>
                         </div>
                         <div class='slds-col slds-size_1-of-2 slds-m-left_x-small'>
-                            <lightning-input id={item.Id} value={item.Sales_Margin__c} label='Sales Margin' 
+                            <lightning-input name={item.Id} value={item.Sales_Margin__c} label='Sales Margin' 
                             type='number' formater='percent' onchange={handleMargin}></lightning-input>
                             <lightning-input id={item.Id} value={item.Unit_Price__c} label='Total Price' type='number' formater='percent' ></lightning-input>
                         </div>
