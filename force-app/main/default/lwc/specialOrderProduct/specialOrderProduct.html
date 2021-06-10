@@ -4,7 +4,7 @@
         <lightning-spinner alternative-text="Loading" size="small" variant='brand'></lightning-spinner>
     </template>
     <template if:false={isLoading}>
-        <template if:false={formSize}>
+        <template if:true={formSize}>
             <lightning-datatable
                 key-field='Id'
                 data={items}
@@ -16,8 +16,7 @@
             </lightning-datatable>
         </template>
 
-        <template if:true={formSize}>
-            <h3>Testing...This is normally mobile facing</h3>
+        <template if:false={formSize}>
             <lightning-layout multiple-rows="true">
                 <template for:each={items} for:item='item'>
                     <lightning-layout-item size="12" key={item.Id} class="slds-box slds-p-around_none 
@@ -30,7 +29,8 @@
                         <div class='slds-col slds-size_1-of-2 slds-m-left_x-small'>
                             <lightning-input name={item.Id} value={item.Sales_Margin__c} label='Sales Margin' 
                             type='number' formater='percent' onchange={handleMargin}></lightning-input>
-                            <lightning-input id={item.Id} value={item.Unit_Price__c} label='Total Price' type='number' formater='percent' ></lightning-input>
+                            <lightning-input name={item.Id} value={item.Unit_Price__c} label='Total Price' 
+                            type='number' formater='currency' onchange={handlePrice} ></lightning-input>
                         </div>
                     </div>
                     </lightning-layout-item>

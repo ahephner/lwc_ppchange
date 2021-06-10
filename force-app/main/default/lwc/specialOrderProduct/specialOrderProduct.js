@@ -63,12 +63,15 @@ export default class SpecialOrderProduct extends LightningElement {
 //DESKTOP VERSION
         handleSave(event){
             this.isLoading = true;
-        
+            
             const recordInputs =  event.detail.draftValues.slice().map(draft => {
                 const fields = Object.assign({}, draft);
                 return { fields };
             });
+            console.log(recordInputs);
             const promises = recordInputs.map(recordInput => updateRecord(recordInput));
+            console.log(promises);
+            
             Promise.all(promises).then(prod => {
                 this.dispatchEvent(
                     new ShowToastEvent({
@@ -102,10 +105,10 @@ export default class SpecialOrderProduct extends LightningElement {
         } 
 //Mobile stuff//////
         handleMargin(m){
+            let index = this.items.findIndex(prod => prod.Id === m.target.name);
             window.clearTimeout(this.delay); 
-           let index = this.items.findIndex(prod => prod.Id === m.target.name);
            this.delay = setTimeout(()=>{
-               console.log('margin');
+            this.items[index].Sales_Margin__c = Number(m.detail.value);
             if(100- this.items[index].Sales_Margin__c > 0){
                 this.items[index].Unit_Price__c = Number(this.items[index].Cost__c /(1 - this.items[index].Sales_Margin__c/100)).toFixed(2);
             }else{
@@ -114,12 +117,64 @@ export default class SpecialOrderProduct extends LightningElement {
                 
             }
 },800)
-           
-           
+        }
+        handlePrice(p){
+            window.clearTimeout(this.delay);
+            let index = this.items.findIndex(prod => prod.Id === p.target.name);
+            // console.log('index '+ index);
+            this.delay =  setTimeout(()=>{ 
+                this.items[index].Unit_Price__c = Number(p.detail.value);
+                console.log(this.items[index].Unit_Price__c);
+                if(this.items[index].Unit_Price__c >0){
+                    this.items[index].Sales_Margin__c = Number((1 - (this.items[index].Cost__c /this.items[index].Unit_Price__c))*100).toFixed(2)
+                }else{
+                    console.log('something is happening');
+                    
+                }
+            },800)
         }
         //save mobile
         saveMobile(e){
-            console.log('save ');
+            console.log('items');
+            
+            console.log(this.items);
+
+            this.isLoading = true;
+            const recordInputs =  this.items.slice().map(draft => {
+                let Id = draft.Id;
+                let Sales_Margin__c = draft.Sales_Margin__c
+                let Unit_Price__c = draft.Unit_Price__c;
+                const fields = {Id, Sales_Margin__c, Unit_Price__c}
+                return { fields };
+            });
+            console.log(recordInputs)
+            const promises = recordInputs.map(recordInput => updateRecord(recordInput));
+            Promise.all(promises).then(x => {
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title:'Record Saved',
+                        message:'Successfully pricing',
+                        variant:'success'
+                    })
+                );
+                return this.refresh();
+            }).catch(error => {
+                console.log(error);
+                
+                // Handle error
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Margin Error',
+                        message: error.body.output.errors[0].message,
+                        variant: 'error'
+                    })
+                )
+            }).finally(() => {
+                console.log('finally'); 
+                this.isLoading = false
+                
+            });
+            
             
         }
 
