@@ -1,7 +1,7 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import FORM_FACTOR from '@salesforce/client/formFactor';
-import getItems from '@salesforce/apex/specialOrderCloneWProducts.getOrderRequestItems';
+import getItems from '@salesforce/apex/lookUpFlow.getOrderRequestItems';
 import { updateRecord } from 'lightning/uiRecordApi';
 import { refreshApex } from '@salesforce/apex';
 

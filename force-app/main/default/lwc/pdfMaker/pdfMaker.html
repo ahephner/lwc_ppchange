@@ -1,0 +1,66 @@
+<template>
+    <lightning-card icon-name="standard:account" variant="base">
+      <div slot="title">
+          History
+      </div>
+      <div slot="actions">
+    
+      </div>
+      <div class="slds-grid">
+        <!-- Card Body  -->
+        <div class="slds-col slds-size_1-of-2 slds-m-left_small slds-m-right_small">
+            <lightning-input 
+            type="date" 
+            name="input1" 
+            label="Start Date" 
+            onchange={handleDateOne}
+            ></lightning-input>
+            <lightning-combobox
+            name="category"
+            label="Primary Category"
+            value={value}
+            placeholder="Select Category"
+            options={options}
+            onchange={handleCategory} 
+            
+            
+            ></lightning-combobox>
+
+            <lightning-input 
+            type="text"
+            
+            label="Search by Product"
+            onchange={handleSearchString}
+          ></lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-2 slds-m-right_small">
+            <lightning-input 
+            type="date" 
+            name="2" 
+            label="End Date" 
+            onchange={handleDateTwo}
+            ></lightning-input>
+            
+            <lightning-combobox
+            name="family"
+            label="Product Family"
+            value={value}
+            placeholder="Select Family"
+            options={options}
+            onchange={handleFamily} 
+            
+            
+            ></lightning-combobox>
+        </div>
+ 
+    </div>
+      <div slot="footer">
+        <lightning-button 
+      variant="success"
+      label="Generate PDF" 
+      onclick={generateData} 
+    ></lightning-button>
+      </div>
+    </lightning-card>
+
+</template>
